@@ -1,0 +1,15 @@
+$ARENA:Neocola Centre
+$CHALLENGER:S750 Kreludan Defender Robot
+$DIFFICULTY:Mighty
+Red Neocola Token|1
+Oppressor Onions|1
+Lu Codestone|1
+Remote Control Virtupets Snowball|1
+Blue Neocola Token|1
+Rocket Fizzy Drink|2
+Helm-mounted Laser Beam|2
+Robot Rock|2
+Zei Codestone|1
+Kew Codestone|1
+Bri Codestone|1
+Zed Codestone|1

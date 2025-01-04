@@ -1,0 +1,18 @@
+$ARENA:Central Arena
+$CHALLENGER:Flaming Meerca
+$DIFFICULTY:Mighty
+Weak Bottled Dark Faerie|1
+Sho Codestone|1
+Darigan Muffin|1
+Weak Bottled Fire Faerie|1
+Fire Muffin|1
+Aethias Ultimate Battle Guide|1
+Weak Bottled Water Faerie|1
+Flaming Super Hot Pasty|1
+Weak Bottled Earth Faerie|1
+Croissant|1
+Har Codestone|1
+Electro Sword|1
+Robot Muffin|1
+Zed Codestone|1
+Kew Codestone|1

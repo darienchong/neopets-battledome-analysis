@@ -1,0 +1,16 @@
+$ARENA:Central Arena
+$CHALLENGER:Flaming Meerca
+$DIFFICULTY:Mighty
+Organic Bran Carrot Muffin|1
+Zei Codestone|2
+Electro Sword|1
+Wrapped Strawberry Candy|2
+Apple and Cheese Sandwich|1
+Brioche|1
+Brain Muffin|1
+Bri Codestone|1
+Chocolate Creme Pie|1
+Golden Muffin|1
+Can of Neocola|1
+Marzipan Sugared Slorg|1
+Lu Codestone|1

@@ -1,0 +1,15 @@
+$ARENA:Neocola Centre
+$CHALLENGER:S750 Kreludan Defender Robot
+$DIFFICULTY:Mighty
+Main Codestone|1
+Helm-mounted Laser Beam|1
+Ultranova|2
+Blue Neocola Token|1
+Red Neocola Token|1
+Eo Codestone|1
+Tai-Kai Codestone|1
+Light Speed Made Easy|3
+Lu Codestone|1
+Zei Codestone|1
+Space Spice|1
+Neocola Book|1

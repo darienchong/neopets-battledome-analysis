@@ -1,0 +1,15 @@
+$ARENA:Neocola Centre
+$CHALLENGER:S750 Kreludan Defender Robot
+$DIFFICULTY:Mighty
+Sho Codestone|2
+Unidentifiable Weak Bottled Faerie|2
+Space Spice|2
+Red Neocola Token|1
+Zei Codestone|1
+Har Codestone|1
+Blue Neocola Token|1
+N-4 Info Retrieval Bot|1
+Space Goggle Helmet|1
+Vux Codestone|1
+Rocket Fizzy Drink|1
+Zed Codestone|1

@@ -1,0 +1,15 @@
+$ARENA:Dome of the Deep
+$CHALLENGER:Koi Warrior
+$DIFFICULTY:Average
+Unidentifiable Weak Bottled Faerie|1
+Lu Codestone|1
+Maraquan Grackle Bug|2
+Ten Dubloon Coin|1
+Maraquan Faerie Tales|1
+Red Koi Plushie|2
+Water Pizza|1
+Vo Codestone|1
+Weak Bottled Light Faerie|2
+Necklace of the Water Faerie|1
+Strawberry Koi Pop|1
+Maraquan Defenders Stamp|1

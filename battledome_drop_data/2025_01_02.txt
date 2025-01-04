@@ -1,0 +1,17 @@
+$ARENA:Central Arena
+$CHALLENGER:Flaming Meerca
+$DIFFICULTY:Mighty
+Cursed Wand of Shadow|1
+Ridiculously Heavy Battle Hammer|1
+Wrapped Strawberry Candy|1
+Vo Codestone|2
+Milk Chocolate Rose|1
+Orn Codestone|1
+Eo Codestone|1
+Hot Buttered Toast|1
+Weak Bottled Earth Faerie|1
+Battle Faerie Dagger|1
+Vegetarian Meat Pie|1
+Fire Dartboard|1
+Main Codestone|1
+Har Codestone|1

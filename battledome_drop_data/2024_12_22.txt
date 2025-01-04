@@ -1,0 +1,18 @@
+$ARENA:Central Arena
+$CHALLENGER:Flaming Meerca
+$DIFFICULTY:Mighty
+Chocolate Covered Cherries|1
+Flaming Super Hot Pasty|1
+Har Codestone|1
+Orn Codestone|1
+Zed Codestone|1
+Fish and Chips|1
+Fire Dartboard|1
+Smelly Dung Muffin|1
+Robot Muffin|1
+Flaming Dagger Of Fire|1
+Oatmeal Raisin Biscuit|1
+Strawberry Fondant Surprise|1
+Dried Mango|1
+Vo Codestone|1
+Endless Salad and Bread Sticks|1

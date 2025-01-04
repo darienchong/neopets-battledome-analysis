@@ -1,0 +1,18 @@
+$ARENA:Central Arena
+$CHALLENGER:Flaming Meerca
+$DIFFICULTY:Mighty
+Bri Codestone|1
+Zed Codestone|1
+Mau Codestone|1
+Cinnamon Roll|1
+Weak Bottled Fire Faerie|1
+Blue Berry Pie|1
+Eo Codestone|1
+Vo Codestone|1
+Battle Faerie Dagger|1
+Main Codestone|1
+Flaming Super Hot Pasty|1
+Grilled Veggie Bowl|1
+Marzipan Sugared Slorg|1
+Weak Bottled Air Faerie|1
+Blackberry Pie|1

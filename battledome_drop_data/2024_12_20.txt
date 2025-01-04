@@ -1,0 +1,17 @@
+$ARENA:Central Arena
+$CHALLENGER:Flaming Meerca
+$DIFFICULTY:Mighty
+Ridiculously Heavy Battle Hammer|1
+Cursed Wand of Shadow|1
+Chocolate Creme Pie|1
+Can of Neocola|1
+Unidentifiable Weak Bottled Faerie|1
+Har Codestone|2
+Orn Codestone|1
+Bri Codestone|1
+Main Codestone|1
+Tai-Kai Codestone|1
+Marzipan Sugared Slorg|1
+Kew Codestone|1
+Eo Codestone|1
+Robot Muffin|1

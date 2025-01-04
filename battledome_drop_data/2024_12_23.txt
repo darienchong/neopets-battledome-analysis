@@ -1,0 +1,14 @@
+$ARENA:Neocola Centre
+$CHALLENGER:S750 Kreludan Defender Robot
+$DIFFICULTY:Mighty
+Zei Codestone|2
+Neocola Book|1
+Sho Codestone|3
+N-4 Info Retrieval Bot|1
+Thermal Explosive Device|1
+Helm-mounted Laser Beam|1
+Space Goggle Helmet|1
+Blue Neocola Token|2
+Vo Codestone|1
+Bri Codestone|1
+Kew Codestone|1

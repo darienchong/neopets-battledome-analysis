@@ -1,0 +1,16 @@
+$ARENA:Dome of the Deep
+$CHALLENGER:Koi Warrior
+$DIFFICULTY:Average
+Eo Codestone|1
+Weak Bottled Light Faerie|1
+Main Codestone|1
+Red Koi Plushie|2
+Weak Bottled Water Faerie|1
+Legends of Maraqua|1
+Unidentifiable Weak Bottled Faerie|1
+Kew Codestone|1
+Strawberry Koi Pop|1
+Maraquan Troops Stamp|2
+Maraquan Grackle Bug|1
+Maraquan Faerie Tales|1
+Realm of the Water Faeries|1

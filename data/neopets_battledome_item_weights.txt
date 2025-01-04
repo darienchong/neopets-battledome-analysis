@@ -1,0 +1,1237 @@
+Frost Arena
+
+Diamond Snowball - 2 %
+
+Steel Snowball - 2 %
+
+Itsy Bitsy Tiny Snowball - 2 %
+
+Pink Faerie Snowball - 2 %
+
+Grape Snowflake - 2 %
+
+Mega Force Ice Glove - 2 %
+
+Blueberry Snowflake - 2 %
+
+Glowing Snowflake - 2 %
+
+Yellow Snowflake - 2 %
+
+Wet Snowflake - 2 %
+
+Peach Snowflake - 2 %
+
+Poisonous Snowflake - 2 %
+
+Evil Snowflake - 2 %
+
+Exploding Snowflake - 2 %
+
+Frost Bite Egg - 2 %
+
+Crystal Negg - 1 %
+
+Cool Negg - .25 %
+
+Snow Paint Brush - .001 %
+
+Christmas Paint Brush - .001 %
+
+Snow Petpet Paint Brush - .01 %
+
+Icestorm Negg - 1 %
+
+Ice Dagger - 2 %
+
+Green Frost Cannon - 2 %
+
+Christmas Tree Negg - 1 %
+
+Grapity Slushie - 2 %
+
+Rainborific Slushie - 2 %
+
+Berry Cola Slushie - 2 %
+
+Peanut Butter Slushie - 2 %
+
+Chocolate Chip Cookie Slushie - 2 %
+
+Twinkling Ice Cream - 2 %
+
+Chocolate Ice Cream Cream Puff - 2 %
+
+Borovan Ice Cream Scoop - 2 %
+
+Water Ice Cream - 2 %
+
+Lavender Ice Cream - 2 %
+
+Mau Codestone - 1.5 %
+
+Tai-Kai Codestone - 1.5 %
+
+Lu Codestone - 1.5 %
+
+Vo Codestone - 1.5 %
+
+Main Codestone - 1.5 %
+
+Main Codestone - 1.5 %
+
+Zei Codestone - 1.5 %
+
+Orn Codestone - 1.5 %
+
+Har Codestone - 1.5 %
+
+Bri Codestone - 1.5 %
+
+Mag Codestone - .8 %
+
+Mag Codestone - .8 %
+
+Vux Codestone - .8 %
+
+Cui Codestone - .8 %
+
+Kew Codestone - .8 %
+
+Sho Codestone - .8 %
+
+Zed Codestone - .8 %
+
+The Definitive Snowglobe Guide - 2 %
+
+Snow Architecture - 2 %
+
+Snow Days - 2 %
+
+Terror Mountain Travel Brochure - 2 %
+
+The Happy Valley Report - 2 %
+
+Cooling Ointment - 1 %
+
+Finely Ground Bean Powder - 1 %
+
+Steaming Green Tea - 1 %
+
+Abominable Snowball - .5 %
+
+Raindorf - .5 %
+
+Fir - .5 %
+
+Feepit - .5 %
+
+nothing - 55 %
+
+Weak Bottled Earth Faerie - 1.5 %
+
+Weak Bottled Air Faerie - 1.5 %
+
+Weak Bottled Fire Faerie - 1.5 %
+
+Weak Bottled Water Faerie - 1.5 %
+
+Weak Bottled Light Faerie - 1.5 %
+
+Weak Bottled Dark Faerie - 1.5 %
+
+Unidentifiable Weak Bottled Faerie - 1.5 %
+
+
+
+Cosmic Dome
+
+Flutter - 5 %
+
+Gorunda the Wise - 5 %
+
+Gorunda the Wise - 5 %
+
+Mau Codestone - 1.35 %
+
+Tai-Kai Codestone - 1.35 %
+
+Lu Codestone - 1.35 %
+
+Vo Codestone - 1.35 %
+
+Eo Codestone - 1.35 %
+
+Main Codestone - 1.35 %
+
+Zei Codestone - 1.35 %
+
+Orn Codestone - 1.35 %
+
+Har Codestone - 1.35 %
+
+Bri Codestone - 1.35 %
+
+Mag Codestone - 0.4 %
+
+Vux Codestone - 0.4 %
+
+Cui Codestone - 0.4 %
+
+Kew Codestone - 0.4 %
+
+Sho Codestone - 0.4 %
+
+Zed Codestone - 0.4 %
+
+Lesser Nerkmid - 0.4 %
+
+Average Nerkmid - 0.4 %
+
+Good Nerkmid - 0.4 %
+
+Super Nerkmid - 0.2 %
+
+Ultra Nerkmid - 0.2 %
+
+Ultimate Nerkmid - 0.2 %
+
+Basic Golden Nerkmid - 0.2 %
+
+Normal Golden Nerkmid - 0.2 %
+
+Magical Golden Nerkmid - 0.2 %
+
+Ultra Golden Nerkmid - 0.2 %
+
+Golden Nerkmid X - 0.2 %
+
+Golden Nerkmid XX - 0.2 %
+
+Ultra Platinum Nerkmid - 0.2 %
+
+Normal Platinum Nerkmid - 0.2 %
+
+Basic Platinum Nerkmid - 0.2 %
+
+Platinum Nerkmid XX - 0.2 %
+
+Platinum Nerkmid X - 0.2 %
+
+Magical Platinum Nerkmid - 0.2 %
+
+Aluminium Nerkmid - 0.7 %
+
+Copper Nerkmid - 0.7 %
+
+Nova - 2.7 %
+
+Dark Nova - 2.7 %
+
+Ultranova - 2.7 %
+
+Supernova - 2.7 %
+
+Scroll of Supernova - 2.7 %
+
+Scroll of Ultranova - 2.7 %
+
+Scroll of Dark Nova - 2.7 %
+
+Space Faerie Cupcake - 2.7 %
+
+Triple Tier Space Faerie Cake - 2.7 %
+
+Space Faerie Cereal - 2.7 %
+
+Blue Neocola Token - 2.2 %
+
+Green Neocola Token - 2.2 %
+
+Red Neocola Token - 2.2 %
+
+Starry Biscuit Jar - 2.3 %
+
+Starry Box Kite - 2.3 %
+
+Starry Cookie Pile - 2.3 %
+
+Starry Crunch - 2.3 %
+
+nothing - 40 %
+
+Unidentifiable Weak Bottled Faerie - 1.35 %
+
+Weak Bottled Dark Faerie - 1.35 %
+
+Weak Bottled Light Faerie - 1.35 %
+
+Weak Bottled Water Faerie - 1.35 %
+
+Weak Bottled Fire Faerie - 1.35 %
+
+Weak Bottled Air Faerie - 1.35 %
+
+Weak Bottled Earth Faerie - 1.35 %
+
+
+
+Pango Palladium
+
+Frucumber - 2 %
+
+Boingari - 2 %
+
+Banango Bread - 2 %
+
+Flatfruit Lollypop - 2 %
+
+Islandberry Fruit Kebab - 2 %
+
+Leeble - 2 %
+
+Baby Blu - 2 %
+
+Catamara - 2 %
+
+Tapira - 2 %
+
+Quetzal - 2 %
+
+Ixi Island - 2 %
+
+Mystery Island Paperback Book - 2 %
+
+Sunset On Mystery Island - 2 %
+
+Mystery Island Travel Brochure - 2 %
+
+Mystery Island Monthly - 2 %
+
+Island Cybunny Guide - 2 %
+
+The Rock Pool and You: Your guide to Mystery Island Petpets - 2 %
+
+Mystery Island Jungle Lore - 2 %
+
+Mystery Island Tour Guide - 2 %
+
+How to Pick Flowers - 2 %
+
+Mau Codestone - 1 %
+
+Tai-Kai Codestone - 1 %
+
+Lu Codestone - 1 %
+
+Vo Codestone - 1 %
+
+Eo Codestone - 1 %
+
+Main Codestone - 1 %
+
+Zei Codestone - 1 %
+
+Orn Codestone - 1 %
+
+Har Codestone - 1 %
+
+Bri Codestone - 1 %
+
+Mag Codestone - 1 %
+
+Vux Codestone - 1 %
+
+Cui Codestone - 1 %
+
+Kew Codestone - 1 %
+
+Sho Codestone - 1 %
+
+Sho Codestone - 1 %
+
+Wooden Warf Totem - 2 %
+
+Wooden Meepit Totem - 2 %
+
+Wooden Stahkee Totem - 2 %
+
+Wooden Snuffly Totem - 2 %
+
+Mystery Island Paint Brush - .001 %
+
+Island Petpet Paint Brush - .01 %
+
+Camouflage Paint Brush - .001 %
+
+Stealth Paint Brush - .001 %
+
+Steaming Skeem Potion - .5 %
+
+Jittery Jipple Pear Potion - 1 %
+
+Tangella Tonic - .5 %
+
+Magical Wheel Potion - .5 %
+
+Warm Amber Ointment - .5 %
+
+Nova - 1 %
+
+Supernova - 1 %
+
+Ultranova - 1 %
+
+Dark Nova - 1 %
+
+Stramberry Coconut Milk - 2 %
+
+Azzle Fruit Leather Socks - 2 %
+
+Grunion Fruit Shake - 2 %
+
+Teal Juppie - 2 %
+
+Cocoa Juppie - 2 %
+
+Pickled Eel - 2 %
+
+Snowberry Crepe - 2 %
+
+Funnydew Melon - 2 %
+
+Corn Balls - 2 %
+
+nothing - 25 %
+
+Weak Bottled Earth Faerie - 1.25 %
+
+Weak Bottled Air Faerie - 1.25 %
+
+Weak Bottled Fire Faerie - 1.25 %
+
+Weak Bottled Water Faerie - 1.25 %
+
+Weak Bottled Light Faerie - 1.25 %
+
+Weak Bottled Dark Faerie - 1.25 %
+
+Unidentifiable Weak Bottled Faerie - 1.25 %
+
+
+
+Rattling Cauldron
+
+Mau Codestone - 1.5 %
+
+Tai-Kai Codestone - 1.5 %
+
+Lu Codestone - 1.5 %
+
+Vo Codestone - 1.5 %
+
+Eo Codestone - 1.5 %
+
+Main Codestone - 1.5 %
+
+Zei Codestone - 1.5 %
+
+Orn Codestone - 1.5 %
+
+Har Codestone - 1.5 %
+
+Bri Codestone - 1.5 %
+
+Mag Codestone - .8 %
+
+Vux Codestone - .8 %
+
+Cui Codestone - .8 %
+
+Kew Codestone - .8 %
+
+Sho Codestone - .8 %
+
+Zed Codestone - .8 %
+
+Halloween Blumaroo Morphing Potion - .001 %
+
+Halloween Kau Morphing Potion - .001 %
+
+Halloween Nimmo Morphing Potion - .001 %
+
+Halloween Techo Morphing Potion - .001 %
+
+Halloween Tonu Morphing Potion - .001 %
+
+Halloween Kyrii Morphing Potion - .001 %
+
+Halloween Korbat Morphing Potion - .001 %
+
+Halloween Uni Morphing Potion - .001 %
+
+Halloween Ixi Morphing Potion - .001 %
+
+Halloween Lenny Morphing Potion - .001 %
+
+Halloween Xweetok Morphing Potion - .001 %
+
+Halloween Cybunny Morphing Potion - .001 %
+
+Halloween Hissi Morphing Potion - .001 %
+
+Halloween Grundo Morphing Potion - .0001 %
+
+Halloween Petpet Paint Brush - .0001 %
+
+Halloween Paint Brush - .0001 %
+
+Undead Broccoli - .999 %
+
+Wormy Pasta - .999 %
+
+Slime Soup - 1 %
+
+Ghastly Stew - .99999 %
+
+Tomb Chips - 1 %
+
+Roasted Spyder on a Stick - 1 %
+
+Eliv Thade Wrap - 1 %
+
+Gooey Bug Soup - 1 %
+
+Candy Corn Stuffed Pumpkin - 1 %
+
+Box of Skull Truffles - 1 %
+
+Eliv Thade Sludge Shake - 1 %
+
+Brain Stew - 1 %
+
+Haunted Pumpkin Bar - .009 %
+
+Halloween Draik Plushie - .0001 %
+
+Apple Lantern - .002 %
+
+Undead Turnip - 1.98 %
+
+Bone Dog - 2 %
+
+Undead Celery - 2 %
+
+Bottled Droolik Drool - 1 %
+
+Haunted Hummus - 1 %
+
+Ghost Wrap - 1 %
+
+Rotting Wormburger - 1 %
+
+Zombie Marshmallows - 1.72 %
+
+Festering Coffee - 2 %
+
+Crispy Pumpkin Chips - 3 %
+
+Spider Licorice - 2 %
+
+Large Grundo Toe With Lint Side Order - 3 %
+
+Grundo Stix - 2 %
+
+Pumpkin Slice - 2 %
+
+Hubrids Odial Sphere - .000000001 %
+
+nothing - 40 %
+
+Unidentifiable Weak Bottled Faerie - 1.5 %
+
+Weak Bottled Dark Faerie - 1.5 %
+
+Weak Bottled Light Faerie - 1.5 %
+
+Weak Bottled Water Faerie - 1.5 %
+
+Weak Bottled Fire Faerie - 1.5 %
+
+Weak Bottled Air Faerie - 1.5 %
+
+Weak Bottled Earth Faerie - 1.5 %
+
+
+
+Central Arena
+
+Mau Codestone - 0.7 %
+
+Tai-Kai Codestone - 0.7 %
+
+Lu Codestone - 0.7 %
+
+Vo Codestone - 0.7 %
+
+Eo Codestone - 0.7 %
+
+Main Codestone - 0.7 %
+
+Zei Codestone - 0.7 %
+
+Orn Codestone - 0.7 %
+
+Har Codestone - 0.7 %
+
+Bri Codestone - 0.7 %
+
+Mag Codestone - 0.5 %
+
+Vux Codestone - 0.5 %
+
+Cui Codestone - 0.5 %
+
+Kew Codestone - 0.5 %
+
+Sho Codestone - 0.5 %
+
+Zed Codestone - 0.5 %
+
+Rainbow Paint Brush - .002 %
+
+Lesser Nerkmid - 0.01 %
+
+Average Nerkmid - 0.01 %
+
+Good Nerkmid - 0.01 %
+
+Super Nerkmid - 0.01 %
+
+Ultra Nerkmid - 0.01 %
+
+Ultimate Nerkmid - 0.01 %
+
+Basic Golden Nerkmid - 0.01 %
+
+Normal Golden Nerkmid - 0.01 %
+
+Magical Golden Nerkmid - 0.01 %
+
+Ultra Golden Nerkmid - 0.01 %
+
+Golden Nerkmid X - 0.01 %
+
+Golden Nerkmid XX - 0.01 %
+
+Ultra Platinum Nerkmid - 0.01 %
+
+Normal Platinum Nerkmid - 0.01 %
+
+Basic Platinum Nerkmid - 0.01 %
+
+Platinum Nerkmid XX - 0.01 %
+
+Platinum Nerkmid X - 0.01 %
+
+Magical Platinum Nerkmid - 0.01 %
+
+Aluminium Nerkmid - 0.01 %
+
+Copper Nerkmid - 0.01 %
+
+Blue Flotsam Morphing Potion - 0.002 %
+
+Blue Gnorbu Morphing Potion - 0.002 %
+
+Blue Kyrii Morphing Potion - 0.002 %
+
+Blue Meerca Morphing Potion - 0.002 %
+
+Blue Moehog Morphing Potion - 0.002 %
+
+Blue Ruki Morphing Potion - 0.002 %
+
+Blue Yurble Morphing Potion - 0.002 %
+
+Brown Kougra Morphing Potion - 0.002 %
+
+Brown Lenny Morphing Potion - 0.002 %
+
+Brown Techo Morphing Potion - 0.002 %
+
+Checkered Koi Morphing Potion - 0.002 %
+
+Fire Grarrl Morphing Potion - 0.002 %
+
+Green Uni Morphing Potion - 0.002 %
+
+Red Poogle Morphing Potion - 0.002 %
+
+Red Quiggle Morphing Potion - 0.002 %
+
+Red Scorchio Morphing Potion - 0.002 %
+
+Red Tuskaninny Morphing Potion - 0.002 %
+
+Babyca - 0.03 %
+
+Doglefox - 0.03 %
+
+Flishy - 0.03 %
+
+Flowper - 0.03 %
+
+Kookith - 0.03 %
+
+Triffin - 0.03 %
+
+Zebba - 0.03 %
+
+Apple Cherry Tarts - 0.6 %
+
+Apple Cinnamon Crepe - 0.6 %
+
+Apple Cobbler - 0.6 %
+
+Assorted Mini Biscuits - 0.6 %
+
+Baked Asparagus Biscuit - 0.6 %
+
+Baked Cheddar Straws - 0.6 %
+
+Banana Creme Pie - 0.6 %
+
+Basket of Bread - 0.6 %
+
+Blackberry Pie - 0.6 %
+
+Blue Berry Pie - 0.6 %
+
+Brioche - 0.6 %
+
+Chocolate Creme Pie - 0.6 %
+
+Cinnamon Roll - 0.6 %
+
+Croissant - 0.6 %
+
+Doughnut Holes - 0.6 %
+
+French Toast Sticks - 0.6 %
+
+Fried Egg on Toast - 0.6 %
+
+Fruity Pancakes - 0.6 %
+
+Hot Buttered Toast - 0.6 %
+
+Nutty Chocolate Brownies - 0.6 %
+
+Oatmeal Raisin Biscuit - 0.6 %
+
+Scrambled Egg on Toast - 0.6 %
+
+Strawberry Jam Sandwich Cookie - 0.6 %
+
+Toad in a Hole - 0.6 %
+
+Toast with Jam - 0.6 %
+
+Vegetarian Meat Pie - 0.6 %
+
+Apple Juice - 0.6 %
+
+Bag of Chips - 0.6 %
+
+Buttered Toast - 0.8 %
+
+Can of Neocola - 0.8 %
+
+Chocolate Ice Cream - 0.8 %
+
+Corn Bread - 0.8 %
+
+Egg Salad and Cheese Sandwich - 0.8 %
+
+Endless Salad and Bread Sticks - 0.8 %
+
+Fish and Chips - 0.8 %
+
+Fried Chicken and Waffles - 0.8 %
+
+Garlic Cheese Toast - 0.8 %
+
+Hasee Puff Cereal - 0.8 %
+
+Apple and Cheese Sandwich - 0.85 %
+
+Avocado Baby Food - 0.85 %
+
+Bite Size Celery - 0.85 %
+
+Brown Rice - 0.85 %
+
+Cinnamon Raisin Oatmeal - 0.85 %
+
+Dried Mango - 1 %
+
+Freshly Tinned Carrots - 0.85 %
+
+Grilled Veggie Bowl - 0.85 %
+
+Healthy Veggie Deluxe Sandwich - 0.85 %
+
+Organic Bran Carrot Muffin - 0.85 %
+
+Veggie Lasagne - 0.85 %
+
+Watermelon Fruit Cup - 1 %
+
+Caramel Creams - 0.85 %
+
+Chocolate Covered Cherries - 0.85 %
+
+Marzipan Sugared Slorg - 0.8 %
+
+Milk Chocolate Rose - 0.85 %
+
+Strawberry Fondant Surprise - 0.85 %
+
+Wrapped Strawberry Candy - 0.85 %
+
+Aethias Ultimate Battle Guide - 0.08 %
+
+Defenders Of Neopia Battle Log - 0.08 %
+
+Tips for the Beginning Acara Battler - 0.08 %
+
+Tonu Battle Tips - 0.08 %
+
+Awesome Blumaroo Battles - 0.08 %
+
+Kau Battle Tactics - 0.08 %
+
+Techo Battle Tactics - 0.08 %
+
+Acara Battle Book - 0.08 %
+
+Uni Battle! - 0.08 %
+
+Battle! - 0.08 %
+
+Defence in the Battledome - 0.08 %
+
+Battledome Techniques - 0.085 %
+
+Pteri Battle Manual - 0.085 %
+
+Nimmo Battle Cry - 0.05 %
+
+Battle Faerie Dagger - 1.5 %
+
+Ridiculously Heavy Battle Hammer - 1.5 %
+
+Cursed Wand of Shadow - 1.5 %
+
+Electro Sword - 1.5 %
+
+Brain Muffin - 1.5 %
+
+Darigan Muffin - 1.5 %
+
+Fire Muffin - 1.5 %
+
+Golden Muffin - 1.5 %
+
+Robot Muffin - 1.5 %
+
+Smelly Dung Muffin - 1.5 %
+
+Stone Muffin - 1.5 %
+
+nothing - 45 %
+
+Weak Bottled Earth Faerie - 1.5 %
+
+Weak Bottled Air Faerie - 1.5 %
+
+Weak Bottled Fire Faerie - 1.5 %
+
+Weak Bottled Water Faerie - 1.5 %
+
+Weak Bottled Light Faerie - 1.5 %
+
+Weak Bottled Dark Faerie - 1.5 %
+
+Unidentifiable Weak Bottled Faerie - 1.5 %
+
+
+
+Neocola Centre
+
+Zed Codestone - .85 %
+
+Sho Codestone - .85 %
+
+Kew Codestone - .85 %
+
+Cui Codestone - .85 %
+
+Vux Codestone - .85 %
+
+Mag Codestone - .85 %
+
+Lu Codestone - 1.5 %
+
+Eo Codestone - 1.5 %
+
+Main Codestone - 1.5 %
+
+Orn Codestone - 1.5 %
+
+Har Codestone - 1.5 %
+
+Bri Codestone - 1.5 %
+
+Vo Codestone - 1.5 %
+
+Mau Codestone - 1.5 %
+
+Tai-Kai Codestone - 1.5 %
+
+Zei Codestone - 1.5 %
+
+Robot Rock - 5 %
+
+Light Speed Made Easy - 5 %
+
+Neocola Book - 5 %
+
+Red Neocola Token - 5 %
+
+Green Neocola Token - 5 %
+
+Blue Neocola Token - 5 %
+
+Thermal Explosive Device - 3 %
+
+Helm-mounted Laser Beam - 3 %
+
+Meteor Bomb - 3 %
+
+Space Goggle Helmet - 3 %
+
+Spy Glasses - 2 %
+
+Armoured Negg - .5 %
+
+Genius Negg - .5 %
+
+Evil Negg - .5 %
+
+Space Spice - 5 %
+
+Rocket Fizzy Drink - 5 %
+
+Galaxy Energy Drink - 3 %
+
+Oppressor Onions - 1 %
+
+Remote Control Virtupets Snowball - 1 %
+
+Adventures In Space - 3 %
+
+N-4 Info Retrieval Bot - 2 %
+
+Roburg 3T3 - 2 %
+
+GX-4 Oscillabot - 2 %
+
+Robot Petpet Paint Brush - .001 %
+
+Eventide Paint Brush - .001 %
+
+Starry Paint Brush - .001 %
+
+Split Paint Brush - .001 %
+
+Mynci Transmogrification Potion - .001 %
+
+Meerca Transmogrification Potion - .001 %
+
+Basic Golden Nerkmid - .08 %
+
+Normal Golden Nerkmid - .08 %
+
+Super Nerkmid - .08 %
+
+Ultranova - 1 %
+
+nothing - 60 %
+
+Weak Bottled Dark Faerie - 1.5 %
+
+Unidentifiable Weak Bottled Faerie - 1.5 %
+
+Weak Bottled Light Faerie - 1.5 %
+
+Weak Bottled Water Faerie - 1.5 %
+
+Weak Bottled Fire Faerie - 1.5 %
+
+Weak Bottled Air Faerie - 1.5 %
+
+Weak Bottled Earth Faerie - 1.5 %
+
+
+
+Dome of the Deep
+
+Mau Codestone - 1.5 %
+
+Tai-Kai Codestone - 1.5 %
+
+Lu Codestone - 1.5 %
+
+Vo Codestone - 1.5 %
+
+Eo Codestone - 1.5 %
+
+Main Codestone - 1.5 %
+
+Zei Codestone - 1.5 %
+
+Orn Codestone - 1.5 %
+
+Har Codestone - 1.5 %
+
+Bri Codestone - 1.5 %
+
+Mag Codestone - .8 %
+
+Vux Codestone - .8 %
+
+Cui Codestone - .8 %
+
+Kew Codestone - .8 %
+
+Sho Codestone - .8 %
+
+Zed Codestone - .8 %
+
+One Dubloon Coin - 1 %
+
+Two Dubloon Coin - 1 %
+
+Five Dubloon Coin - .5 %
+
+Ten Dubloon Coin - .5 %
+
+Twenty Dubloon Coin - .05 %
+
+Fifty Dubloon Coin - .05 %
+
+One Hundred Dubloon Coin - .001 %
+
+Two Hundred Dubloon Coin - .0001 %
+
+One Thousand Dubloon Coin - .00001 %
+
+Maraquan Paint Brush - .00001 %
+
+Maraquan Spyder - .01 %
+
+Maraquan Petpet Paint Brush - .002 %
+
+Legends of Maraqua - 2 %
+
+Maraquan Faerie Tales - 2 %
+
+Maraquan Gallion - .005 %
+
+Maraquan Grackle Bug - 1 %
+
+Maraquan Bed Time Stories - 2 %
+
+Maraquan Usul Morphing Potion - .0002 %
+
+Maraquan Hissi Morphing Potion - .0002 %
+
+Maraquan Cybunny Morphing Potion - .0002 %
+
+Maraquan Grarrl Morphing Potion - .0002 %
+
+Maraquan Ixi Morphing Potion - .0002 %
+
+Maraquan Buzz Morphing Potion - .0002 %
+
+Maraquan Techo Morphing Potion - .0002 %
+
+Maraquan Meerca Morphing Potion - .0002 %
+
+Maraquan Acara Morphing Potion - .0002 %
+
+Maraquan Defenders Stamp - .9578 %
+
+Maraquan Troops Stamp - 1 %
+
+Maraquan Charger Plushie - 2 %
+
+Tablet of Water Runes - 2 %
+
+Realm of the Water Faeries - 2 %
+
+Underwater Tour - 2 %
+
+Water Pizza - 1 %
+
+Deluxe Water Pizza - .5 %
+
+Necklace of the Water Faerie - 1 %
+
+Water Kau Morphing Potion - .0002 %
+
+Water Gnorbu Morphing Potion - .0002 %
+
+Water Kyrii Morphing Potion - .0002 %
+
+Underwater Background - .05 %
+
+Water Draik Morphing Potion - .000001 %
+
+Water Paint Brush - .000001 %
+
+Maraquan Korbat Morphing Potion - .0002 %
+
+Water Faerie Halberd - 1 %
+
+Underwater Shipwreck Background - .05 %
+
+Maraquan Shieldmaiden Plushie - 2 %
+
+nothing - 30 %
+
+Weak Bottled Earth Faerie - 1.5 %
+
+Weak Bottled Air Faerie - 1.5 %
+
+Weak Bottled Fire Faerie - 1.5 %
+
+Weak Bottled Water Faerie - 1.5 %
+
+Weak Bottled Light Faerie - 1.5 %
+
+Weak Bottled Dark Faerie - 1.5 %
+
+Unidentifiable Weak Bottled Faerie - 1.5 %
+
+
+
+Ugga Dome
+
+Zed Codestone - .4 %
+
+Sho Codestone - .4 %
+
+Kew Codestone - .4 %
+
+Cui Codestone - .4 %
+
+Vux Codestone - .4 %
+
+Mag Codestone - .4 %
+
+Bri Codestone - 1 %
+
+Har Codestone - 1 %
+
+Orn Codestone - 1 %
+
+Zei Codestone - 1 %
+
+Main Codestone - 1 %
+
+Eo Codestone - 1 %
+
+Vo Codestone - 1 %
+
+Lu Codestone - 1 %
+
+Tai-Kai Codestone - 1 %
+
+Mau Codestone - 1 %
+
+Tyragh the Tyrannian Buzz - 5 %
+
+General Crustygums - 2 %
+
+Trrygdorr - 5 %
+
+Blue Chomby Morphing Potion - .001 %
+
+Red Chomby Morphing Potion - .001 %
+
+Yellow Grarrl Morphing Potion - .001 %
+
+Green Grarrl Morphing Potion - .001 %
+
+Egg Slingshot - .05 %
+
+Bony Boomerang - .06 %
+
+Glowing Fire Axe - .05 %
+
+Jagged Stone Sword - .04 %
+
+Icklesaur - 1.5 %
+
+Mazzew - 1.5 %
+
+Camelior - 4 %
+
+Gargaraptor Arm - .01 %
+
+Blue Furry Negg - 5 %
+
+Bang Bang Negg - 1.5 %
+
+Stone Muffin - 5 %
+
+Tyrannian Paint Brush - .001 %
+
+Brown Paint Brush - .002 %
+
+Relic Paint Brush - .002 %
+
+Tyrannian Petpet Paint Brush - .004 %
+
+Tyrannian Goulash - 1.3 %
+
+Skies Above Tyrannia - 2 %
+
+Tyrannian Acara Plushie - 5 %
+
+Tyrannian Skeith Plushie - 4 %
+
+Tyrannian Usuki - 5 %
+
+Speak Tyrannian - 5 %
+
+Hairy Snowball - 3 %
+
+nothing - 45 %
+
+Unidentifiable Weak Bottled Faerie - 1.5 %
+
+Weak Bottled Dark Faerie - 1.5 %
+
+Weak Bottled Light Faerie - 1.5 %
+
+Weak Bottled Water Faerie - 1.5 %
+
+Weak Bottled Fire Faerie - 1.5 %
+
+Weak Bottled Air Faerie - 1.5 %
+
+Weak Bottled Earth Faerie - 1.5 %

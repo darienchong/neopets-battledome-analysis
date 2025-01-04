@@ -1,0 +1,17 @@
+$ARENA:Central Arena
+$CHALLENGER:Flaming Meerca
+$DIFFICULTY:Mighty
+Weak Bottled Light Faerie|1
+Weak Bottled Earth Faerie|1
+Tonu Battle Tips|1
+Wrapped Strawberry Candy|1
+Har Codestone|1
+Lu Codestone|1
+Electro Sword|1
+Eo Codestone|1
+Sho Codestone|2
+Garlic Cheese Toast|1
+Smelly Dung Muffin|1
+Bri Codestone|1
+Avocado Baby Food|1
+Cui Codestone|1
