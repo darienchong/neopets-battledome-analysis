@@ -1,7 +1,7 @@
 package helpers
 
 import (
-	"github.com/darienchong/neopetsbattledomeanalysis/constants"
+	"github.com/darienchong/neopets-battledome-analysis/constants"
 	"github.com/dustin/go-humanize"
 )
 

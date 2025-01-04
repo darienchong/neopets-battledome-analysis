@@ -4,9 +4,9 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/darienchong/neopetsbattledomeanalysis/constants"
-	"github.com/darienchong/neopetsbattledomeanalysis/models"
-	"github.com/darienchong/neopetsbattledomeanalysis/services"
+	"github.com/darienchong/neopets-battledome-analysis/constants"
+	"github.com/darienchong/neopets-battledome-analysis/models"
+	"github.com/darienchong/neopets-battledome-analysis/services"
 )
 
 func shouldHaveItemAndQuantity(drops *models.BattledomeDrops, t *testing.T, itemName string, itemQuantity int32) {

@@ -13,7 +13,7 @@ import (
 	"time"
 
 	"github.com/PuerkitoBio/goquery"
-	"github.com/darienchong/neopetsbattledomeanalysis/constants"
+	"github.com/darienchong/neopets-battledome-analysis/constants"
 )
 
 var lock = &sync.Mutex{}

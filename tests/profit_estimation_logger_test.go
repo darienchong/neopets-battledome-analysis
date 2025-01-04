@@ -3,7 +3,7 @@ package tests
 import (
 	"testing"
 
-	"github.com/darienchong/neopetsbattledomeanalysis/services"
+	"github.com/darienchong/neopets-battledome-analysis/services"
 )
 
 func TestProfitEstimationLogger(t *testing.T) {

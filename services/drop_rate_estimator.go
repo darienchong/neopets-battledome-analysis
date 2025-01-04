@@ -7,9 +7,9 @@ import (
 	"sort"
 	"sync"
 
-	"github.com/darienchong/neopetsbattledomeanalysis/constants"
-	"github.com/darienchong/neopetsbattledomeanalysis/helpers"
-	"github.com/darienchong/neopetsbattledomeanalysis/models"
+	"github.com/darienchong/neopets-battledome-analysis/constants"
+	"github.com/darienchong/neopets-battledome-analysis/helpers"
+	"github.com/darienchong/neopets-battledome-analysis/models"
 	"github.com/dustin/go-humanize"
 	"github.com/schollz/progressbar/v3"
 )

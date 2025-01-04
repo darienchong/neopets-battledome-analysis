@@ -5,7 +5,7 @@ import (
 	"log/slog"
 	"math"
 
-	"github.com/darienchong/neopetsbattledomeanalysis/helpers"
+	"github.com/darienchong/neopets-battledome-analysis/helpers"
 	"github.com/montanaflynn/stats"
 )
 

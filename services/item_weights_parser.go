@@ -7,8 +7,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/darienchong/neopetsbattledomeanalysis/helpers"
-	"github.com/darienchong/neopetsbattledomeanalysis/models"
+	"github.com/darienchong/neopets-battledome-analysis/helpers"
+	"github.com/darienchong/neopets-battledome-analysis/models"
 )
 
 type ItemWeightParser struct{}

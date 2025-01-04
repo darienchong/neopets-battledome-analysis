@@ -1,4 +1,4 @@
-module github.com/darienchong/neopetsbattledomeanalysis
+module github.com/darienchong/neopets-battledome-analysis
 
 go 1.23.4
 

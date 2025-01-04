@@ -3,8 +3,8 @@ package services
 import (
 	"fmt"
 
-	"github.com/darienchong/neopetsbattledomeanalysis/helpers"
-	"github.com/darienchong/neopetsbattledomeanalysis/models"
+	"github.com/darienchong/neopets-battledome-analysis/helpers"
+	"github.com/darienchong/neopets-battledome-analysis/models"
 )
 
 type ArenaDataAnalyser struct{}

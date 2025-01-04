@@ -4,8 +4,8 @@ import (
 	"os"
 	"testing"
 
-	"github.com/darienchong/neopetsbattledomeanalysis/caches"
-	"github.com/darienchong/neopetsbattledomeanalysis/constants"
+	"github.com/darienchong/neopets-battledome-analysis/caches"
+	"github.com/darienchong/neopets-battledome-analysis/constants"
 )
 
 func TestSaveToFile(t *testing.T) {

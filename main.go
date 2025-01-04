@@ -3,8 +3,8 @@ package main
 import (
 	"strings"
 
-	"github.com/darienchong/neopetsbattledomeanalysis/constants"
-	"github.com/darienchong/neopetsbattledomeanalysis/services"
+	"github.com/darienchong/neopets-battledome-analysis/constants"
+	"github.com/darienchong/neopets-battledome-analysis/services"
 )
 
 func main() {

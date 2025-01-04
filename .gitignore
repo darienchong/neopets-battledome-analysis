@@ -1,0 +1,5 @@
+.vscode/settings.json
+.vscode/tasks.json
+data/neopets_battledome_generated_items_10000000.txt
+data/neopets_battledome_item_drop_rates_10000000.txt
+data/neopets_item_price_cache.txt

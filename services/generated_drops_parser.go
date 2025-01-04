@@ -7,9 +7,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/darienchong/neopetsbattledomeanalysis/caches"
-	"github.com/darienchong/neopetsbattledomeanalysis/helpers"
-	"github.com/darienchong/neopetsbattledomeanalysis/models"
+	"github.com/darienchong/neopets-battledome-analysis/caches"
+	"github.com/darienchong/neopets-battledome-analysis/helpers"
+	"github.com/darienchong/neopets-battledome-analysis/models"
 )
 
 type GeneratedDropsParser struct{}

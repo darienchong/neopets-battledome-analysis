@@ -1,8 +1,8 @@
 package models
 
 import (
-	"github.com/darienchong/neopetsbattledomeanalysis/caches"
-	"github.com/darienchong/neopetsbattledomeanalysis/constants"
+	"github.com/darienchong/neopets-battledome-analysis/caches"
+	"github.com/darienchong/neopets-battledome-analysis/constants"
 )
 
 type BattledomeDrops struct {

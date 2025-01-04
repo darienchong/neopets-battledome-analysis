@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/darienchong/neopetsbattledomeanalysis/models"
+	"github.com/darienchong/neopets-battledome-analysis/models"
 )
 
 type DropDataLineParser interface {
