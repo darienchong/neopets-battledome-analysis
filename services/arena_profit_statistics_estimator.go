@@ -90,7 +90,7 @@ func (parser *ArenaProfitStatisticsParser) Parse(filePath string) ([]*models.Are
 
 type ArenaProfitStatisticsEstimator struct{}
 
-func (statsEstimator *ArenaProfitStatisticsEstimator) generateDrops() (map[string]*models.BattledomeDrops, error) {
+func (statsEstimator *ArenaProfitStatisticsEstimator) generateDrops(arenaToGenerate string) (map[string]*models.BattledomeDrops, error) {
 	estimator := new(DropRateEstimator)
 	cache := caches.GetItemPriceCacheInstance()
 	defer cache.Close()
@@ -102,6 +102,10 @@ func (statsEstimator *ArenaProfitStatisticsEstimator) generateDrops() (map[strin
 
 	drops := map[string]*models.BattledomeDrops{}
 	for _, arena := range constants.ARENAS {
+		if arenaToGenerate != "" && arenaToGenerate != arena {
+			continue
+		}
+
 		relevantItemWeights := helpers.Filter(itemWeights, func(itemWeight models.ItemWeight) bool {
 			return itemWeight.Arena == arena
 		})
@@ -166,26 +170,34 @@ func generateStatistics(arena string, items map[string]*models.BattledomeItem) (
 }
 
 func (estimator *ArenaProfitStatisticsEstimator) Estimate() (map[string]*models.ArenaProfitStatistics, error) {
-	var drops map[string]*models.BattledomeDrops
-	if helpers.IsFileExists(constants.GetGeneratedDropsFilePath()) {
-		parsedDrops, err := new(GeneratedDropsParser).Parse(constants.GetGeneratedDropsFilePath())
-		if err != nil {
-			return nil, err
-		}
+	drops := map[string]*models.BattledomeDrops{}
+	for _, arena := range constants.ARENAS {
+		if helpers.IsFileExists(constants.GetGeneratedDropsFilePath(arena)) {
+			parsedDrops, err := new(GeneratedDropsParser).Parse(constants.GetGeneratedDropsFilePath(arena))
+			if err != nil {
+				return nil, err
+			}
 
-		drops = parsedDrops
-	} else {
-		generatedDrops, err := estimator.generateDrops()
-		if err != nil {
-			return nil, err
-		}
+			if len(parsedDrops) > 1 {
+				panic(fmt.Errorf("encountered mixed arena data in generated drops; there should only be a single arena's data per file"))
+			}
 
-		err = new(GeneratedDropsParser).Save(generatedDrops, constants.GetGeneratedDropsFilePath())
-		if err != nil {
-			return nil, err
-		}
+			for parsedArena, parsedArenaDrops := range parsedDrops {
+				drops[parsedArena] = parsedArenaDrops
+			}
+		} else {
+			generatedDrops, err := estimator.generateDrops(arena)
+			if err != nil {
+				return nil, err
+			}
 
-		drops = generatedDrops
+			err = new(GeneratedDropsParser).Save(generatedDrops, constants.GetGeneratedDropsFilePath(arena))
+			if err != nil {
+				return nil, err
+			}
+
+			drops = generatedDrops
+		}
 	}
 
 	stats := map[string]*models.ArenaProfitStatistics{}

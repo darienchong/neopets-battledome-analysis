@@ -52,7 +52,7 @@ func (dropsLogger *ArenaDropsLogger) Log(dataFolderPath string) {
 		profitBreakdownTable := helpers.NewTable([]string{
 			"i",
 			"Item Name",
-			"Quantity",
+			"Qty",
 			"Price",
 			"Profit",
 			"%-age",

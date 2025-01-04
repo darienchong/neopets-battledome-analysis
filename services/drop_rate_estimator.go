@@ -66,47 +66,56 @@ func (estimator *DropRateEstimator) GenerateItems(weights []models.ItemWeight, c
 	return items
 }
 
-func (estimator *DropRateEstimator) generateItemDropRates(weights []models.ItemWeight) []models.ItemDropRate {
+func (estimator *DropRateEstimator) generateItems(weights []models.ItemWeight) map[string]*models.BattledomeItem {
 	arena := weights[0].Arena
 	items := map[string]*models.BattledomeItem{}
-	numberOfItemsGenerated := 0
-	slog.Info(fmt.Sprintf("Generating drop rates for %s @ %s items", arena, humanize.Comma(constants.NUMBER_OF_ITEMS_TO_GENERATE_FOR_ESTIMATING_DROP_RATES)))
-	itemNames := estimator.GenerateItems(weights, constants.NUMBER_OF_ITEMS_TO_GENERATE_FOR_ESTIMATING_DROP_RATES)
-	for _, item := range itemNames {
-		if item != "nothing" {
-			numberOfItemsGenerated++
-		}
-
-		_, isEntryExists := items[item]
-		if !isEntryExists {
-			items[item] = &models.BattledomeItem{
-				Name:     item,
-				Quantity: 1,
+	parsedItems, err := new(GeneratedDropsParser).Parse(constants.GetGeneratedDropsFilePath(arena))
+	if err == nil {
+		items = parsedItems[arena].Items
+	} else {
+		itemNames := estimator.GenerateItems(weights, constants.NUMBER_OF_ITEMS_TO_GENERATE_FOR_ESTIMATING_DROP_RATES)
+		for _, item := range itemNames {
+			_, isEntryExists := items[item]
+			if !isEntryExists {
+				items[item] = &models.BattledomeItem{
+					Name:     item,
+					Quantity: 1,
+				}
+			} else {
+				items[item].Quantity += 1
 			}
-		} else {
-			items[item].Quantity += 1
 		}
 	}
 
-	// bar := progressbar.Default(constants.NUMBER_OF_ITEMS_TO_GENERATE_FOR_ESTIMATING_DROP_RATES)
-	// for i := 0; i < constants.NUMBER_OF_ITEMS_TO_GENERATE_FOR_ESTIMATING_DROP_RATES; i++ {
-	// 	item := estimator.GenerateItem(weights)
-	// 	if item != "nothing" {
-	// 		numberOfItemsGenerated++
-	// 	}
+	drops := models.NewBattledomeDrops()
+	drops.Metadata = models.DropsMetadata{
+		Source:     "(generated)",
+		Arena:      arena,
+		Challenger: "(generated)",
+		Difficulty: "(generated)",
+	}
+	drops.Items = items
+	dropsMap := map[string]*models.BattledomeDrops{}
+	dropsMap[arena] = drops
+	err = new(GeneratedDropsParser).Save(dropsMap, constants.GetGeneratedDropsFilePath(arena))
+	if err != nil {
+		panic(err)
+	}
 
-	// 	_, isEntryExists := items[item]
-	// 	if !isEntryExists {
-	// 		items[item] = &models.BattledomeItem{
-	// 			Name:     item,
-	// 			Quantity: 1,
-	// 		}
-	// 	} else {
-	// 		items[item].Quantity += 1
-	// 	}
+	return items
+}
 
-	// 	bar.Add(1)
-	// }
+func (estimator *DropRateEstimator) generateItemDropRates(weights []models.ItemWeight) []models.ItemDropRate {
+	arena := weights[0].Arena
+	slog.Info(fmt.Sprintf("Generating drop rates for %s @ %s items", arena, humanize.Comma(constants.NUMBER_OF_ITEMS_TO_GENERATE_FOR_ESTIMATING_DROP_RATES)))
+	items := estimator.generateItems(weights)
+	numberOfItemsGenerated := helpers.Sum(helpers.Map(helpers.ToSlice(items), func(tuple helpers.Tuple) int32 {
+		if tuple.Elements[0].(string) == "nothing" {
+			return 0
+		} else {
+			return tuple.Elements[1].(*models.BattledomeItem).Quantity
+		}
+	}))
 	dropRates := []models.ItemDropRate{}
 	for _, v := range items {
 		dropRates = append(dropRates, models.ItemDropRate{

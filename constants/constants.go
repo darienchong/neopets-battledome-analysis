@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"path/filepath"
 	"runtime"
+	"strings"
 )
 
 const (
@@ -11,7 +12,7 @@ const (
 	ITEM_PRICE_CACHE_FILE                                        = "neopets_item_price_cache.txt"
 	ITEW_WEIGHTS_FILE                                            = "neopets_battledome_item_weights.txt"
 	ITEM_DROP_RATES_FILE_TEMPLATE                                = "neopets_battledome_item_drop_rates_%d.txt"
-	GENERATED_DROPS_FILE_TEMPLATE                                = "neopets_battledome_generated_items_%d.txt"
+	GENERATED_DROPS_FILE_TEMPLATE                                = "neopets_battledome_generated_items_%s_%d.txt"
 	DATA_EXPIRY_TIME_LAYOUT                                      = "2006-01-02 15:04:05.000000"
 	TIME_LAYOUT                                                  = "2006/01/02 15:04:05"
 	BATTLEDOME_DROPS_FOLDER                                      = "./../battledome_drop_data/"
@@ -23,7 +24,7 @@ const (
 	NUMBER_OF_ITEMS_TO_GENERATE_FOR_ESTIMATING_PROFIT_STATISTICS = 100_000_000
 
 	FILTER_ARENA = ""
-	ACTION       = "Compare"
+	ACTION       = "AnalyseDrops"
 )
 
 var (
@@ -81,6 +82,6 @@ func GetDropRatesFilePath() string {
 	return combineRelativeFolderAndFilename(DATA_FOLDER, fmt.Sprintf(ITEM_DROP_RATES_FILE_TEMPLATE, NUMBER_OF_ITEMS_TO_GENERATE_FOR_ESTIMATING_DROP_RATES))
 }
 
-func GetGeneratedDropsFilePath() string {
-	return combineRelativeFolderAndFilename(DATA_FOLDER, fmt.Sprintf(GENERATED_DROPS_FILE_TEMPLATE, NUMBER_OF_ITEMS_TO_GENERATE_FOR_ESTIMATING_PROFIT_STATISTICS))
+func GetGeneratedDropsFilePath(arena string) string {
+	return combineRelativeFolderAndFilename(DATA_FOLDER, fmt.Sprintf(GENERATED_DROPS_FILE_TEMPLATE, strings.ReplaceAll(arena, " ", "_"), NUMBER_OF_ITEMS_TO_GENERATE_FOR_ESTIMATING_PROFIT_STATISTICS))
 }
