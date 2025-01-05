@@ -1,0 +1,15 @@
+$ARENA:Neocola Centre
+$CHALLENGER:S750 Kreludan Defender Robot
+$DIFFICULTY:Mighty
+Space Goggle Helmet|2
+Robot Rock|1
+Roburg 3T3|1
+GX-4 Oscillabot|1
+Space Spice|1
+Weak Bottled Earth Faerie|2
+Unidentifiable Weak Bottled Faerie|1
+Red Neocola Token|1
+Thermal Explosive Device|1
+Vux Codestone|1
+Blue Neocola Token|2
+Vo Codestone|1
