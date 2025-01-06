@@ -25,9 +25,11 @@ type ItemPriceCache struct {
 
 var cacheInstance *ItemPriceCache
 
-var bannedItems = []string{"nothing"}
+var bannedItems = []string{
+	"nothing",
+}
 
-func GetItemPriceCacheInstance() *ItemPriceCache {
+func GetItemPriceCacheInstance() (*ItemPriceCache, error) {
 	if cacheInstance == nil {
 		lock.Lock()
 		defer lock.Unlock()
@@ -35,10 +37,13 @@ func GetItemPriceCacheInstance() *ItemPriceCache {
 			cacheInstance = &ItemPriceCache{}
 			cacheInstance.generateExpiry()
 			cacheInstance.cachedPrices = map[string]float64{}
-			cacheInstance.loadFromFile()
+			err := cacheInstance.loadFromFile()
+			if err != nil {
+				return nil, err
+			}
 		}
 	}
-	return cacheInstance
+	return cacheInstance, nil
 }
 
 func (cache *ItemPriceCache) generateExpiry() {
@@ -85,34 +90,32 @@ func (cache *ItemPriceCache) getPriceFromItemDb(itemName string) float64 {
 }
 
 func (cache *ItemPriceCache) GetPrice(itemName string) float64 {
-	maybeCachedValue, existsInCache := cache.cachedPrices[itemName]
-	if existsInCache {
+	if maybeCachedValue, existsInCache := cache.cachedPrices[itemName]; existsInCache {
 		return maybeCachedValue
 	}
 
-	priceFromItemDb := cache.getPriceFromItemDb(itemName)
-	cache.cachedPrices[itemName] = priceFromItemDb
-	return priceFromItemDb
+	cache.cachedPrices[itemName] = cache.getPriceFromItemDb(itemName)
+	return cache.cachedPrices[itemName]
 }
 
-func (cache *ItemPriceCache) flushToFile() {
+func (cache *ItemPriceCache) flushToFile() error {
 	file, err := os.OpenFile(constants.GetItemPriceCacheFilePath(), os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0755)
 	if err != nil {
-		slog.Error("Failed to open item price cache file when flushing.")
-		panic(err)
+		return fmt.Errorf("failed to open item price cache file when flushing to disk: %w", err)
 	}
 	defer file.Close()
 	file.WriteString(fmt.Sprintf("%s\n", cache.expiry.Format(constants.DATA_EXPIRY_TIME_LAYOUT)))
 	for key, value := range cache.cachedPrices {
 		file.WriteString(fmt.Sprintf("%s|%f\n", key, value))
 	}
+	return nil
 }
 
-func (cache *ItemPriceCache) Close() {
-	cache.flushToFile()
+func (cache *ItemPriceCache) Close() error {
+	return cache.flushToFile()
 }
 
-func (cache *ItemPriceCache) loadFromFile() {
+func (cache *ItemPriceCache) loadFromFile() error {
 	if cache.cachedPrices == nil {
 		cache.cachedPrices = map[string]float64{}
 	}
@@ -120,12 +123,12 @@ func (cache *ItemPriceCache) loadFromFile() {
 	_, err := os.Stat(constants.GetItemPriceCacheFilePath())
 	if os.IsNotExist(err) {
 		cache.generateExpiry()
-		return
+		return nil
 	}
 
 	file, err := os.Open(constants.GetItemPriceCacheFilePath())
 	if err != nil {
-		panic(err)
+		return err
 	}
 	defer file.Close()
 
@@ -137,7 +140,7 @@ func (cache *ItemPriceCache) loadFromFile() {
 			// It's the expiry date
 			parsedExpiry, err := time.Parse(constants.DATA_EXPIRY_TIME_LAYOUT, line)
 			if err != nil {
-				slog.Warn(fmt.Sprintf(`Failed to parse expiry for item price cache file; the line was %s`, line))
+				slog.Warn(fmt.Sprintf("Failed to parse expiry for item price cache file; the line was \"%s\"", line))
 				cache.generateExpiry()
 			} else {
 				cache.expiry = parsedExpiry
@@ -148,9 +151,9 @@ func (cache *ItemPriceCache) loadFromFile() {
 				err := os.Remove(constants.GetItemPriceCacheFilePath())
 				cache.generateExpiry()
 				if err != nil {
-					slog.Any("error", err)
+					return nil
 				}
-				return
+				return nil
 			}
 		} else {
 			data := strings.Split(line, "|")
@@ -162,4 +165,5 @@ func (cache *ItemPriceCache) loadFromFile() {
 			cache.cachedPrices[itemName] = itemPrice
 		}
 	}
+	return nil
 }

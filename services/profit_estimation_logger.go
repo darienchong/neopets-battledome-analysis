@@ -16,8 +16,11 @@ import (
 type ProfitEstimationLogger struct{}
 
 func (logger *ProfitEstimationLogger) Log() {
-	cache := caches.GetItemPriceCacheInstance()
-	defer cache.Close()
+	itemPriceCache, err := caches.GetItemPriceCacheInstance()
+	if err != nil {
+		panic(err)
+	}
+	defer itemPriceCache.Close()
 
 	statsEstimator := new(ArenaProfitStatisticsEstimator)
 	estimator := new(DropRateEstimator)
@@ -29,7 +32,7 @@ func (logger *ProfitEstimationLogger) Log() {
 	itemProfits := helpers.Map(dropRates, func(dropRate models.ItemDropRate) models.ItemProfit {
 		return models.ItemProfit{
 			ItemDropRate:    dropRate,
-			IndividualPrice: cache.GetPrice(dropRate.ItemName),
+			IndividualPrice: itemPriceCache.GetPrice(dropRate.ItemName),
 		}
 	})
 	profitsByArena := helpers.GroupBy(itemProfits, func(itemProfit models.ItemProfit) string {

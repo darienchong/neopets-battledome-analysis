@@ -92,8 +92,11 @@ type ArenaProfitStatisticsEstimator struct{}
 
 func (statsEstimator *ArenaProfitStatisticsEstimator) generateDrops(arenaToGenerate string) (map[string]*models.BattledomeDrops, error) {
 	estimator := new(DropRateEstimator)
-	cache := caches.GetItemPriceCacheInstance()
-	defer cache.Close()
+	itemPriceCache, err := caches.GetItemPriceCacheInstance()
+	if err != nil {
+		return nil, err
+	}
+	defer itemPriceCache.Close()
 
 	itemWeights, err := new(ItemWeightParser).Parse(constants.GetItemWeightsFilePath())
 	if err != nil {
@@ -119,7 +122,7 @@ func (statsEstimator *ArenaProfitStatisticsEstimator) generateDrops(arenaToGener
 				items[generatedItem] = &models.BattledomeItem{
 					Name:            generatedItem,
 					Quantity:        1,
-					IndividualPrice: cache.GetPrice(generatedItem),
+					IndividualPrice: itemPriceCache.GetPrice(generatedItem),
 				}
 			} else {
 				item.Quantity++

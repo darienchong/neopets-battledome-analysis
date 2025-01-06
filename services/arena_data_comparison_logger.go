@@ -117,7 +117,10 @@ func (comparisonLogger *ArenaDataComparisonLogger) getEstimatedProfitsByArena(pr
 }
 
 func (comparisonLogger *ArenaDataComparisonLogger) LogComparison(dataFolderPath string) {
-	itemPriceCache := caches.GetItemPriceCacheInstance()
+	itemPriceCache, err := caches.GetItemPriceCacheInstance()
+	if err != nil {
+		panic(err)
+	}
 	defer itemPriceCache.Close()
 
 	predictedDropRates, err := comparisonLogger.dropRateEstimator.Estimate()

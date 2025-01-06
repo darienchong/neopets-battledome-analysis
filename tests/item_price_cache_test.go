@@ -9,17 +9,23 @@ import (
 )
 
 func TestSaveToFile(t *testing.T) {
-	target := caches.GetItemPriceCacheInstance()
+	target, err := caches.GetItemPriceCacheInstance()
+	if err != nil {
+		t.Fatalf("%w", err)
+	}
 	target.GetPrice("Green Apple")
 	target.Close()
-	_, err := os.Stat(constants.GetItemPriceCacheFilePath())
+	_, err = os.Stat(constants.GetItemPriceCacheFilePath())
 	if os.IsNotExist(err) {
 		t.Fatalf("Cache file does not exist")
 	}
 }
 
 func TestGetPriceFromItemDb(t *testing.T) {
-	target := caches.GetItemPriceCacheInstance()
+	target, err := caches.GetItemPriceCacheInstance()
+	if err != nil {
+		t.Fatalf("%w", err)
+	}
 	defer target.Close()
 	price := target.GetPrice("Green Apple")
 

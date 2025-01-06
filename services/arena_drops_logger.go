@@ -20,7 +20,10 @@ func (dropsLogger *ArenaDropsLogger) Log(dataFolderPath string) {
 
 	parser := new(DropDataParser)
 	analyser := new(EmpiricalDropRateEstimator)
-	itemPriceCache := caches.GetItemPriceCacheInstance()
+	itemPriceCache, err := caches.GetItemPriceCacheInstance()
+	if err != nil {
+		panic(err)
+	}
 	defer itemPriceCache.Close()
 
 	files, err := helpers.GetFilesInFolder(dataFolderPath)

@@ -39,7 +39,10 @@ func (parser *GeneratedDropsParser) Parse(filePath string) (map[string]*models.B
 	}
 	defer file.Close()
 
-	itemPriceCache := caches.GetItemPriceCacheInstance()
+	itemPriceCache, err := caches.GetItemPriceCacheInstance()
+	if err != nil {
+		return nil, err
+	}
 	defer itemPriceCache.Close()
 
 	drops := map[string]*models.BattledomeDrops{}

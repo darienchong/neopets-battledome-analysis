@@ -8,7 +8,10 @@ import (
 type EmpiricalDropRateEstimator struct{}
 
 func (analyser *EmpiricalDropRateEstimator) Analyse(drops *models.BattledomeDrops) *models.DropDataAnalysisResult {
-	itemPriceCache := caches.GetItemPriceCacheInstance()
+	itemPriceCache, err := caches.GetItemPriceCacheInstance()
+	if err != nil {
+		panic(err)
+	}
 	defer itemPriceCache.Close()
 	drops.AddPrices(itemPriceCache)
 	return models.NewAnalysisResultFromDrops(drops)

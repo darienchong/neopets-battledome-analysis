@@ -18,7 +18,7 @@ const (
 	BATTLEDOME_DROPS_FOLDER                                      = "./../battledome_drop_data/"
 	FLOAT_FORMAT_LAYOUT                                          = "#,###."
 	PERCENTAGE_FORMAT_LAYOUT                                     = "#,###.##"
-	NUMBER_OF_ITEMS_TO_PRINT                                     = 10
+	NUMBER_OF_ITEMS_TO_PRINT                                     = 15
 	BATTLEDOME_DROPS_PER_DAY                                     = 15
 	NUMBER_OF_ITEMS_TO_GENERATE_FOR_ESTIMATING_DROP_RATES        = 100_000_000
 	NUMBER_OF_ITEMS_TO_GENERATE_FOR_ESTIMATING_PROFIT_STATISTICS = 100_000_000
