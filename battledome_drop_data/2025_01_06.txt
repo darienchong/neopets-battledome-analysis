@@ -1,0 +1,17 @@
+$ARENA:Neocola Centre
+$CHALLENGER:S750 Kreludan Defender Robot
+$DIFFICULTY:Mighty
+Kreludan Defender Plushie|1
+Lu Codestone|1
+Eo Codestone|1
+Zed Codestone|1
+Vux Codestone|2
+Space Goggle Helmet|1
+Main Codestone|1
+Mag Codestone|1
+Neocola Book|1
+Weak Bottled Light Faerie|1
+Unidentifiable Weak Bottled Faerie|1
+Light Speed Made Easy|1
+Sho Codestone|1
+Vo Codestone|1
