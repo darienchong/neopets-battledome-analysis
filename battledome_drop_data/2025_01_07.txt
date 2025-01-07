@@ -1,0 +1,17 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Weak Bottled Earth Faerie|1
+Cui Codestone|1
+Eo Codestone|2
+Main Codestone|1
+Blackberry Pie|1
+Buttered Toast|1
+Chocolate Covered Cherries|1
+Kew Codestone|1
+Dried Mango|1
+Har Codestone|1
+Milk Chocolate Rose|1
+Steamed Vegetable Dumplings|1
+Healthy Veggie Deluxe Sandwich|1
+Toast with Jam|1
