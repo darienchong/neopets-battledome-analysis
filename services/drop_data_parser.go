@@ -15,6 +15,10 @@ import (
 
 type DropDataParser struct{}
 
+func NewDropDataParser() *DropDataParser {
+	return &DropDataParser{}
+}
+
 var (
 	parsers = []DropDataLineParser{
 		new(MetadataParser),

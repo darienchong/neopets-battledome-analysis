@@ -10,15 +10,15 @@ import (
 )
 
 func TestAnalyser(t *testing.T) {
-	target := new(services.EmpiricalDropRateEstimator)
-	parser := new(services.DropDataParser)
+	target := services.NewEmpiricalDropRateEstimator()
+	parser := services.NewDropDataParser()
 	drops, err := parser.Parse(constants.GetDropDataFilePath("2024_12_20.txt"))
 	if err != nil {
 		slog.Any("error", err)
 		t.Fatalf("Failed to parse drop file!")
 	}
 	res := target.Analyse(drops)
-	prev := new(models.BattledomeItem)
+	prev := &models.BattledomeItem{}
 	for idx, item := range res.GetItemsOrderedByPrice() {
 		if idx != 0 {
 			if prev.IndividualPrice < item.IndividualPrice {

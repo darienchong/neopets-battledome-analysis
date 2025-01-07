@@ -10,7 +10,7 @@ import (
 )
 
 func TestItemWeightsParser(t *testing.T) {
-	target := new(services.ItemWeightParser)
+	target := services.NewItemWeightParser()
 	itemWeights, err := target.Parse(constants.GetItemWeightsFilePath())
 	if err != nil {
 		panic(err)

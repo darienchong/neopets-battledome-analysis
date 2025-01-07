@@ -8,5 +8,5 @@ import (
 )
 
 func TestArenaDropsLogger(t *testing.T) {
-	new(services.ArenaDropsLogger).Log(constants.BATTLEDOME_DROPS_FOLDER)
+	services.NewArenaDropsLogger().Log(constants.BATTLEDOME_DROPS_FOLDER)
 }

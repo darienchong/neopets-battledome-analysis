@@ -84,15 +84,15 @@ func Distinct[T comparable](ts []T) []T {
 	return distinctTs
 }
 
-func GroupBy[T any, K comparable](ts []T, keyFn func(T) K) map[K][]*T {
-	groups := map[K][]*T{}
+func GroupBy[T any, K comparable](ts []T, keyFn func(T) K) map[K][]T {
+	groups := map[K][]T{}
 	for _, t := range ts {
 		key := keyFn(t)
 		_, ok := groups[key]
 		if !ok {
-			groups[key] = []*T{}
+			groups[key] = []T{}
 		}
-		groups[key] = append(groups[key], &t)
+		groups[key] = append(groups[key], t)
 	}
 	return groups
 }

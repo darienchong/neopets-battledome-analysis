@@ -7,5 +7,5 @@ import (
 )
 
 func TestProfitEstimationLogger(t *testing.T) {
-	new(services.ProfitEstimationLogger).Log()
+	services.NewProfitEstimationLogger().Log()
 }

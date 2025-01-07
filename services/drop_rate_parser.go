@@ -13,6 +13,10 @@ import (
 
 type DropRateParser struct{}
 
+func NewDropRateParser() *DropRateParser {
+	return &DropRateParser{}
+}
+
 func (parser *DropRateParser) Parse(filePath string) ([]models.ItemDropRate, error) {
 	if !helpers.IsFileExists(filePath) {
 		return nil, fmt.Errorf("item drop rates file does not exist! file path was \"%s\"", filePath)

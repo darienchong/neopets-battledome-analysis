@@ -31,11 +31,11 @@ func GetDryChance(dropRate float64, trials int) float64 {
 }
 
 func NewArenaDataComparisonLogger() *ArenaDataComparisonLogger {
-	instance := new(ArenaDataComparisonLogger)
-	instance.dropDataParser = new(DropDataParser)
-	instance.empiricalDropRateEstimator = new(EmpiricalDropRateEstimator)
-	instance.arenaProfitStatisticsEstimator = new(ArenaProfitStatisticsEstimator)
-	instance.dropRateEstimator = new(DropRateEstimator)
+	instance := &ArenaDataComparisonLogger{}
+	instance.dropDataParser = NewDropDataParser()
+	instance.empiricalDropRateEstimator = NewEmpiricalDropRateEstimator()
+	instance.arenaProfitStatisticsEstimator = NewArenaProfitStatisticsEstimator()
+	instance.dropRateEstimator = NewDropRateEstimator()
 	return instance
 }
 
@@ -99,7 +99,7 @@ func (comparisonLogger *ArenaDataComparisonLogger) getEstimatedProfitStatisticsB
 	return arenaStatistics
 }
 
-func (comparisonLogger *ArenaDataComparisonLogger) getEstimatedProfitsByArena(predictedDropRates []models.ItemDropRate, itemPriceCache *caches.ItemPriceCache) map[string][]*models.ItemProfit {
+func (comparisonLogger *ArenaDataComparisonLogger) getEstimatedProfitsByArena(predictedDropRates []models.ItemDropRate, itemPriceCache *caches.ItemPriceCache) map[string][]models.ItemProfit {
 	return helpers.GroupBy(
 		helpers.Map(
 			predictedDropRates,
@@ -147,7 +147,7 @@ func (comparisonLogger *ArenaDataComparisonLogger) LogComparison(dataFolderPath 
 			return drops.GetTotalItemQuantity()
 		}))
 
-		predictedProfit := helpers.Sum(helpers.Map(estimatedProfitsByArena[arena], func(profit *models.ItemProfit) float64 { return profit.GetProfit() })) * constants.BATTLEDOME_DROPS_PER_DAY
+		predictedProfit := helpers.Sum(helpers.Map(estimatedProfitsByArena[arena], func(profit models.ItemProfit) float64 { return profit.GetProfit() })) * constants.BATTLEDOME_DROPS_PER_DAY
 		predictedStdev := estimatedProfitStatisticsByArena[arena].StandardDeviation * math.Sqrt(constants.BATTLEDOME_DROPS_PER_DAY)
 		stats, err := analysisResultsByArena[arena].GetStatistics()
 		if err != nil {
@@ -183,7 +183,7 @@ func (comparisonLogger *ArenaDataComparisonLogger) LogComparison(dataFolderPath 
 			"Expectation",
 			"%age",
 		})
-		predictedProfitableItems := helpers.OrderByDescending(estimatedProfitsByArena[arena], func(profit *models.ItemProfit) float64 {
+		predictedProfitableItems := helpers.OrderByDescending(estimatedProfitsByArena[arena], func(profit models.ItemProfit) float64 {
 			return profit.GetProfit()
 		})
 		for i, itemProfit := range predictedProfitableItems {
@@ -248,18 +248,18 @@ func (comparisonLogger *ArenaDataComparisonLogger) LogComparison(dataFolderPath 
 	}
 }
 
-func (*ArenaDataComparisonLogger) generateCodestoneDropRateTables(arena string, analysisResultsByArena map[string]*models.DropDataAnalysisResult, predictedProfitableItems []*models.ItemProfit, actualProfitableItems []*models.BattledomeItem, codestoneList []string) (*helpers.Table, *helpers.Table) {
+func (*ArenaDataComparisonLogger) generateCodestoneDropRateTables(arena string, analysisResultsByArena map[string]*models.DropDataAnalysisResult, predictedProfitableItems []models.ItemProfit, actualProfitableItems []*models.BattledomeItem, codestoneList []string) (*helpers.Table, *helpers.Table) {
 	predictedCodestoneDropRateTable := helpers.NewNamedTable("Predicted", []string{
 		"Item Name",
 		"Drop Rate",
 	})
 	predictedCodestoneDropRateTable.IsLastRowDistinct = true
 
-	predictedCodestoneDropRates := helpers.ToMap(helpers.Filter(predictedProfitableItems, func(itemProfit *models.ItemProfit) bool {
+	predictedCodestoneDropRates := helpers.ToMap(helpers.Filter(predictedProfitableItems, func(itemProfit models.ItemProfit) bool {
 		return slices.Contains(codestoneList, itemProfit.ItemName)
-	}), func(itemProfit *models.ItemProfit) string {
+	}), func(itemProfit models.ItemProfit) string {
 		return itemProfit.ItemName
-	}, func(itemProfit *models.ItemProfit) *models.ItemProfit {
+	}, func(itemProfit models.ItemProfit) models.ItemProfit {
 		return itemProfit
 	})
 

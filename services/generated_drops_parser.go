@@ -14,6 +14,10 @@ import (
 
 type GeneratedDropsParser struct{}
 
+func NewGeneratedDropsParser() *GeneratedDropsParser {
+	return &GeneratedDropsParser{}
+}
+
 func (parser *GeneratedDropsParser) Save(drops map[string]*models.BattledomeDrops, filePath string) error {
 	file, err := os.OpenFile(filePath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0755)
 	if err != nil {

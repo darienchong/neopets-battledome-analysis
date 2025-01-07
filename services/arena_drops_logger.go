@@ -13,13 +13,17 @@ import (
 
 type ArenaDropsLogger struct{}
 
+func NewArenaDropsLogger() *ArenaDropsLogger {
+	return &ArenaDropsLogger{}
+}
+
 func (dropsLogger *ArenaDropsLogger) Log(dataFolderPath string) {
 	if constants.FILTER_ARENA != "" {
 		slog.Info(fmt.Sprintf("Only displaying data related to \"%s\"", constants.FILTER_ARENA))
 	}
 
-	parser := new(DropDataParser)
-	analyser := new(EmpiricalDropRateEstimator)
+	parser := NewDropDataParser()
+	analyser := NewEmpiricalDropRateEstimator()
 	itemPriceCache, err := caches.GetItemPriceCacheInstance()
 	if err != nil {
 		panic(err)

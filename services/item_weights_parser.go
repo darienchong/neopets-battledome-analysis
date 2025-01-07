@@ -13,6 +13,10 @@ import (
 
 type ItemWeightParser struct{}
 
+func NewItemWeightParser() *ItemWeightParser {
+	return &ItemWeightParser{}
+}
+
 func (parser *ItemWeightParser) Parse(filePath string) ([]models.ItemWeight, error) {
 	if !helpers.IsFileExists(filePath) {
 		return nil, fmt.Errorf("item weights file does not exist: %s", filePath)

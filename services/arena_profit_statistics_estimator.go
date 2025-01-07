@@ -16,7 +16,15 @@ import (
 	"github.com/montanaflynn/stats"
 )
 
-type ArenaProfitStatisticsParser struct{}
+type ArenaProfitStatisticsParser struct {
+	itemGenerator *ItemGenerator
+}
+
+func NewArenaProfitStatisticsParser() *ArenaProfitStatisticsParser {
+	return &ArenaProfitStatisticsParser{
+		itemGenerator: &ItemGenerator{},
+	}
+}
 
 func (parser *ArenaProfitStatisticsParser) Save(arenaStats []*models.ArenaProfitStatistics, expiry time.Time, filePath string) error {
 	slog.Info(fmt.Sprintf("Saving arena statistics to %s", filePath))
@@ -88,17 +96,24 @@ func (parser *ArenaProfitStatisticsParser) Parse(filePath string) ([]*models.Are
 	return stats, expiry, nil
 }
 
-type ArenaProfitStatisticsEstimator struct{}
+type ArenaProfitStatisticsEstimator struct {
+	itemGenerator *ItemGenerator
+}
+
+func NewArenaProfitStatisticsEstimator() *ArenaProfitStatisticsEstimator {
+	return &ArenaProfitStatisticsEstimator{
+		itemGenerator: &ItemGenerator{},
+	}
+}
 
 func (statsEstimator *ArenaProfitStatisticsEstimator) generateDrops(arenaToGenerate string) (map[string]*models.BattledomeDrops, error) {
-	estimator := new(DropRateEstimator)
 	itemPriceCache, err := caches.GetItemPriceCacheInstance()
 	if err != nil {
 		return nil, err
 	}
 	defer itemPriceCache.Close()
 
-	itemWeights, err := new(ItemWeightParser).Parse(constants.GetItemWeightsFilePath())
+	itemWeights, err := NewItemWeightParser().Parse(constants.GetItemWeightsFilePath())
 	if err != nil {
 		return nil, err
 	}
@@ -115,7 +130,7 @@ func (statsEstimator *ArenaProfitStatisticsEstimator) generateDrops(arenaToGener
 
 		items := map[string]*models.BattledomeItem{}
 		slog.Info(fmt.Sprintf("Generating arena statistics for %s", arena))
-		itemNames := estimator.GenerateItems(relevantItemWeights, constants.NUMBER_OF_ITEMS_TO_GENERATE_FOR_ESTIMATING_PROFIT_STATISTICS)
+		itemNames := statsEstimator.itemGenerator.GenerateItems(relevantItemWeights, constants.NUMBER_OF_ITEMS_TO_GENERATE_FOR_ESTIMATING_PROFIT_STATISTICS)
 		for _, generatedItem := range itemNames {
 			item, isInItems := items[generatedItem]
 			if !isInItems {
@@ -176,7 +191,7 @@ func (estimator *ArenaProfitStatisticsEstimator) Estimate() (map[string]*models.
 	drops := map[string]*models.BattledomeDrops{}
 	for _, arena := range constants.ARENAS {
 		if helpers.IsFileExists(constants.GetGeneratedDropsFilePath(arena)) {
-			parsedDrops, err := new(GeneratedDropsParser).Parse(constants.GetGeneratedDropsFilePath(arena))
+			parsedDrops, err := NewGeneratedDropsParser().Parse(constants.GetGeneratedDropsFilePath(arena))
 			if err != nil {
 				return nil, err
 			}
@@ -194,7 +209,7 @@ func (estimator *ArenaProfitStatisticsEstimator) Estimate() (map[string]*models.
 				return nil, err
 			}
 
-			err = new(GeneratedDropsParser).Save(generatedDrops, constants.GetGeneratedDropsFilePath(arena))
+			err = NewGeneratedDropsParser().Save(generatedDrops, constants.GetGeneratedDropsFilePath(arena))
 			if err != nil {
 				return nil, err
 			}

@@ -15,6 +15,10 @@ import (
 
 type ProfitEstimationLogger struct{}
 
+func NewProfitEstimationLogger() *ProfitEstimationLogger {
+	return &ProfitEstimationLogger{}
+}
+
 func (logger *ProfitEstimationLogger) Log() {
 	itemPriceCache, err := caches.GetItemPriceCacheInstance()
 	if err != nil {
@@ -22,8 +26,8 @@ func (logger *ProfitEstimationLogger) Log() {
 	}
 	defer itemPriceCache.Close()
 
-	statsEstimator := new(ArenaProfitStatisticsEstimator)
-	estimator := new(DropRateEstimator)
+	statsEstimator := NewArenaProfitStatisticsEstimator()
+	estimator := NewDropRateEstimator()
 	dropRates, err := estimator.Estimate()
 	if err != nil {
 		panic(err)

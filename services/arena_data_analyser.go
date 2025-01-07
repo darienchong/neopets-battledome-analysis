@@ -9,6 +9,10 @@ import (
 
 type ArenaDataAnalyser struct{}
 
+func NewArenaDataAnalyser() *ArenaDataAnalyser {
+	return &ArenaDataAnalyser{}
+}
+
 func validateDropsAreAllFromSameArena(drops []*models.BattledomeDrops) bool {
 	if len(drops) == 0 {
 		return true
