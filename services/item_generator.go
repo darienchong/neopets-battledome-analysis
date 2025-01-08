@@ -6,17 +6,22 @@ import (
 	"sort"
 	"sync"
 
+	"github.com/darienchong/neopets-battledome-analysis/caches"
 	"github.com/darienchong/neopets-battledome-analysis/models"
 	"github.com/schollz/progressbar/v3"
 )
 
-type ItemGenerator struct{}
-
-func NewItemGenerator() *ItemGenerator {
-	return &ItemGenerator{}
+type ItemGenerator struct {
+	ItemWeightService *ItemWeightService
 }
 
-func (generator *ItemGenerator) GenerateItem(weights []models.ItemWeight) string {
+func NewItemGenerator() *ItemGenerator {
+	return &ItemGenerator{
+		ItemWeightService: NewItemWeightService(),
+	}
+}
+
+func (generator *ItemGenerator) generateItem(weights []models.ItemWeight) string {
 	rand.Shuffle(len(weights), func(i int, j int) {
 		weights[i], weights[j] = weights[j], weights[i]
 	})
@@ -38,7 +43,18 @@ func (generator *ItemGenerator) GenerateItem(weights []models.ItemWeight) string
 	panic(fmt.Errorf("failed to generate an item - this should not happen; total was %f, sample was %f", total, sample))
 }
 
-func (generator *ItemGenerator) GenerateItems(weights []models.ItemWeight, count int) []string {
+func (generator *ItemGenerator) GenerateItems(arena string, count int) (map[string]*models.BattledomeItem, error) {
+	weights, err := generator.ItemWeightService.GetItemWeights(arena)
+	if err != nil {
+		return nil, err
+	}
+
+	itemPriceCache, err := caches.GetItemPriceCacheInstance()
+	if err != nil {
+		return nil, err
+	}
+	defer itemPriceCache.Close()
+
 	progressBarMutex := &sync.Mutex{}
 	itemChannel := make(chan string, count)
 	wg := &sync.WaitGroup{}
@@ -49,7 +65,7 @@ func (generator *ItemGenerator) GenerateItems(weights []models.ItemWeight, count
 		go func(p *progressbar.ProgressBar) {
 			defer wg.Done()
 
-			item := generator.GenerateItem(append([]models.ItemWeight(nil), weights...))
+			item := generator.generateItem(append([]models.ItemWeight(nil), weights...))
 			itemChannel <- item
 			progressBarMutex.Lock()
 			defer progressBarMutex.Unlock()
@@ -59,9 +75,24 @@ func (generator *ItemGenerator) GenerateItems(weights []models.ItemWeight, count
 	wg.Wait()
 	close(itemChannel)
 
-	items := []string{}
+	itemNames := []string{}
 	for range itemChannel {
-		items = append(items, <-itemChannel)
+		itemNames = append(itemNames, <-itemChannel)
 	}
-	return items
+
+	items := map[string]*models.BattledomeItem{}
+	for _, generatedItem := range itemNames {
+		item, isInItems := items[generatedItem]
+		if !isInItems {
+			items[generatedItem] = &models.BattledomeItem{
+				Name:            generatedItem,
+				Quantity:        1,
+				IndividualPrice: itemPriceCache.GetPrice(generatedItem),
+			}
+		} else {
+			item.Quantity++
+		}
+	}
+
+	return items, nil
 }

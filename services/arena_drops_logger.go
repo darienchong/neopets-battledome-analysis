@@ -11,34 +11,39 @@ import (
 	"github.com/darienchong/neopets-battledome-analysis/models"
 )
 
-type ArenaDropsLogger struct{}
-
-func NewArenaDropsLogger() *ArenaDropsLogger {
-	return &ArenaDropsLogger{}
+type ArenaDropsLogger struct {
+	DropDataService            *DropDataService
+	DropDataParser             *DropDataParser
+	EmpiricalDropRateEstimator *EmpiricalDropRateEstimator
 }
 
-func (dropsLogger *ArenaDropsLogger) Log(dataFolderPath string) {
+func NewArenaDropsLogger() *ArenaDropsLogger {
+	return &ArenaDropsLogger{
+		DropDataService:            NewDropDataService(),
+		DropDataParser:             NewDropDataParser(),
+		EmpiricalDropRateEstimator: NewEmpiricalDropRateEstimator(),
+	}
+}
+
+func (dropsLogger *ArenaDropsLogger) Log(dataFolderPath string) error {
 	if constants.FILTER_ARENA != "" {
 		slog.Info(fmt.Sprintf("Only displaying data related to \"%s\"", constants.FILTER_ARENA))
 	}
 
-	parser := NewDropDataParser()
-	analyser := NewEmpiricalDropRateEstimator()
 	itemPriceCache, err := caches.GetItemPriceCacheInstance()
 	if err != nil {
-		panic(err)
+		return fmt.Errorf("failed to get item price cache instance: %w", err)
 	}
 	defer itemPriceCache.Close()
 
 	files, err := helpers.GetFilesInFolder(dataFolderPath)
 	if err != nil {
-		slog.Error("Failed to get files in folder!")
-		panic(err)
+		return fmt.Errorf("failed to get files in %s: %w", dataFolderPath, err)
 	}
 
 	samplesByArena := map[string][]*models.BattledomeDrops{}
 	for _, file := range files {
-		drops, err := parser.Parse(constants.GetDropDataFilePath(file))
+		drops, err := dropsLogger.DropDataParser.Parse(constants.GetDropDataFilePath(file))
 		if err != nil {
 			slog.Error(fmt.Sprintf("Failed to parse drop data file (%s)", file))
 			panic(err)
@@ -55,7 +60,7 @@ func (dropsLogger *ArenaDropsLogger) Log(dataFolderPath string) {
 		}
 
 		itemCount := 0
-		res := analyser.Analyse(drops)
+		res := dropsLogger.EmpiricalDropRateEstimator.Analyse(drops)
 		profitBreakdownTable := helpers.NewTable([]string{
 			"i",
 			"Item Name",
@@ -101,4 +106,6 @@ func (dropsLogger *ArenaDropsLogger) Log(dataFolderPath string) {
 		profitBreakdownTable.LogWithPrefix("\t")
 		slog.Info("")
 	}
+
+	return nil
 }

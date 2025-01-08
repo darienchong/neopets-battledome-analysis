@@ -12,8 +12,6 @@ func main() {
 	switch constants.ACTION {
 	case "AnalyseDrops":
 		services.NewArenaDropsLogger().Log(dataFolderPath)
-	case "EstimateProfits":
-		services.NewProfitEstimationLogger().Log()
 	case "Compare":
 		services.NewArenaDataComparisonLogger().LogComparison(dataFolderPath)
 	}

@@ -9,7 +9,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/darienchong/neopets-battledome-analysis/caches"
 	"github.com/darienchong/neopets-battledome-analysis/constants"
 	"github.com/darienchong/neopets-battledome-analysis/helpers"
 	"github.com/darienchong/neopets-battledome-analysis/models"
@@ -17,12 +16,12 @@ import (
 )
 
 type ArenaProfitStatisticsParser struct {
-	itemGenerator *ItemGenerator
+	GeneratedDropsService *GeneratedDropsService
 }
 
 func NewArenaProfitStatisticsParser() *ArenaProfitStatisticsParser {
 	return &ArenaProfitStatisticsParser{
-		itemGenerator: &ItemGenerator{},
+		GeneratedDropsService: NewGeneratedDropsService(),
 	}
 }
 
@@ -58,6 +57,7 @@ func (parser *ArenaProfitStatisticsParser) Parse(filePath string) ([]*models.Are
 		return nil, time.Now(), err
 	}
 	defer file.Close()
+
 	scanner := bufio.NewScanner(file)
 	expiry := time.Now().AddDate(0, 0, 7)
 	for scanner.Scan() {
@@ -97,68 +97,17 @@ func (parser *ArenaProfitStatisticsParser) Parse(filePath string) ([]*models.Are
 }
 
 type ArenaProfitStatisticsEstimator struct {
-	itemGenerator *ItemGenerator
+	GeneratedDropsService *GeneratedDropsService
 }
 
 func NewArenaProfitStatisticsEstimator() *ArenaProfitStatisticsEstimator {
 	return &ArenaProfitStatisticsEstimator{
-		itemGenerator: &ItemGenerator{},
+		GeneratedDropsService: NewGeneratedDropsService(),
 	}
-}
-
-func (statsEstimator *ArenaProfitStatisticsEstimator) generateDrops(arenaToGenerate string) (map[string]*models.BattledomeDrops, error) {
-	itemPriceCache, err := caches.GetItemPriceCacheInstance()
-	if err != nil {
-		return nil, err
-	}
-	defer itemPriceCache.Close()
-
-	itemWeights, err := NewItemWeightParser().Parse(constants.GetItemWeightsFilePath())
-	if err != nil {
-		return nil, err
-	}
-
-	drops := map[string]*models.BattledomeDrops{}
-	for _, arena := range constants.ARENAS {
-		if arenaToGenerate != "" && arenaToGenerate != arena {
-			continue
-		}
-
-		relevantItemWeights := helpers.Filter(itemWeights, func(itemWeight models.ItemWeight) bool {
-			return itemWeight.Arena == arena
-		})
-
-		items := map[string]*models.BattledomeItem{}
-		slog.Info(fmt.Sprintf("Generating arena statistics for %s", arena))
-		itemNames := statsEstimator.itemGenerator.GenerateItems(relevantItemWeights, constants.NUMBER_OF_ITEMS_TO_GENERATE_FOR_ESTIMATING_PROFIT_STATISTICS)
-		for _, generatedItem := range itemNames {
-			item, isInItems := items[generatedItem]
-			if !isInItems {
-				items[generatedItem] = &models.BattledomeItem{
-					Name:            generatedItem,
-					Quantity:        1,
-					IndividualPrice: itemPriceCache.GetPrice(generatedItem),
-				}
-			} else {
-				item.Quantity++
-			}
-		}
-
-		drops[arena] = models.NewBattledomeDrops()
-		drops[arena].Metadata = models.DropsMetadata{
-			Source:     "(generated)",
-			Arena:      arena,
-			Challenger: "(generated)",
-			Difficulty: "(generated)",
-		}
-		drops[arena].Items = items
-	}
-
-	return drops, nil
 }
 
 func generateStatistics(arena string, items map[string]*models.BattledomeItem) (*models.ArenaProfitStatistics, error) {
-	arenaStats := &models.ArenaProfitStatistics{}
+
 	profitData := []float64{}
 	for _, item := range items {
 		for j := 0; j < int(item.Quantity); j++ {
@@ -170,52 +119,33 @@ func generateStatistics(arena string, items map[string]*models.BattledomeItem) (
 	if err != nil {
 		return nil, err
 	}
+
 	median, err := stats.Median(profitData)
 	if err != nil {
 		return nil, err
 	}
+
 	stdev, err := stats.StandardDeviationSample(profitData)
 	if err != nil {
 		return nil, err
 	}
 
-	arenaStats.Arena = arena
-	arenaStats.Mean = mean
-	arenaStats.Median = median
-	arenaStats.StandardDeviation = stdev
-
-	return arenaStats, nil
+	return &models.ArenaProfitStatistics{
+		Arena:             arena,
+		Mean:              mean,
+		Median:            median,
+		StandardDeviation: stdev,
+	}, nil
 }
 
 func (estimator *ArenaProfitStatisticsEstimator) Estimate() (map[string]*models.ArenaProfitStatistics, error) {
 	drops := map[string]*models.BattledomeDrops{}
 	for _, arena := range constants.ARENAS {
-		if helpers.IsFileExists(constants.GetGeneratedDropsFilePath(arena)) {
-			parsedDrops, err := NewGeneratedDropsParser().Parse(constants.GetGeneratedDropsFilePath(arena))
-			if err != nil {
-				return nil, err
-			}
-
-			if len(parsedDrops) > 1 {
-				panic(fmt.Errorf("encountered mixed arena data in generated drops; there should only be a single arena's data per file"))
-			}
-
-			for parsedArena, parsedArenaDrops := range parsedDrops {
-				drops[parsedArena] = parsedArenaDrops
-			}
-		} else {
-			generatedDrops, err := estimator.generateDrops(arena)
-			if err != nil {
-				return nil, err
-			}
-
-			err = NewGeneratedDropsParser().Save(generatedDrops, constants.GetGeneratedDropsFilePath(arena))
-			if err != nil {
-				return nil, err
-			}
-
-			drops = generatedDrops
+		dropsByArena, err := estimator.GeneratedDropsService.GetDrops(arena)
+		if err != nil {
+			return nil, err
 		}
+		drops[arena] = dropsByArena
 	}
 
 	stats := map[string]*models.ArenaProfitStatistics{}

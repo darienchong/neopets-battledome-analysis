@@ -59,6 +59,16 @@ func Filter[T any](ts []T, predicate func(T) bool) []T {
 	return filteredTs
 }
 
+func FilterPointers[T any](ts []*T, predicate func(*T) bool) []*T {
+	filteredTs := []*T{}
+	for _, elt := range ts {
+		if predicate(elt) {
+			filteredTs = append(filteredTs, elt)
+		}
+	}
+	return filteredTs
+}
+
 func Count[T any](ts []T, predicate func(T) bool) int {
 	return len(Filter(ts, predicate))
 }
@@ -91,6 +101,19 @@ func GroupBy[T any, K comparable](ts []T, keyFn func(T) K) map[K][]T {
 		_, ok := groups[key]
 		if !ok {
 			groups[key] = []T{}
+		}
+		groups[key] = append(groups[key], t)
+	}
+	return groups
+}
+
+func GroupPointersBy[T any, K comparable](ts []*T, keyFn func(*T) K) map[K][]*T {
+	groups := map[K][]*T{}
+	for _, t := range ts {
+		key := keyFn(t)
+		_, ok := groups[key]
+		if !ok {
+			groups[key] = []*T{}
 		}
 		groups[key] = append(groups[key], t)
 	}
@@ -138,10 +161,56 @@ func ToMap[K comparable, T, V any](ts []T, keyFn func(T) K, valFn func(T) V) map
 	return mappedVals
 }
 
+func ToPointerMap[K comparable, T, V any](ts []T, keyFn func(T) K, valFn func(T) *V) map[K]*V {
+	mappedVals := map[K]*V{}
+	for _, t := range ts {
+		key := keyFn(t)
+		val := valFn(t)
+		mappedVals[key] = val
+	}
+	return mappedVals
+}
+
 func Keys[K comparable, V any](m map[K]V) []K {
 	keys := []K{}
 	for k, _ := range m {
 		keys = append(keys, k)
 	}
 	return keys
+}
+
+func PointerValues[K comparable, V any](m map[K]*V) []*V {
+	values := []*V{}
+	for _, v := range m {
+		values = append(values, v)
+	}
+	return values
+}
+
+func Values[K comparable, V any](m map[K]V) []V {
+	values := []V{}
+	for _, v := range m {
+		values = append(values, v)
+	}
+	return values
+}
+
+func LazyWhen[T any](pred bool, ifTrue func() T, ifFalse func() T) T {
+	if pred {
+		return ifTrue()
+	}
+	return ifFalse()
+}
+
+func When[T any](pred bool, ifTrue T, ifFalse T) T {
+	if pred {
+		return ifTrue
+	}
+	return ifFalse
+}
+
+func AsLiteral[T any](ptrs []*T) []T {
+	return Map(ptrs, func(ptr *T) T {
+		return *ptr
+	})
 }

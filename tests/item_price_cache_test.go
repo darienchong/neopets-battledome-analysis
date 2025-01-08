@@ -11,7 +11,7 @@ import (
 func TestSaveToFile(t *testing.T) {
 	target, err := caches.GetItemPriceCacheInstance()
 	if err != nil {
-		t.Fatalf("%w", err)
+		t.Fatalf("%s", err)
 	}
 	target.GetPrice("Green Apple")
 	target.Close()
@@ -24,7 +24,7 @@ func TestSaveToFile(t *testing.T) {
 func TestGetPriceFromItemDb(t *testing.T) {
 	target, err := caches.GetItemPriceCacheInstance()
 	if err != nil {
-		t.Fatalf("%w", err)
+		t.Fatalf("%s", err)
 	}
 	defer target.Close()
 	price := target.GetPrice("Green Apple")

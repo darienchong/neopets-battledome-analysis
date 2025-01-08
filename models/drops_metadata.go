@@ -37,3 +37,12 @@ func (first *DropsMetadata) Combine(second *DropsMetadata) (*DropsMetadata, erro
 func (metadata *DropsMetadata) String() string {
 	return fmt.Sprintf("%s - %s - %s - %s", metadata.Source, metadata.Arena, metadata.Challenger, metadata.Difficulty)
 }
+
+func GeneratedMetadata(arena string) *DropsMetadata {
+	return &DropsMetadata{
+		Source:     "(generated)",
+		Arena:      arena,
+		Challenger: "(generated)",
+		Difficulty: "(generated)",
+	}
+}

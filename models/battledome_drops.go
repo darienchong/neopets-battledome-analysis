@@ -11,25 +11,24 @@ type BattledomeDrops struct {
 }
 
 func NewBattledomeDrops() *BattledomeDrops {
-	instance := new(BattledomeDrops)
-	instance.Items = map[string]*BattledomeItem{}
-	return instance
+	return &BattledomeDrops{
+		Items: map[string]*BattledomeItem{},
+	}
 }
 
 func (drops *BattledomeDrops) GetTotalItemQuantity() int {
 	totalItemQuantity := 0
 	for _, item := range drops.Items {
+		if item.Name == "nothing" {
+			continue
+		}
 		totalItemQuantity += int(item.Quantity)
 	}
 	return totalItemQuantity
 }
 
 func (drops *BattledomeDrops) Validate() bool {
-	if drops.GetTotalItemQuantity() != constants.BATTLEDOME_DROPS_PER_DAY {
-		return false
-	}
-
-	return true
+	return drops.GetTotalItemQuantity() == constants.BATTLEDOME_DROPS_PER_DAY
 }
 
 func (drops *BattledomeDrops) AddPrices(cache *caches.ItemPriceCache) {

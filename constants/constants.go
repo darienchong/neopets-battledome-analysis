@@ -11,7 +11,7 @@ const (
 	DATA_FOLDER                                                  = "./../data/"
 	ITEM_PRICE_CACHE_FILE                                        = "neopets_item_price_cache.txt"
 	ITEW_WEIGHTS_FILE                                            = "neopets_battledome_item_weights.txt"
-	ITEM_DROP_RATES_FILE_TEMPLATE                                = "neopets_battledome_item_drop_rates_%d.txt"
+	ITEM_DROP_RATES_FILE_TEMPLATE                                = "neopets_battledome_item_drop_rates_%s_%d.txt"
 	GENERATED_DROPS_FILE_TEMPLATE                                = "neopets_battledome_generated_items_%s_%d.txt"
 	DATA_EXPIRY_TIME_LAYOUT                                      = "2006-01-02 15:04:05.000000"
 	TIME_LAYOUT                                                  = "2006/01/02 15:04:05"
@@ -78,8 +78,8 @@ func GetItemWeightsFilePath() string {
 	return combineRelativeFolderAndFilename(DATA_FOLDER, ITEW_WEIGHTS_FILE)
 }
 
-func GetDropRatesFilePath() string {
-	return combineRelativeFolderAndFilename(DATA_FOLDER, fmt.Sprintf(ITEM_DROP_RATES_FILE_TEMPLATE, NUMBER_OF_ITEMS_TO_GENERATE_FOR_ESTIMATING_DROP_RATES))
+func GetDropRatesFilePath(arena string) string {
+	return combineRelativeFolderAndFilename(DATA_FOLDER, fmt.Sprintf(ITEM_DROP_RATES_FILE_TEMPLATE, strings.ReplaceAll(arena, " ", "_"), NUMBER_OF_ITEMS_TO_GENERATE_FOR_ESTIMATING_DROP_RATES))
 }
 
 func GetGeneratedDropsFilePath(arena string) string {
