@@ -1,0 +1,17 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Weak Bottled Earth Faerie|1
+Ridiculously Heavy Battle Hammer|1
+Cinnamon Raisin Oatmeal|1
+Golden Muffin|2
+Fruity Pancakes|1
+Electro Sword|1
+Har Codestone|1
+Darigan Muffin|1
+Zed Codestone|1
+Cui Codestone|1
+Steamed Vegetable Dumplings|1
+Apple Cherry Tarts|1
+Battle!|1
+Zei Codestone|1
