@@ -137,6 +137,14 @@ func (table *Table) GetLinesWith(tableSeparator string, tables ...*Table) []stri
 		return table.GetLines()
 	})
 
+	isNamedTableExists := false
+	for _, table := range tables {
+		if table.Name != "" {
+			isNamedTableExists = true
+			break
+		}
+	}
+
 	maxTableLength := Max(
 		Map(
 			tableLines,
@@ -150,13 +158,30 @@ func (table *Table) GetLinesWith(tableSeparator string, tables ...*Table) []stri
 	)
 
 	for i := range maxTableLength {
-		lineParts := Map(tableLines, func(tableLines []string) string {
-			if i < len(tableLines) {
-				return tableLines[i]
+		lineParts := []string{}
+		for j := range tables {
+			currTable := tables[j]
+			currTableLines := tableLines[j]
+			if i < 2 && isNamedTableExists && currTable.Name == "" {
+				lineParts = append(lineParts, getEmptyLine(len(currTableLines[0])))
+				continue
 			}
 
-			return getEmptyLine(len(tableLines[0]))
-		})
+			if currTable.Name == "" {
+				if 0 <= i-2 && i-2 < len(currTableLines) {
+					lineParts = append(lineParts, currTableLines[i-2])
+				} else {
+					lineParts = append(lineParts, getEmptyLine(len(currTableLines[0])))
+				}
+			} else {
+				if i < len(currTableLines) {
+					lineParts = append(lineParts, currTableLines[i])
+				} else {
+					lineParts = append(lineParts, getEmptyLine(len(currTableLines[0])))
+				}
+			}
+		}
+
 		lines = append(lines, strings.Join(lineParts, tableSeparator))
 	}
 

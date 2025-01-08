@@ -1,6 +1,8 @@
 package services
 
 import (
+	"github.com/darienchong/neopets-battledome-analysis/caches"
+	"github.com/darienchong/neopets-battledome-analysis/helpers"
 	"github.com/darienchong/neopets-battledome-analysis/models"
 	"github.com/montanaflynn/stats"
 )
@@ -11,12 +13,21 @@ func NewDropStatisticsService() *DropStatisticsService {
 	return &DropStatisticsService{}
 }
 
-func (estimator *DropStatisticsService) Estimate(drop *models.BattledomeDrops) (*models.DropsStatistics, error) {
+func (estimator *DropStatisticsService) GetStatistics(drop *models.BattledomeDrops) (*models.DropsStatistics, error) {
+	itemPriceCache, err := caches.GetItemPriceCacheInstance()
+	if err != nil {
+		return nil, err
+	}
+	defer itemPriceCache.Close()
+
 	var arena string = drop.Metadata.Arena
 	profitData := []float64{}
 	for _, item := range drop.Items {
+		if item.Name == "nothing" {
+			continue
+		}
 		for j := 0; j < int(item.Quantity); j++ {
-			profitData = append(profitData, item.IndividualPrice)
+			profitData = append(profitData, helpers.LazyWhen(item.IndividualPrice <= 0, func() float64 { return itemPriceCache.GetPrice(item.Name) }, func() float64 { return item.IndividualPrice }))
 		}
 	}
 

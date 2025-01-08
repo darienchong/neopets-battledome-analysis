@@ -85,3 +85,13 @@ func TestMultipleTablesWithDifferentLineCounts(t *testing.T) {
 		slog.Info(line)
 	}
 }
+
+func TestMixedNamedAndUnnamedTablesWithDifferentLineCounts(t *testing.T) {
+	firstTable := generateTable(5)
+	secondTable := generateNamedTable("Second", 6)
+	thirdTable := generateNamedTable("Third", 7)
+
+	for _, line := range firstTable.GetLinesWith(" ", secondTable, thirdTable) {
+		slog.Info(line)
+	}
+}

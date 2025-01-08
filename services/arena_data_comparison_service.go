@@ -73,11 +73,11 @@ func (service *ArenaDataComparisonService) Compare(arena string) (*ArenaComparis
 		return nil, nil, err
 	}
 
-	realStats, err := service.DropStatisticsService.Estimate(combinedRealDrops)
+	realStats, err := service.DropStatisticsService.GetStatistics(combinedRealDrops)
 	if err != nil {
 		return nil, nil, err
 	}
-	generatedStats, err := service.DropStatisticsService.Estimate(combinedGeneratedDrops)
+	generatedStats, err := service.DropStatisticsService.GetStatistics(combinedGeneratedDrops)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -149,7 +149,7 @@ func generateProfitableItemsTable(data *ArenaComparisonData, isRealData bool) *h
 	})
 	table := helpers.NewNamedTable(helpers.When(isRealData, "Actual", "Predicted"), headers)
 
-	predictedProfit := helpers.Sum(helpers.Map(helpers.Values(data.Profit), func(profit *models.ItemProfit) float64 { return profit.GetProfit() })) * constants.BATTLEDOME_DROPS_PER_DAY
+	predictedProfit := helpers.Sum(helpers.Map(helpers.Values(data.Profit), func(profit *models.ItemProfit) float64 { return profit.GetProfit() }))
 	profitableItems := helpers.OrderByDescending(helpers.Values(data.Profit), func(profit *models.ItemProfit) float64 {
 		return profit.GetProfit()
 	})
@@ -166,7 +166,7 @@ func generateProfitableItemsTable(data *ArenaComparisonData, isRealData bool) *h
 				// Don't include dry chance in real data
 				helpers.FormatFloat(itemProfit.IndividualPrice) + " NP",
 				helpers.FormatFloat(itemProfit.GetProfit()*constants.BATTLEDOME_DROPS_PER_DAY) + " NP",
-				helpers.FormatPercentage(itemProfit.GetProfit()*constants.BATTLEDOME_DROPS_PER_DAY/predictedProfit) + "%",
+				helpers.FormatPercentage(itemProfit.GetProfit()/predictedProfit) + "%",
 			},
 			[]string{
 				strconv.Itoa(i + 1),
@@ -175,7 +175,7 @@ func generateProfitableItemsTable(data *ArenaComparisonData, isRealData bool) *h
 				helpers.FormatPercentage(getDryChance(itemProfit.DropRate, 30*constants.NUMBER_OF_ITEMS_TO_PRINT)) + "%",
 				helpers.FormatFloat(itemProfit.IndividualPrice) + " NP",
 				helpers.FormatFloat(itemProfit.GetProfit()*constants.BATTLEDOME_DROPS_PER_DAY) + " NP",
-				helpers.FormatPercentage(itemProfit.GetProfit()*constants.BATTLEDOME_DROPS_PER_DAY/predictedProfit) + "%",
+				helpers.FormatPercentage(itemProfit.GetProfit()/predictedProfit) + "%",
 			})
 
 		table.AddRow(row)
