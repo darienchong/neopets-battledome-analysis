@@ -7,6 +7,7 @@ import (
 
 	"github.com/darienchong/neopets-battledome-analysis/constants"
 	"github.com/darienchong/neopets-battledome-analysis/helpers"
+	"github.com/darienchong/neopets-battledome-analysis/models"
 )
 
 func getPrefix(indentLevel int) string {
@@ -51,7 +52,11 @@ func (logger *ArenaDataComparisonLogger) CompareAll() error {
 			return err
 		}
 
-		slog.Info(fmt.Sprintf("%d. %s", i+1, realData.Statistics.Arena))
+		realItemCount := helpers.Sum(helpers.Map(helpers.Values(realData.Analysis.Items), func(item *models.BattledomeItem) int32 {
+			return helpers.When(item.Name == "nothing", 0, item.Quantity)
+		}))
+
+		slog.Info(fmt.Sprintf("%d. %s (%d samples)", i+1, realData.Statistics.Arena, realItemCount))
 		for _, line := range lines {
 			slog.Info(getPrefix(1) + line)
 		}

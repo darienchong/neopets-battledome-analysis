@@ -136,7 +136,7 @@ func generateProfitableItemsTable(data *ArenaComparisonData, isRealData bool) *h
 		"Drop Rate",
 		// Don't include Dry Chance in real data
 		"Price",
-		// "Expectation",
+		"Expectation",
 		"%",
 	}, []string{
 		"i",
@@ -144,7 +144,7 @@ func generateProfitableItemsTable(data *ArenaComparisonData, isRealData bool) *h
 		"Drop Rate",
 		"Dry Chance",
 		"Price",
-		// "Expectation",
+		"Expectation",
 		"%",
 	})
 	table := helpers.NewNamedTable(helpers.When(isRealData, "Actual", "Predicted"), headers)
@@ -165,7 +165,7 @@ func generateProfitableItemsTable(data *ArenaComparisonData, isRealData bool) *h
 				helpers.FormatPercentage(itemProfit.DropRate) + "%",
 				// Don't include dry chance in real data
 				helpers.FormatFloat(itemProfit.IndividualPrice) + " NP",
-				// helpers.FormatFloat(itemProfit.GetProfit()) + " NP",
+				helpers.FormatFloat(itemProfit.GetProfit()*constants.BATTLEDOME_DROPS_PER_DAY) + " NP",
 				helpers.FormatPercentage(itemProfit.GetProfit()*constants.BATTLEDOME_DROPS_PER_DAY/predictedProfit) + "%",
 			},
 			[]string{
@@ -174,7 +174,7 @@ func generateProfitableItemsTable(data *ArenaComparisonData, isRealData bool) *h
 				helpers.FormatPercentage(itemProfit.DropRate) + "%",
 				helpers.FormatPercentage(getDryChance(itemProfit.DropRate, 30*constants.NUMBER_OF_ITEMS_TO_PRINT)) + "%",
 				helpers.FormatFloat(itemProfit.IndividualPrice) + " NP",
-				// helpers.FormatFloat(itemProfit.GetProfit()) + " NP",
+				helpers.FormatFloat(itemProfit.GetProfit()*constants.BATTLEDOME_DROPS_PER_DAY) + " NP",
 				helpers.FormatPercentage(itemProfit.GetProfit()*constants.BATTLEDOME_DROPS_PER_DAY/predictedProfit) + "%",
 			})
 
