@@ -13,7 +13,7 @@ func NewBattledomeDropsAnalyser() *BattledomeDropsAnalyser {
 func (analyser *BattledomeDropsAnalyser) Analyse(drops []*models.BattledomeDrops) (*models.BattledomeDropsAnalysis, error) {
 	res := new(models.BattledomeDropsAnalysis)
 	combinedDrops := new(models.BattledomeDrops)
-	res.Metadata = drops[0].Metadata
+	res.Metadata = drops[0].Metadata.DropsMetadata
 	res.Items = combinedDrops.Items
 
 	for _, drop := range drops {
@@ -21,7 +21,7 @@ func (analyser *BattledomeDropsAnalyser) Analyse(drops []*models.BattledomeDrops
 		if err != nil {
 			return nil, err
 		}
-		res.Metadata = *combinedMetadata
+		res.Metadata = combinedMetadata
 
 		err = combinedDrops.Append(drop)
 		if err != nil {

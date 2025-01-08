@@ -15,6 +15,17 @@ type BattledomeItem struct {
 	IndividualPrice float64
 }
 
+func (item *BattledomeItem) ToProfit(arena string, dropRate float64, price float64) *ItemProfit {
+	return &ItemProfit{
+		ItemDropRate: ItemDropRate{
+			Arena:    arena,
+			ItemName: item.Name,
+			DropRate: dropRate,
+		},
+		IndividualPrice: price,
+	}
+}
+
 func (first *BattledomeItem) Combine(second *BattledomeItem) error {
 	if first.Name != second.Name {
 		return fmt.Errorf("tried to combine two items that did not have the same name: %s and %s", first, second)

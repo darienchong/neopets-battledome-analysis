@@ -5,7 +5,7 @@ import (
 )
 
 type BattledomeDrops struct {
-	Metadata DropsMetadata
+	Metadata DropsMetadataWithSource
 	Items    map[string]*BattledomeItem
 }
 

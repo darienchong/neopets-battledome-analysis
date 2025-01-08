@@ -39,9 +39,10 @@ func (parser *DropDataParser) Parse(filePath string) (*models.BattledomeDropsDto
 	}
 	defer file.Close()
 
-	dropsMetadata := new(models.DropsMetadata)
-	dropsDto := &models.BattledomeDropsDto{}
-	dropsDto.Metadata = *dropsMetadata
+	dropsDto := &models.BattledomeDropsDto{
+		Metadata: models.DropsMetadataWithSource{},
+		Items:    map[string]*models.BattledomeItem{},
+	}
 	dropsDto.Metadata.Source = filepath.Base(filePath)
 
 	scanner := bufio.NewScanner(file)

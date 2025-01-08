@@ -3,7 +3,7 @@ package models
 import "github.com/darienchong/neopets-battledome-analysis/constants"
 
 type BattledomeDropsDto struct {
-	Metadata DropsMetadata
+	Metadata DropsMetadataWithSource
 	Items    map[string]*BattledomeItem
 }
 

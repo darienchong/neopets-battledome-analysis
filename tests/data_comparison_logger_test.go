@@ -7,5 +7,5 @@ import (
 )
 
 func TestArenaDataComparisonLogger(t *testing.T) {
-	services.NewArenaDataComparisonLogger().CompareAll()
+	services.NewDataComparisonLogger().CompareAllArenas()
 }

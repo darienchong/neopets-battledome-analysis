@@ -14,24 +14,24 @@ func getPrefix(indentLevel int) string {
 	return strings.Repeat("  ", indentLevel)
 }
 
-type ArenaDataComparisonLogger struct {
-	ArenaDataComparisonService *ArenaDataComparisonService
-	ArenaDataComparisonViewer  *ArenaDataComparisonViewer
+type DataComparisonLogger struct {
+	ArenaDataComparisonService *DataComparisonService
+	ArenaDataComparisonViewer  *DataComparisonViewer
 }
 
-func NewArenaDataComparisonLogger() *ArenaDataComparisonLogger {
-	return &ArenaDataComparisonLogger{
-		ArenaDataComparisonService: NewArenaDataComparisonService(),
-		ArenaDataComparisonViewer:  NewArenaDataComparisonViewer(),
+func NewDataComparisonLogger() *DataComparisonLogger {
+	return &DataComparisonLogger{
+		ArenaDataComparisonService: NewDataComparisonService(),
+		ArenaDataComparisonViewer:  NewDataComparisonViewer(),
 	}
 }
 
-func (logger *ArenaDataComparisonLogger) CompareAll() error {
+func (logger *DataComparisonLogger) CompareAllArenas() error {
 	comparisonData := helpers.OrderByDescending(
 		helpers.Map(
 			constants.ARENAS,
 			func(arena string) *helpers.Tuple {
-				realData, generatedData, err := logger.ArenaDataComparisonService.Compare(arena)
+				realData, generatedData, err := logger.ArenaDataComparisonService.CompareArena(arena)
 				if err != nil {
 					panic(err)
 				}
@@ -39,7 +39,7 @@ func (logger *ArenaDataComparisonLogger) CompareAll() error {
 			},
 		),
 		func(tuple *helpers.Tuple) float64 {
-			realData := tuple.Elements[0].(*ArenaComparisonData)
+			realData := tuple.Elements[0].(*models.ComparisonResult)
 			profit, err := realData.Analysis.GetMeanDropsProfit()
 			if err != nil {
 				return 0
@@ -49,9 +49,9 @@ func (logger *ArenaDataComparisonLogger) CompareAll() error {
 	)
 
 	for i, comparisonDatum := range comparisonData {
-		realData := comparisonDatum.Elements[0].(*ArenaComparisonData)
-		generatedData := comparisonDatum.Elements[1].(*ArenaComparisonData)
-		lines, err := logger.ArenaDataComparisonViewer.View(realData, generatedData)
+		realData := comparisonDatum.Elements[0].(*models.ComparisonResult)
+		generatedData := comparisonDatum.Elements[1].(*models.ComparisonResult)
+		lines, err := logger.ArenaDataComparisonViewer.ViewArenaComparison(realData, generatedData)
 		if err != nil {
 			return err
 		}
@@ -60,7 +60,7 @@ func (logger *ArenaDataComparisonLogger) CompareAll() error {
 			return helpers.When(item.Name == "nothing", 0, item.Quantity)
 		}))
 
-		slog.Info(fmt.Sprintf("%d. %s (%d samples)", i+1, &realData.Analysis.Metadata.Arena, realItemCount))
+		slog.Info(fmt.Sprintf("%d. %s (%d samples)", i+1, realData.Analysis.Metadata.Arena, realItemCount))
 		for _, line := range lines {
 			slog.Info(getPrefix(1) + line)
 		}

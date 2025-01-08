@@ -18,7 +18,7 @@ type BattledomeDropsAnalysis struct {
 
 func NewAnalysisResultFromDrops(drops *BattledomeDrops) *BattledomeDropsAnalysis {
 	res := new(BattledomeDropsAnalysis)
-	res.Metadata = drops.Metadata
+	res.Metadata = drops.Metadata.DropsMetadata
 	res.Items = drops.Items
 	return res
 }
@@ -103,6 +103,14 @@ func (analysis *BattledomeDropsAnalysis) GetTotalProfit() float64 {
 		}
 	}
 	return totalProfit
+}
+
+func (analysis *BattledomeDropsAnalysis) GetTotalItemQuantity() int {
+	items := helpers.Values(analysis.Items)
+	quantities := helpers.Map(items, func(item *BattledomeItem) int {
+		return int(item.Quantity)
+	})
+	return helpers.Sum(quantities)
 }
 
 func (analysis *BattledomeDropsAnalysis) EstimateDropRates() []*ItemDropRate {

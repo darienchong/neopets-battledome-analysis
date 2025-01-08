@@ -69,7 +69,7 @@ func (service *DropRateService) GetPredictedDropRates(arena string) (map[string]
 	return itemDropRates, nil
 }
 
-func (service *DropRateService) CalculateDropRates(drops []*models.BattledomeDrops) (map[string][]*models.ItemDropRate, error) {
+func (service *DropRateService) CalculateDropRates(drops ...*models.BattledomeDrops) (map[string][]*models.ItemDropRate, error) {
 	dropsByArena := helpers.GroupBy(drops, func(drop *models.BattledomeDrops) string {
 		return drop.Metadata.Arena
 	})

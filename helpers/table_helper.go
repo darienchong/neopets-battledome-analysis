@@ -105,7 +105,11 @@ func (table *Table) GetLines() []string {
 
 	if table.Name != "" {
 		rowSeparator := table.generateTableLineWithoutColumnSeparators()
+		if len(table.Name) > len(rowSeparator) {
+			table.Name = table.Name[:len(" ")+len(rowSeparator)-8] + "..."
+		}
 		numSpaces := len(" ") + len(rowSeparator) - len(table.Name) - 3
+
 		lines = append(lines, rowSeparator)
 		leftPadding := int(math.Floor(float64(numSpaces) / 2.0))
 		rightPadding := int(math.Ceil(float64(numSpaces) / 2.0))

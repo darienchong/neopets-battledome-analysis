@@ -39,7 +39,27 @@ func (service *EmpiricalDropsService) GetAllDrops(dataFolderPath string) ([]*mod
 	return drops, nil
 }
 
-func (service *EmpiricalDropsService) GetDrops(arena string) ([]*models.BattledomeDrops, error) {
+func (service *EmpiricalDropsService) GetDropsByMetadata(metadata models.DropsMetadata) ([]*models.BattledomeDrops, error) {
+	allDrops, err := service.GetAllDrops(constants.BATTLEDOME_DROPS_FOLDER)
+	if err != nil {
+		return nil, err
+	}
+	return helpers.Filter(allDrops, func(drop *models.BattledomeDrops) bool {
+		return drop.Metadata.DropsMetadata == metadata
+	}), nil
+}
+
+func (service *EmpiricalDropsService) GetDropsGroupedByMetadata() (map[models.DropsMetadata][]*models.BattledomeDrops, error) {
+	allDrops, err := service.GetAllDrops(constants.BATTLEDOME_DROPS_FOLDER)
+	if err != nil {
+		return nil, err
+	}
+	return helpers.GroupBy(allDrops, func(drop *models.BattledomeDrops) models.DropsMetadata {
+		return drop.Metadata.DropsMetadata
+	}), nil
+}
+
+func (service *EmpiricalDropsService) GetDropsByArena(arena string) ([]*models.BattledomeDrops, error) {
 	allDrops, err := service.GetAllDrops(constants.BATTLEDOME_DROPS_FOLDER)
 	if err != nil {
 		return nil, err

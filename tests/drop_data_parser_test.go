@@ -28,7 +28,7 @@ func TestDropDataParser(t *testing.T) {
 		panic(err)
 	}
 
-	expectedMetadata := new(models.DropsMetadata)
+	expectedMetadata := new(models.DropsMetadataWithSource)
 	expectedMetadata.Source = filepath.Base(constants.GetDropDataFilePath("2024_12_20.txt"))
 	expectedMetadata.Arena = "Central Arena"
 	expectedMetadata.Challenger = "Flaming Meerca"

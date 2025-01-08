@@ -12,20 +12,15 @@ import (
 	"github.com/darienchong/neopets-battledome-analysis/models"
 )
 
-type ArenaComparisonData struct {
-	Analysis *models.BattledomeDropsAnalysis
-	Profit   map[string]*models.ItemProfit
-}
-
-type ArenaDataComparisonService struct {
+type DataComparisonService struct {
 	GeneratedDropsService *GeneratedDropsService
 	EmpiricalDropsService *EmpiricalDropsService
 	DropsAnalysisService  *DropsAnalysisService
 	DropRateService       *DropRateService
 }
 
-func NewArenaDataComparisonService() *ArenaDataComparisonService {
-	return &ArenaDataComparisonService{
+func NewDataComparisonService() *DataComparisonService {
+	return &DataComparisonService{
 		GeneratedDropsService: NewGeneratedDropsService(),
 		EmpiricalDropsService: NewEmpiricalDropsService(),
 		DropsAnalysisService:  NewDropsAnalysisService(),
@@ -33,14 +28,54 @@ func NewArenaDataComparisonService() *ArenaDataComparisonService {
 	}
 }
 
-func (service *ArenaDataComparisonService) Compare(arena string) (*ArenaComparisonData, *ArenaComparisonData, error) {
+func (service *DataComparisonService) ToComparisonResult(drop *models.BattledomeDrops) (*models.ComparisonResult, error) {
+	itemPriceCache, err := caches.GetItemPriceCacheInstance()
+	if err != nil {
+		return nil, err
+	}
+	defer itemPriceCache.Close()
+
+	analysis := service.DropsAnalysisService.Analyse(drop)
+	dropRates, err := service.DropRateService.CalculateDropRates(&models.BattledomeDrops{
+		Metadata: models.DropsMetadataWithSource{
+			Source:        "(multiple sources)",
+			DropsMetadata: analysis.Metadata,
+		},
+		Items: helpers.ToPointerMap(
+			analysis.GetItemsOrderedByProfit(),
+			func(item *models.BattledomeItem) string {
+				return item.Name
+			},
+			func(item *models.BattledomeItem) *models.BattledomeItem {
+				return item
+			}),
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	profits := map[string]*models.ItemProfit{}
+	for _, itemDropRate := range dropRates[analysis.Metadata.Arena] {
+		profits[itemDropRate.ItemName] = &models.ItemProfit{
+			ItemDropRate:    *itemDropRate,
+			IndividualPrice: itemPriceCache.GetPrice(itemDropRate.ItemName),
+		}
+	}
+
+	return &models.ComparisonResult{
+		Analysis: analysis,
+		Profit:   profits,
+	}, nil
+}
+
+func (service *DataComparisonService) CompareByMetadata(metadata models.DropsMetadata) (*models.ComparisonResult, *models.ComparisonResult, error) {
 	itemPriceCache, err := caches.GetItemPriceCacheInstance()
 	if err != nil {
 		return nil, nil, err
 	}
 	defer itemPriceCache.Close()
 
-	realDrops, err := service.EmpiricalDropsService.GetDrops(arena)
+	realDrops, err := service.EmpiricalDropsService.GetDropsByMetadata(metadata)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -49,6 +84,60 @@ func (service *ArenaDataComparisonService) Compare(arena string) (*ArenaComparis
 			item.IndividualPrice = itemPriceCache.GetPrice(item.Name)
 		}
 	}
+
+	var combinedRealDrops *models.BattledomeDrops
+	if len(realDrops) > 0 {
+		combinedRealDrops = helpers.Reduce(realDrops, func(first *models.BattledomeDrops, second *models.BattledomeDrops) *models.BattledomeDrops {
+			combined, err := first.Union(second)
+			if err != nil {
+				panic(err)
+			}
+			return combined
+		})
+		combinedRealDrops.Metadata = realDrops[0].Metadata
+		combinedRealDrops.Metadata.Source = "(multiple sources)"
+	} else {
+		combinedRealDrops = models.NewBattledomeDrops()
+		combinedRealDrops.Metadata = models.DropsMetadataWithSource{
+			Source:        "(none)",
+			DropsMetadata: metadata,
+		}
+	}
+
+	combinedGeneratedDrops, err := service.GeneratedDropsService.GenerateDrops(metadata.Arena)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	realComparisonResult, err := service.ToComparisonResult(combinedRealDrops)
+	if err != nil {
+		return nil, nil, err
+	}
+	generatedComparisonResult, err := service.ToComparisonResult(combinedGeneratedDrops)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return realComparisonResult, generatedComparisonResult, nil
+}
+
+func (service *DataComparisonService) CompareArena(arena string) (*models.ComparisonResult, *models.ComparisonResult, error) {
+	itemPriceCache, err := caches.GetItemPriceCacheInstance()
+	if err != nil {
+		return nil, nil, err
+	}
+	defer itemPriceCache.Close()
+
+	realDrops, err := service.EmpiricalDropsService.GetDropsByArena(arena)
+	if err != nil {
+		return nil, nil, err
+	}
+	for _, drop := range realDrops {
+		for _, item := range drop.Items {
+			item.IndividualPrice = itemPriceCache.GetPrice(item.Name)
+		}
+	}
+
 	var combinedRealDrops *models.BattledomeDrops
 	if len(realDrops) > 0 {
 		combinedRealDrops = helpers.Reduce(realDrops, func(first *models.BattledomeDrops, second *models.BattledomeDrops) *models.BattledomeDrops {
@@ -60,8 +149,13 @@ func (service *ArenaDataComparisonService) Compare(arena string) (*ArenaComparis
 		})
 	} else {
 		combinedRealDrops = models.NewBattledomeDrops()
-		combinedRealDrops.Metadata = models.DropsMetadata{
-			Arena: arena,
+		combinedRealDrops.Metadata = models.DropsMetadataWithSource{
+			Source: "(none)",
+			DropsMetadata: models.DropsMetadata{
+				Arena:      arena,
+				Challenger: "(none)",
+				Difficulty: "(none)",
+			},
 		}
 	}
 
@@ -70,52 +164,29 @@ func (service *ArenaDataComparisonService) Compare(arena string) (*ArenaComparis
 		return nil, nil, err
 	}
 
-	realDropRates, err := service.DropRateService.CalculateDropRates(realDrops)
+	realComparisonResult, err := service.ToComparisonResult(combinedRealDrops)
 	if err != nil {
 		return nil, nil, err
 	}
-	realProfits := map[string]*models.ItemProfit{}
-	for _, itemDropRate := range realDropRates[arena] {
-		realProfits[itemDropRate.ItemName] = &models.ItemProfit{
-			ItemDropRate:    *itemDropRate,
-			IndividualPrice: itemPriceCache.GetPrice(itemDropRate.ItemName),
-		}
-	}
-	generatedDropRates, err := service.DropRateService.CalculateDropRates([]*models.BattledomeDrops{combinedGeneratedDrops})
+	generatedComparisonResult, err := service.ToComparisonResult(combinedGeneratedDrops)
 	if err != nil {
 		return nil, nil, err
 	}
-	generatedProfits := map[string]*models.ItemProfit{}
-	for _, itemDropRate := range generatedDropRates[arena] {
-		generatedProfits[itemDropRate.ItemName] = &models.ItemProfit{
-			ItemDropRate:    *itemDropRate,
-			IndividualPrice: itemPriceCache.GetPrice(itemDropRate.ItemName),
-		}
-	}
 
-	realAnalysisResult := service.DropsAnalysisService.Analyse(combinedRealDrops)
-	generatedAnalysisResult := service.DropsAnalysisService.Analyse(combinedGeneratedDrops)
-
-	return &ArenaComparisonData{
-			Analysis: realAnalysisResult,
-			Profit:   realProfits,
-		}, &ArenaComparisonData{
-			Analysis: generatedAnalysisResult,
-			Profit:   generatedProfits,
-		}, nil
+	return realComparisonResult, generatedComparisonResult, nil
 }
 
-type ArenaDataComparisonViewer struct{}
+type DataComparisonViewer struct{}
 
-func NewArenaDataComparisonViewer() *ArenaDataComparisonViewer {
-	return &ArenaDataComparisonViewer{}
+func NewDataComparisonViewer() *DataComparisonViewer {
+	return &DataComparisonViewer{}
 }
 
 func getDryChance(dropRate float64, trials int) float64 {
 	return math.Pow(1-dropRate, float64(trials))
 }
 
-func generateProfitableItemsTable(data *ArenaComparisonData, isRealData bool) *helpers.Table {
+func generateProfitableItemsTable(data *models.ComparisonResult, isRealData bool) *helpers.Table {
 	headers := helpers.When(isRealData, []string{
 		"i",
 		"ItemName",
@@ -170,7 +241,7 @@ func generateProfitableItemsTable(data *ArenaComparisonData, isRealData bool) *h
 	return table
 }
 
-func generateCodestoneDropRatesTable(realData *ArenaComparisonData, generatedData *ArenaComparisonData, codestoneList []string) *helpers.Table {
+func generateCodestoneDropRatesTable(realData *models.ComparisonResult, generatedData *models.ComparisonResult, codestoneList []string) *helpers.Table {
 	var tableName string
 	if slices.Contains(codestoneList, constants.BROWN_CODESTONES[0]) {
 		tableName = "Brown Codestone Drop Rates"
@@ -241,7 +312,64 @@ func generateCodestoneDropRatesTable(realData *ArenaComparisonData, generatedDat
 	return table
 }
 
-func (viewer *ArenaDataComparisonViewer) View(realData *ArenaComparisonData, generatedData *ArenaComparisonData) ([]string, error) {
+func (viewer *DataComparisonViewer) ViewChallengerComparison(realData *models.ComparisonResult, generatedData *models.ComparisonResult) ([]string, error) {
+	profitComparisonTable := helpers.NewNamedTable(fmt.Sprintf("%s %s in %s", realData.Analysis.Metadata.Difficulty, realData.Analysis.Metadata.Challenger, realData.Analysis.Metadata.Arena), []string{
+		"Type",
+		"Value",
+	})
+	profitComparisonTable.IsLastRowDistinct = true
+
+	generatedMeanProfit, err := generatedData.Analysis.GetMeanDropsProfit()
+	if err != nil {
+		return nil, err
+	}
+	generatedProfitStdev, err := generatedData.Analysis.GetDropsProfitStdev()
+	if err != nil {
+		return nil, err
+	}
+
+	realMeanProfit, err := realData.Analysis.GetMeanDropsProfit()
+	if err != nil {
+		return nil, err
+	}
+	realProfitStdev, err := realData.Analysis.GetDropsProfitStdev()
+	if err != nil {
+		return nil, err
+	}
+
+	profitComparisonTable.AddRow([]string{
+		"Predicted",
+		fmt.Sprintf("%s ± %s NP", helpers.FormatFloat(generatedMeanProfit), helpers.FormatFloat(generatedProfitStdev)),
+	})
+	profitComparisonTable.AddRow([]string{
+		"Actual",
+		fmt.Sprintf("%s ± %s NP", helpers.FormatFloat(realMeanProfit), helpers.FormatFloat(realProfitStdev)),
+	})
+	profitComparisonTable.AddRow([]string{
+		"Difference",
+		fmt.Sprintf("%s NP", helpers.FormatFloat(realMeanProfit-generatedMeanProfit)),
+	})
+
+	realProfitableItemsTable := generateProfitableItemsTable(realData, true)
+	generatedProfitableItemsTable := generateProfitableItemsTable(generatedData, false)
+
+	brownCodestoneDropRatesTable := generateCodestoneDropRatesTable(realData, generatedData, constants.BROWN_CODESTONES)
+	redCodestoneDropRatesTable := generateCodestoneDropRatesTable(realData, generatedData, constants.RED_CODESTONES)
+
+	tableSeparator := "\t"
+
+	lines := []string{}
+	lines = append(lines, profitComparisonTable.GetLines()...)
+	lines = append(lines, "\n")
+	lines = append(lines, fmt.Sprintf("Top %d most profitable items", constants.NUMBER_OF_ITEMS_TO_PRINT))
+	lines = append(lines, generatedProfitableItemsTable.GetLinesWith(tableSeparator, realProfitableItemsTable)...)
+	lines = append(lines, "\n")
+	lines = append(lines, fmt.Sprintf("Codestone drop rates"))
+	lines = append(lines, brownCodestoneDropRatesTable.GetLinesWith(tableSeparator, redCodestoneDropRatesTable)...)
+	return lines, nil
+}
+
+func (viewer *DataComparisonViewer) ViewArenaComparison(realData *models.ComparisonResult, generatedData *models.ComparisonResult) ([]string, error) {
 	arena := realData.Analysis.Metadata.Arena
 
 	profitComparisonTable := helpers.NewNamedTable(fmt.Sprintf("Profit in %s", arena), []string{

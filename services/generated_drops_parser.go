@@ -64,12 +64,7 @@ func (parser *GeneratedDropsParser) Parse(filePath string) (map[string]*models.B
 		_, ok := drops[arena]
 		if !ok {
 			drops[arena] = models.NewBattledomeDrops()
-			drops[arena].Metadata = models.DropsMetadata{
-				Source:     "(generated)",
-				Arena:      arena,
-				Challenger: "(generated)",
-				Difficulty: "(generated)",
-			}
+			drops[arena].Metadata = *models.GeneratedMetadata(arena)
 		}
 		_, ok = drops[arena].Items[itemName]
 		if !ok {
