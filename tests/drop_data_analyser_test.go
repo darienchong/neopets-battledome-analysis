@@ -12,12 +12,12 @@ import (
 func TestAnalyser(t *testing.T) {
 	target := services.NewDropsAnalysisService()
 	parser := services.NewDropDataParser()
-	drops, err := parser.Parse(constants.GetDropDataFilePath("2024_12_20.txt"))
+	dropsDto, err := parser.Parse(constants.GetDropDataFilePath("2024_12_20.txt"))
 	if err != nil {
 		slog.Any("error", err)
 		t.Fatalf("Failed to parse drop file!")
 	}
-	res := target.Analyse(drops)
+	res := target.Analyse(dropsDto.ToBattledomeDrops())
 	prev := &models.BattledomeItem{}
 	for idx, item := range res.GetItemsOrderedByPrice() {
 		if idx != 0 {

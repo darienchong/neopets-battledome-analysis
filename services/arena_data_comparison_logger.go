@@ -40,7 +40,11 @@ func (logger *ArenaDataComparisonLogger) CompareAll() error {
 		),
 		func(tuple *helpers.Tuple) float64 {
 			realData := tuple.Elements[0].(*ArenaComparisonData)
-			return realData.Statistics.GetDropsProfitMean()
+			profit, err := realData.Analysis.GetMeanDropsProfit()
+			if err != nil {
+				return 0
+			}
+			return profit
 		},
 	)
 
@@ -56,7 +60,7 @@ func (logger *ArenaDataComparisonLogger) CompareAll() error {
 			return helpers.When(item.Name == "nothing", 0, item.Quantity)
 		}))
 
-		slog.Info(fmt.Sprintf("%d. %s (%d samples)", i+1, realData.Statistics.Arena, realItemCount))
+		slog.Info(fmt.Sprintf("%d. %s (%d samples)", i+1, &realData.Analysis.Metadata.Arena, realItemCount))
 		for _, line := range lines {
 			slog.Info(getPrefix(1) + line)
 		}

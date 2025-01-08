@@ -11,7 +11,7 @@ func NewDropsAnalysisService() *DropsAnalysisService {
 	return &DropsAnalysisService{}
 }
 
-func (analyser *DropsAnalysisService) Analyse(drops *models.BattledomeDrops) *models.DropsAnalysis {
+func (analyser *DropsAnalysisService) Analyse(drops *models.BattledomeDrops) *models.BattledomeDropsAnalysis {
 	itemPriceCache, err := caches.GetItemPriceCacheInstance()
 	if err != nil {
 		panic(err)

@@ -48,7 +48,7 @@ func (item *BattledomeItem) GetProfit() (float64, error) {
 	return float64(item.Quantity) * item.IndividualPrice, nil
 }
 
-func (item *BattledomeItem) GetPercentageProfit(res *DropsAnalysis) (float64, error) {
+func (item *BattledomeItem) GetPercentageProfit(res *BattledomeDropsAnalysis) (float64, error) {
 	profit, err := item.GetProfit()
 	if err != nil {
 		return 0.0, err
@@ -57,7 +57,7 @@ func (item *BattledomeItem) GetPercentageProfit(res *DropsAnalysis) (float64, er
 	return profit / res.GetTotalProfit(), nil
 }
 
-func (item *BattledomeItem) GetDropRate(res *DropsAnalysis) float64 {
+func (item *BattledomeItem) GetDropRate(res *BattledomeDropsAnalysis) float64 {
 	return float64(item.Quantity) / float64(helpers.Sum(helpers.Map(helpers.ToSlice(res.Items), func(tuple helpers.Tuple) int32 {
 		return tuple.Elements[1].(*BattledomeItem).Quantity
 	})))

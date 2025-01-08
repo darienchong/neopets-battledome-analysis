@@ -53,14 +53,14 @@ func (dropsLogger *ArenaDropsLogger) Log(dataFolderPath string) error {
 		if !isKeyExists {
 			samplesByArena[drops.Metadata.Arena] = []*models.BattledomeDrops{}
 		}
-		samplesByArena[drops.Metadata.Arena] = append(samplesByArena[drops.Metadata.Arena], drops)
+		samplesByArena[drops.Metadata.Arena] = append(samplesByArena[drops.Metadata.Arena], drops.ToBattledomeDrops())
 
 		if constants.FILTER_ARENA != "" && constants.FILTER_ARENA != drops.Metadata.Arena {
 			continue
 		}
 
 		itemCount := 0
-		res := dropsLogger.EmpiricalDropRateEstimator.Analyse(drops)
+		res := dropsLogger.EmpiricalDropRateEstimator.Analyse(drops.ToBattledomeDrops())
 		profitBreakdownTable := helpers.NewTable([]string{
 			"i",
 			"Item Name",

@@ -2,7 +2,6 @@ package models
 
 import (
 	"github.com/darienchong/neopets-battledome-analysis/caches"
-	"github.com/darienchong/neopets-battledome-analysis/constants"
 )
 
 type BattledomeDrops struct {
@@ -25,10 +24,6 @@ func (drops *BattledomeDrops) GetTotalItemQuantity() int {
 		totalItemQuantity += int(item.Quantity)
 	}
 	return totalItemQuantity
-}
-
-func (drops *BattledomeDrops) Validate() bool {
-	return drops.GetTotalItemQuantity() == constants.BATTLEDOME_DROPS_PER_DAY
 }
 
 func (drops *BattledomeDrops) AddPrices(cache *caches.ItemPriceCache) {

@@ -9,8 +9,8 @@ import (
 	"github.com/darienchong/neopets-battledome-analysis/services"
 )
 
-func shouldHaveItemAndQuantity(drops *models.BattledomeDrops, t *testing.T, itemName string, itemQuantity int32) {
-	battledomeItem, isInItems := drops.Items[itemName]
+func shouldHaveItemAndQuantity(dropsDto *models.BattledomeDropsDto, t *testing.T, itemName string, itemQuantity int32) {
+	battledomeItem, isInItems := dropsDto.Items[itemName]
 	if !isInItems {
 		t.Fatalf("Expected \"%s\" to be in items, but it was not.", itemName)
 	}

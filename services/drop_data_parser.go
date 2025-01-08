@@ -6,7 +6,6 @@ import (
 	"log/slog"
 	"os"
 	"path/filepath"
-	"reflect"
 	"strconv"
 	"strings"
 
@@ -29,50 +28,48 @@ var (
 	}
 )
 
-func (parser *DropDataParser) Parse(filePath string) (*models.BattledomeDrops, error) {
+func (parser *DropDataParser) Parse(filePath string) (*models.BattledomeDropsDto, error) {
 	if !helpers.IsFileExists(filePath) {
-		return &models.BattledomeDrops{}, fmt.Errorf("file at \"%s\" does not exist", filePath)
+		return &models.BattledomeDropsDto{}, fmt.Errorf("file at \"%s\" does not exist", filePath)
 	}
 
 	file, err := os.OpenFile(filePath, os.O_RDONLY, 0755)
 	if err != nil {
-		return &models.BattledomeDrops{}, err
+		return &models.BattledomeDropsDto{}, err
 	}
 	defer file.Close()
 
 	dropsMetadata := new(models.DropsMetadata)
-	drops := models.NewBattledomeDrops()
-	drops.Metadata = *dropsMetadata
-	drops.Metadata.Source = filepath.Base(filePath)
+	dropsDto := &models.BattledomeDropsDto{}
+	dropsDto.Metadata = *dropsMetadata
+	dropsDto.Metadata.Source = filepath.Base(filePath)
 
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		line := scanner.Text()
 		for _, parser := range parsers {
 			if !parser.IsApplicable(line) {
-				slog.Debug(fmt.Sprintf("%s was not applicable for \"%s\"", reflect.TypeOf(parser), line))
 				continue
 			}
 
-			slog.Debug(fmt.Sprintf("Applying %s for \"%s\"", reflect.TypeOf(parser), line))
-			parser.Parse(line, drops)
+			parser.Parse(line, dropsDto)
 			break
 		}
 	}
 
 	itemCount := 0
-	for _, item := range drops.Items {
+	for _, item := range dropsDto.Items {
 		itemCount += int(item.Quantity)
 	}
 	if itemCount != constants.BATTLEDOME_DROPS_PER_DAY {
-		slog.Error(fmt.Sprintf("WARNING! The drop data in \"%s\" does not contain %d drops; %d drops were detected.", drops.Metadata.Source, constants.BATTLEDOME_DROPS_PER_DAY, itemCount))
+		slog.Error(fmt.Sprintf("WARNING! The drop data in \"%s\" does not contain %d drops; %d drops were detected.", dropsDto.Metadata.Source, constants.BATTLEDOME_DROPS_PER_DAY, itemCount))
 	}
-	return drops, nil
+	return dropsDto, nil
 }
 
 type DropDataLineParser interface {
 	IsApplicable(line string) bool
-	Parse(line string, drops *models.BattledomeDrops) error
+	Parse(line string, drops *models.BattledomeDropsDto) error
 }
 
 const (
@@ -87,7 +84,7 @@ func (parser *MetadataParser) IsApplicable(line string) bool {
 	return strings.HasPrefix(line, "$")
 }
 
-func (parser *MetadataParser) Parse(line string, drops *models.BattledomeDrops) error {
+func (parser *MetadataParser) Parse(line string, drops *models.BattledomeDropsDto) error {
 	tokens := strings.Split(line, ":")
 	metadata := &drops.Metadata
 	metadataKey := strings.ToLower(strings.TrimSpace(tokens[0]))
@@ -116,7 +113,7 @@ func (parser *CommentParser) IsApplicable(line string) bool {
 	return strings.HasPrefix(line, "#")
 }
 
-func (parser *CommentParser) Parse(line string, drops *models.BattledomeDrops) error {
+func (parser *CommentParser) Parse(line string, drops *models.BattledomeDropsDto) error {
 	return nil
 }
 
@@ -126,7 +123,7 @@ func (parser *ItemDataParser) IsApplicable(line string) bool {
 	return true
 }
 
-func (parser *ItemDataParser) Parse(line string, drops *models.BattledomeDrops) error {
+func (parser *ItemDataParser) Parse(line string, drops *models.BattledomeDropsDto) error {
 	tokens := strings.Split(line, "|")
 	itemName := strings.TrimSpace(tokens[0])
 	itemQuantity, err := strconv.ParseInt(strings.TrimSpace(tokens[1]), 0, 32)

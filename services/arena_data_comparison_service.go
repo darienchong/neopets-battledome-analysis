@@ -13,15 +13,13 @@ import (
 )
 
 type ArenaComparisonData struct {
-	Statistics *models.DropsStatistics
-	Analysis   *models.DropsAnalysis
-	Profit     map[string]*models.ItemProfit
+	Analysis *models.BattledomeDropsAnalysis
+	Profit   map[string]*models.ItemProfit
 }
 
 type ArenaDataComparisonService struct {
 	GeneratedDropsService *GeneratedDropsService
 	EmpiricalDropsService *EmpiricalDropsService
-	DropStatisticsService *DropStatisticsService
 	DropsAnalysisService  *DropsAnalysisService
 	DropRateService       *DropRateService
 }
@@ -30,7 +28,6 @@ func NewArenaDataComparisonService() *ArenaDataComparisonService {
 	return &ArenaDataComparisonService{
 		GeneratedDropsService: NewGeneratedDropsService(),
 		EmpiricalDropsService: NewEmpiricalDropsService(),
-		DropStatisticsService: NewDropStatisticsService(),
 		DropsAnalysisService:  NewDropsAnalysisService(),
 		DropRateService:       NewDropRateService(),
 	}
@@ -73,15 +70,6 @@ func (service *ArenaDataComparisonService) Compare(arena string) (*ArenaComparis
 		return nil, nil, err
 	}
 
-	realStats, err := service.DropStatisticsService.GetStatistics(combinedRealDrops)
-	if err != nil {
-		return nil, nil, err
-	}
-	generatedStats, err := service.DropStatisticsService.GetStatistics(combinedGeneratedDrops)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	realDropRates, err := service.DropRateService.CalculateDropRates(realDrops)
 	if err != nil {
 		return nil, nil, err
@@ -109,13 +97,11 @@ func (service *ArenaDataComparisonService) Compare(arena string) (*ArenaComparis
 	generatedAnalysisResult := service.DropsAnalysisService.Analyse(combinedGeneratedDrops)
 
 	return &ArenaComparisonData{
-			Statistics: realStats,
-			Analysis:   realAnalysisResult,
-			Profit:     realProfits,
+			Analysis: realAnalysisResult,
+			Profit:   realProfits,
 		}, &ArenaComparisonData{
-			Statistics: generatedStats,
-			Analysis:   generatedAnalysisResult,
-			Profit:     generatedProfits,
+			Analysis: generatedAnalysisResult,
+			Profit:   generatedProfits,
 		}, nil
 }
 
@@ -256,24 +242,43 @@ func generateCodestoneDropRatesTable(realData *ArenaComparisonData, generatedDat
 }
 
 func (viewer *ArenaDataComparisonViewer) View(realData *ArenaComparisonData, generatedData *ArenaComparisonData) ([]string, error) {
-	arena := realData.Statistics.Arena
+	arena := realData.Analysis.Metadata.Arena
 
 	profitComparisonTable := helpers.NewNamedTable(fmt.Sprintf("Profit in %s", arena), []string{
 		"Type",
 		"Value",
 	})
 	profitComparisonTable.IsLastRowDistinct = true
+
+	generatedMeanProfit, err := generatedData.Analysis.GetMeanDropsProfit()
+	if err != nil {
+		return nil, err
+	}
+	generatedProfitStdev, err := generatedData.Analysis.GetDropsProfitStdev()
+	if err != nil {
+		return nil, err
+	}
+
+	realMeanProfit, err := realData.Analysis.GetMeanDropsProfit()
+	if err != nil {
+		return nil, err
+	}
+	realProfitStdev, err := realData.Analysis.GetDropsProfitStdev()
+	if err != nil {
+		return nil, err
+	}
+
 	profitComparisonTable.AddRow([]string{
 		"Predicted",
-		fmt.Sprintf("%s ± %s NP", helpers.FormatFloat(generatedData.Statistics.GetDropsProfitMean()), helpers.FormatFloat(generatedData.Statistics.GetDropsProfitStandardDeviation())),
+		fmt.Sprintf("%s ± %s NP", helpers.FormatFloat(generatedMeanProfit), helpers.FormatFloat(generatedProfitStdev)),
 	})
 	profitComparisonTable.AddRow([]string{
 		"Actual",
-		fmt.Sprintf("%s ± %s NP", helpers.FormatFloat(realData.Statistics.GetDropsProfitMean()), helpers.FormatFloat(realData.Statistics.GetDropsProfitStandardDeviation())),
+		fmt.Sprintf("%s ± %s NP", helpers.FormatFloat(realMeanProfit), helpers.FormatFloat(realProfitStdev)),
 	})
 	profitComparisonTable.AddRow([]string{
 		"Difference",
-		fmt.Sprintf("%s NP", helpers.FormatFloat(realData.Statistics.GetDropsProfitMean()-generatedData.Statistics.GetDropsProfitMean())),
+		fmt.Sprintf("%s NP", helpers.FormatFloat(realMeanProfit-generatedMeanProfit)),
 	})
 
 	realProfitableItemsTable := generateProfitableItemsTable(realData, true)

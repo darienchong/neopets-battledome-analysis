@@ -20,7 +20,11 @@ func (service *EmpiricalDropsService) GetAllDrops(dataFolderPath string) ([]*mod
 	parser := NewDropDataParser()
 	files, err := helpers.GetFilesInFolder(dataFolderPath)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get files in folder (%s): %w", dataFolderPath, err)
+		// Could be due to inconsistent caller, try going down one level
+		files, err = helpers.GetFilesInFolder(strings.Replace(constants.BATTLEDOME_DROPS_FOLDER, "../", "", 1))
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	drops := []*models.BattledomeDrops{}
@@ -29,7 +33,7 @@ func (service *EmpiricalDropsService) GetAllDrops(dataFolderPath string) ([]*mod
 		if err != nil {
 			return nil, fmt.Errorf("DropDataService.GetAllDrops(%s): %w", file, err)
 		}
-		drops = append(drops, drop)
+		drops = append(drops, drop.ToBattledomeDrops())
 	}
 
 	return drops, nil
@@ -38,11 +42,7 @@ func (service *EmpiricalDropsService) GetAllDrops(dataFolderPath string) ([]*mod
 func (service *EmpiricalDropsService) GetDrops(arena string) ([]*models.BattledomeDrops, error) {
 	allDrops, err := service.GetAllDrops(constants.BATTLEDOME_DROPS_FOLDER)
 	if err != nil {
-		// Could be due to inconsistent caller, try going down one level
-		allDrops, err = service.GetAllDrops(strings.Replace(constants.BATTLEDOME_DROPS_FOLDER, "../", "", 1))
-		if err != nil {
-			return nil, err
-		}
+		return nil, err
 	}
 	return helpers.Filter(allDrops, func(drop *models.BattledomeDrops) bool {
 		return drop.Metadata.Arena == arena
