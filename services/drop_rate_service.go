@@ -41,7 +41,7 @@ func (service *DropRateService) GetPredictedDropRates(arena string) (map[string]
 			}), nil
 	}
 
-	drop, err := service.GeneratedDropsService.GetDrops(arena)
+	drop, err := service.GeneratedDropsService.GenerateDrops(arena)
 	if err != nil {
 		return nil, err
 	}

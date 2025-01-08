@@ -2,7 +2,7 @@ package services
 
 import (
 	"fmt"
-	"log/slog"
+	"strings"
 
 	"github.com/darienchong/neopets-battledome-analysis/caches"
 	"github.com/darienchong/neopets-battledome-analysis/constants"
@@ -10,18 +10,17 @@ import (
 	"github.com/darienchong/neopets-battledome-analysis/models"
 )
 
-type DropDataService struct{}
+type EmpiricalDropsService struct{}
 
-func NewDropDataService() *DropDataService {
-	return &DropDataService{}
+func NewEmpiricalDropsService() *EmpiricalDropsService {
+	return &EmpiricalDropsService{}
 }
 
-func (service *DropDataService) GetAllDrops(dataFolderPath string) ([]*models.BattledomeDrops, error) {
+func (service *EmpiricalDropsService) GetAllDrops(dataFolderPath string) ([]*models.BattledomeDrops, error) {
 	parser := NewDropDataParser()
 	files, err := helpers.GetFilesInFolder(dataFolderPath)
 	if err != nil {
-		slog.Error("Failed to get files in folder!")
-		panic(err)
+		return nil, fmt.Errorf("failed to get files in folder (%s): %w", dataFolderPath, err)
 	}
 
 	drops := []*models.BattledomeDrops{}
@@ -36,7 +35,21 @@ func (service *DropDataService) GetAllDrops(dataFolderPath string) ([]*models.Ba
 	return drops, nil
 }
 
-func (service *DropDataService) GetItems(drops []*models.BattledomeDrops) (map[string]*models.BattledomeItem, error) {
+func (service *EmpiricalDropsService) GetDrops(arena string) ([]*models.BattledomeDrops, error) {
+	allDrops, err := service.GetAllDrops(constants.BATTLEDOME_DROPS_FOLDER)
+	if err != nil {
+		// Could be due to inconsistent caller, try going down one level
+		allDrops, err = service.GetAllDrops(strings.Replace(constants.BATTLEDOME_DROPS_FOLDER, "../", "", 1))
+		if err != nil {
+			return nil, err
+		}
+	}
+	return helpers.Filter(allDrops, func(drop *models.BattledomeDrops) bool {
+		return drop.Metadata.Arena == arena
+	}), nil
+}
+
+func (service *EmpiricalDropsService) GetItems(drops []*models.BattledomeDrops) (map[string]*models.BattledomeItem, error) {
 	itemPriceCache, err := caches.GetItemPriceCacheInstance()
 	if err != nil {
 		return nil, fmt.Errorf("failed to get item price cache instance: %w", err)

@@ -5,13 +5,13 @@ import (
 	"github.com/darienchong/neopets-battledome-analysis/models"
 )
 
-type EmpiricalDropRateEstimator struct{}
+type DropsAnalysisService struct{}
 
-func NewEmpiricalDropRateEstimator() *EmpiricalDropRateEstimator {
-	return &EmpiricalDropRateEstimator{}
+func NewDropsAnalysisService() *DropsAnalysisService {
+	return &DropsAnalysisService{}
 }
 
-func (analyser *EmpiricalDropRateEstimator) Analyse(drops *models.BattledomeDrops) *models.DropDataAnalysisResult {
+func (analyser *DropsAnalysisService) Analyse(drops *models.BattledomeDrops) *models.DropsAnalysis {
 	itemPriceCache, err := caches.GetItemPriceCacheInstance()
 	if err != nil {
 		panic(err)

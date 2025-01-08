@@ -24,12 +24,12 @@ func validateDropsAreAllFromSameArena(drops []*models.BattledomeDrops) bool {
 	}) == len(drops)
 }
 
-func (analyser *ArenaDataAnalyser) Analyse(drops []*models.BattledomeDrops) (*models.DropDataAnalysisResult, error) {
+func (analyser *ArenaDataAnalyser) Analyse(drops []*models.BattledomeDrops) (*models.DropsAnalysis, error) {
 	if !validateDropsAreAllFromSameArena(drops) {
 		return nil, fmt.Errorf("not all the drops provided were from the same arena")
 	}
 
-	res := new(models.DropDataAnalysisResult)
+	res := new(models.DropsAnalysis)
 	combinedDrops := new(models.BattledomeDrops)
 	res.Metadata = drops[0].Metadata.Copy()
 	res.Items = combinedDrops.Items

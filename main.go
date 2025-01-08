@@ -13,6 +13,6 @@ func main() {
 	case "AnalyseDrops":
 		services.NewArenaDropsLogger().Log(dataFolderPath)
 	case "Compare":
-		services.NewArenaDataComparisonLogger().LogComparison(dataFolderPath)
+		services.NewArenaDataComparisonLogger().CompareAll()
 	}
 }

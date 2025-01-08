@@ -214,3 +214,21 @@ func AsLiteral[T any](ptrs []*T) []T {
 		return *ptr
 	})
 }
+
+func ReduceMap[K comparable, V any](m map[K][]*V, reducer func(*V, *V) *V) map[K]*V {
+	m2 := map[K]*V{}
+	for k, vs := range m {
+		m2[k] = Reduce(vs, reducer)
+	}
+	return m2
+}
+
+func Max[T comparable](ts []T, less func(T, T) bool) T {
+	best := ts[0]
+	for _, t := range ts {
+		if less(best, t) {
+			best = t
+		}
+	}
+	return best
+}

@@ -2,7 +2,6 @@ package helpers
 
 import (
 	"fmt"
-	"log/slog"
 	"math"
 	"strconv"
 	"strings"
@@ -99,79 +98,67 @@ func (table *Table) generateTableLine() string {
 	return separator
 }
 
-func (table *Table) Log() {
-	table.LogWithPrefix("")
-}
+func (table *Table) GetLines() []string {
+	lines := []string{}
 
-func (table *Table) LogWithPrefix(logPrefix string) {
 	template := table.getLoggingTemplate()
 
 	if table.Name != "" {
 		rowSeparator := table.generateTableLineWithoutColumnSeparators()
 		numSpaces := len(" ") + len(rowSeparator) - len(table.Name) - 3
-		slog.Info(logPrefix + rowSeparator)
+		lines = append(lines, rowSeparator)
 		leftPadding := int(math.Floor(float64(numSpaces) / 2.0))
 		rightPadding := int(math.Ceil(float64(numSpaces) / 2.0))
-		slog.Info(logPrefix + "|" + strings.Repeat(" ", leftPadding) + table.Name + strings.Repeat(" ", rightPadding) + "|")
+		lines = append(lines, "|"+strings.Repeat(" ", leftPadding)+table.Name+strings.Repeat(" ", rightPadding)+"|")
 	}
 
-	slog.Info(logPrefix + table.generateTableLine())
-	slog.Info(logPrefix + fmt.Sprintf(template, table.headers...))
-	slog.Info(logPrefix + table.generateTableLine())
+	lines = append(lines, table.generateTableLine())
+	lines = append(lines, fmt.Sprintf(template, table.headers...))
+	lines = append(lines, table.generateTableLine())
 	for i, row := range table.rows {
 		if table.IsLastRowDistinct && i == len(table.rows)-1 {
-			slog.Info(logPrefix + table.generateTableLine())
+			lines = append(lines, table.generateTableLine())
 		}
-		slog.Info(logPrefix + fmt.Sprintf(template, row...))
+		lines = append(lines, fmt.Sprintf(template, row...))
 	}
-	slog.Info(logPrefix + table.generateTableLine())
+	lines = append(lines, table.generateTableLine())
+	return lines
 }
 
-func (table *Table) LogAlongside(otherTable *Table, tableSeparator string) {
-	table.LogAlongsideWithPrefix(otherTable, tableSeparator, "")
+func getEmptyLine(length int) string {
+	return strings.Repeat(" ", length)
 }
 
-func (table *Table) LogAlongsideWithPrefix(otherTable *Table, tableSeparator string, logPrefix string) {
-	if len(table.rows) != len(otherTable.rows) {
-		panic(fmt.Errorf("can't simultaneously log two tables of differing length"))
+func (table *Table) GetLinesWith(tableSeparator string, tables ...*Table) []string {
+	tables = append([]*Table{table}, tables...)
+	lines := []string{}
+
+	tableLines := Map(tables, func(table *Table) []string {
+		return table.GetLines()
+	})
+
+	maxTableLength := Max(
+		Map(
+			tableLines,
+			func(tableLines []string) int {
+				return len(tableLines)
+			},
+		),
+		func(a int, b int) bool {
+			return a < b
+		},
+	)
+
+	for i := range maxTableLength {
+		lineParts := Map(tableLines, func(tableLines []string) string {
+			if i < len(tableLines) {
+				return tableLines[i]
+			}
+
+			return getEmptyLine(len(tableLines[0]))
+		})
+		lines = append(lines, strings.Join(lineParts, tableSeparator))
 	}
 
-	if table.Name == "" && otherTable.Name != "" || table.Name != "" && otherTable.Name == "" {
-		panic(fmt.Errorf("can't simultaneously log a named table and an unnamed table"))
-	}
-
-	template := table.getLoggingTemplate()
-	otherTemplate := otherTable.getLoggingTemplate()
-	separator := table.generateTableLine() + tableSeparator + otherTable.generateTableLine()
-
-	if table.Name != "" {
-		rowSeparator := table.generateTableLineWithoutColumnSeparators()
-		otherRowSeparator := otherTable.generateTableLineWithoutColumnSeparators()
-
-		numSpaces := len(" ") + len(rowSeparator) - len(table.Name) - 3
-		otherNumSpaces := len(" ") + len(otherRowSeparator) - len(otherTable.Name) - 3
-
-		slog.Info(logPrefix + rowSeparator + tableSeparator + otherRowSeparator)
-		leftPadding, rightPadding := int(math.Floor(float64(numSpaces)/2.0)), int(math.Ceil(float64(numSpaces)/2.0))
-		otherLeftPadding, otherRightPadding := int(math.Floor(float64(otherNumSpaces)/2.0)), int(math.Ceil(float64(otherNumSpaces)/2.0))
-
-		nameRow := "|" + strings.Repeat(" ", leftPadding) + table.Name + strings.Repeat(" ", rightPadding) + "|"
-		otherNameRow := "|" + strings.Repeat(" ", otherLeftPadding) + otherTable.Name + strings.Repeat(" ", otherRightPadding) + "|"
-		slog.Info(logPrefix + nameRow + tableSeparator + otherNameRow)
-	}
-
-	slog.Info(logPrefix + separator)
-	slog.Info(logPrefix + fmt.Sprintf(template, table.headers...) + tableSeparator + fmt.Sprintf(otherTemplate, otherTable.headers...))
-	slog.Info(logPrefix + separator)
-	for i := range table.rows {
-		row := table.rows[i]
-		otherRow := otherTable.rows[i]
-
-		if table.IsLastRowDistinct && i == len(table.rows)-1 {
-			slog.Info(logPrefix + separator)
-		}
-
-		slog.Info(logPrefix + fmt.Sprintf(template, row...) + tableSeparator + fmt.Sprintf(otherTemplate, otherRow...))
-	}
-	slog.Info(logPrefix + separator)
+	return lines
 }

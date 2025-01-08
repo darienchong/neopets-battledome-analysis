@@ -23,7 +23,7 @@ func NewGeneratedDropsService() *GeneratedDropsService {
 	}
 }
 
-func (service *GeneratedDropsService) GetDrops(arena string) (*models.BattledomeDrops, error) {
+func (service *GeneratedDropsService) GenerateDrops(arena string) (*models.BattledomeDrops, error) {
 	if helpers.IsFileExists(constants.GetGeneratedDropsFilePath(arena)) {
 		parsedDrops, err := service.GeneratedDropsParser.Parse(constants.GetGeneratedDropsFilePath(arena))
 		if err != nil {

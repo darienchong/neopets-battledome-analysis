@@ -10,7 +10,7 @@ import (
 )
 
 func TestAnalyser(t *testing.T) {
-	target := services.NewEmpiricalDropRateEstimator()
+	target := services.NewDropsAnalysisService()
 	parser := services.NewDropDataParser()
 	drops, err := parser.Parse(constants.GetDropDataFilePath("2024_12_20.txt"))
 	if err != nil {

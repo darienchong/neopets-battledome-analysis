@@ -12,16 +12,16 @@ import (
 )
 
 type ArenaDropsLogger struct {
-	DropDataService            *DropDataService
+	DropDataService            *EmpiricalDropsService
 	DropDataParser             *DropDataParser
-	EmpiricalDropRateEstimator *EmpiricalDropRateEstimator
+	EmpiricalDropRateEstimator *DropsAnalysisService
 }
 
 func NewArenaDropsLogger() *ArenaDropsLogger {
 	return &ArenaDropsLogger{
-		DropDataService:            NewDropDataService(),
+		DropDataService:            NewEmpiricalDropsService(),
 		DropDataParser:             NewDropDataParser(),
-		EmpiricalDropRateEstimator: NewEmpiricalDropRateEstimator(),
+		EmpiricalDropRateEstimator: NewDropsAnalysisService(),
 	}
 }
 
@@ -103,7 +103,9 @@ func (dropsLogger *ArenaDropsLogger) Log(dataFolderPath string) error {
 		})
 
 		slog.Info(res.Metadata.String())
-		profitBreakdownTable.LogWithPrefix("\t")
+		for _, line := range profitBreakdownTable.GetLines() {
+			slog.Info("\t" + line)
+		}
 		slog.Info("")
 	}
 
