@@ -243,17 +243,22 @@ func generateArenaSpecificDropsTable(realData *models.ComparisonResult, generate
 		"Expectation",
 		"%",
 	})
+	table.IsLastRowDistinct = true
 
 	realItems := helpers.Filter(helpers.Values(realData.Analysis.Items), func(item *models.BattledomeItem) bool {
 		return isArenaSpecificDrop(item.Name, generatedData.Analysis.Items)
 	})
-
 	orderedRealItems := helpers.OrderByDescending(realItems, func(item *models.BattledomeItem) float64 {
 		return float64(item.Quantity) * itemPriceCache.GetPrice(item.Name)
 	})
-
-	totalProfit := helpers.Sum(helpers.Map(realItems, func(item *models.BattledomeItem) float64 {
-		return float64(item.Quantity) * itemPriceCache.GetPrice(item.Name)
+	totalExpectation := helpers.Sum(helpers.Map(helpers.Values(realData.Analysis.Items), func(item *models.BattledomeItem) float64 {
+		return item.GetDropRate(realData.Analysis) * itemPriceCache.GetPrice(item.Name) * constants.BATTLEDOME_DROPS_PER_DAY
+	}))
+	arenaSpecificDropsExpectation := helpers.Sum(helpers.Map(realItems, func(item *models.BattledomeItem) float64 {
+		return item.GetDropRate(realData.Analysis) * itemPriceCache.GetPrice(item.Name) * constants.BATTLEDOME_DROPS_PER_DAY
+	}))
+	totalDropRate := helpers.Sum(helpers.Map(realItems, func(item *models.BattledomeItem) float64 {
+		return item.GetDropRate(realData.Analysis)
 	}))
 
 	for i, item := range orderedRealItems {
@@ -271,9 +276,18 @@ func generateArenaSpecificDropsTable(realData *models.ComparisonResult, generate
 			helpers.FormatPercentage(itemDropRate) + "%",
 			helpers.FormatFloat(itemPrice) + " NP",
 			helpers.FormatFloat(itemExpectation) + " NP",
-			helpers.FormatPercentage(itemExpectation/totalProfit) + "%",
+			helpers.FormatPercentage(itemExpectation/totalExpectation) + "%",
 		})
 	}
+
+	table.AddRow([]string{
+		"",
+		"Total",
+		helpers.FormatPercentage(totalDropRate) + "%",
+		"",
+		helpers.FormatFloat(arenaSpecificDropsExpectation) + " NP",
+		helpers.FormatPercentage(arenaSpecificDropsExpectation/totalExpectation) + "%",
+	})
 
 	return table, nil
 }
@@ -293,17 +307,22 @@ func generateChallengerSpecificDropsTable(realData *models.ComparisonResult, gen
 		"Expectation",
 		"%",
 	})
+	table.IsLastRowDistinct = true
 
 	realItems := helpers.Filter(helpers.Values(realData.Analysis.Items), func(item *models.BattledomeItem) bool {
 		return !isArenaSpecificDrop(item.Name, generatedData.Analysis.Items)
 	})
-
 	orderedRealItems := helpers.OrderByDescending(realItems, func(item *models.BattledomeItem) float64 {
 		return float64(item.Quantity) * itemPriceCache.GetPrice(item.Name)
 	})
-
-	totalProfit := helpers.Sum(helpers.Map(realItems, func(item *models.BattledomeItem) float64 {
-		return float64(item.Quantity) * itemPriceCache.GetPrice(item.Name)
+	totalExpectation := helpers.Sum(helpers.Map(helpers.Values(realData.Analysis.Items), func(item *models.BattledomeItem) float64 {
+		return item.GetDropRate(realData.Analysis) * itemPriceCache.GetPrice(item.Name) * constants.BATTLEDOME_DROPS_PER_DAY
+	}))
+	challengerSpecificDropsExpectation := helpers.Sum(helpers.Map(realItems, func(item *models.BattledomeItem) float64 {
+		return item.GetDropRate(realData.Analysis) * itemPriceCache.GetPrice(item.Name) * constants.BATTLEDOME_DROPS_PER_DAY
+	}))
+	totalDropRate := helpers.Sum(helpers.Map(realItems, func(item *models.BattledomeItem) float64 {
+		return item.GetDropRate(realData.Analysis)
 	}))
 
 	for i, item := range orderedRealItems {
@@ -321,9 +340,18 @@ func generateChallengerSpecificDropsTable(realData *models.ComparisonResult, gen
 			helpers.FormatPercentage(itemDropRate) + "%",
 			helpers.FormatFloat(itemPrice) + " NP",
 			helpers.FormatFloat(itemExpectation) + " NP",
-			helpers.FormatPercentage(itemExpectation/totalProfit) + "%",
+			helpers.FormatPercentage(itemExpectation/totalExpectation) + "%",
 		})
 	}
+
+	table.AddRow([]string{
+		"",
+		"Total",
+		helpers.FormatPercentage(totalDropRate) + "%",
+		"",
+		helpers.FormatFloat(challengerSpecificDropsExpectation) + " NP",
+		helpers.FormatPercentage(challengerSpecificDropsExpectation/totalExpectation) + "%",
+	})
 
 	return table, nil
 }
