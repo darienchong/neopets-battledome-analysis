@@ -1,4 +1,4 @@
-package services
+package loggers
 
 import (
 	"fmt"
@@ -9,19 +9,20 @@ import (
 	"github.com/darienchong/neopets-battledome-analysis/constants"
 	"github.com/darienchong/neopets-battledome-analysis/helpers"
 	"github.com/darienchong/neopets-battledome-analysis/models"
+	"github.com/darienchong/neopets-battledome-analysis/services"
 )
 
 type ArenaDropsLogger struct {
-	DropDataService            *EmpiricalDropsService
-	DropDataParser             *DropDataParser
-	EmpiricalDropRateEstimator *DropsAnalysisService
+	DropDataService            *services.EmpiricalDropsService
+	DropDataParser             *services.DropDataParser
+	EmpiricalDropRateEstimator *services.DropsAnalysisService
 }
 
 func NewArenaDropsLogger() *ArenaDropsLogger {
 	return &ArenaDropsLogger{
-		DropDataService:            NewEmpiricalDropsService(),
-		DropDataParser:             NewDropDataParser(),
-		EmpiricalDropRateEstimator: NewDropsAnalysisService(),
+		DropDataService:            services.NewEmpiricalDropsService(),
+		DropDataParser:             services.NewDropDataParser(),
+		EmpiricalDropRateEstimator: services.NewDropsAnalysisService(),
 	}
 }
 
@@ -102,7 +103,7 @@ func (dropsLogger *ArenaDropsLogger) Log(dataFolderPath string) error {
 			"",
 		})
 
-		slog.Info(res.Metadata.String())
+		slog.Info(fmt.Sprintf("%s - %s", file, res.Metadata.String()))
 		for _, line := range profitBreakdownTable.GetLines() {
 			slog.Info("\t" + line)
 		}

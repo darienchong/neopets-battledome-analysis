@@ -4,9 +4,9 @@ import (
 	"testing"
 
 	"github.com/darienchong/neopets-battledome-analysis/constants"
-	"github.com/darienchong/neopets-battledome-analysis/services"
+	"github.com/darienchong/neopets-battledome-analysis/loggers"
 )
 
 func TestArenaDropsLogger(t *testing.T) {
-	services.NewArenaDropsLogger().Log(constants.BATTLEDOME_DROPS_FOLDER)
+	loggers.NewArenaDropsLogger().Log(constants.BATTLEDOME_DROPS_FOLDER)
 }

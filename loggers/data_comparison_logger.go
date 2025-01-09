@@ -1,4 +1,4 @@
-package services
+package loggers
 
 import (
 	"fmt"
@@ -8,6 +8,7 @@ import (
 	"github.com/darienchong/neopets-battledome-analysis/constants"
 	"github.com/darienchong/neopets-battledome-analysis/helpers"
 	"github.com/darienchong/neopets-battledome-analysis/models"
+	"github.com/darienchong/neopets-battledome-analysis/services"
 )
 
 func getPrefix(indentLevel int) string {
@@ -15,14 +16,14 @@ func getPrefix(indentLevel int) string {
 }
 
 type DataComparisonLogger struct {
-	ArenaDataComparisonService *DataComparisonService
-	ArenaDataComparisonViewer  *DataComparisonViewer
+	DataComparisonService *services.DataComparisonService
+	DataComparisonViewer  *services.DataComparisonViewer
 }
 
 func NewDataComparisonLogger() *DataComparisonLogger {
 	return &DataComparisonLogger{
-		ArenaDataComparisonService: NewDataComparisonService(),
-		ArenaDataComparisonViewer:  NewDataComparisonViewer(),
+		DataComparisonService: services.NewDataComparisonService(),
+		DataComparisonViewer:  services.NewDataComparisonViewer(),
 	}
 }
 
@@ -31,7 +32,7 @@ func (logger *DataComparisonLogger) CompareAllArenas() error {
 		helpers.Map(
 			constants.ARENAS,
 			func(arena string) *helpers.Tuple {
-				realData, generatedData, err := logger.ArenaDataComparisonService.CompareArena(arena)
+				realData, generatedData, err := logger.DataComparisonService.CompareArena(arena)
 				if err != nil {
 					panic(err)
 				}
@@ -51,7 +52,7 @@ func (logger *DataComparisonLogger) CompareAllArenas() error {
 	for i, comparisonDatum := range comparisonData {
 		realData := comparisonDatum.Elements[0].(*models.ComparisonResult)
 		generatedData := comparisonDatum.Elements[1].(*models.ComparisonResult)
-		lines, err := logger.ArenaDataComparisonViewer.ViewArenaComparison(realData, generatedData)
+		lines, err := logger.DataComparisonViewer.ViewArenaComparison(realData, generatedData)
 		if err != nil {
 			return err
 		}
@@ -65,6 +66,40 @@ func (logger *DataComparisonLogger) CompareAllArenas() error {
 			slog.Info(getPrefix(1) + line)
 		}
 		slog.Info("\n\n")
+	}
+
+	return nil
+}
+
+func (logger *DataComparisonLogger) CompareChallenger(metadata models.DropsMetadata) error {
+	realData, generatedData, err := logger.DataComparisonService.CompareByMetadata(metadata)
+	if err != nil {
+		return err
+	}
+	lines, err := logger.DataComparisonViewer.ViewChallengerComparison(realData, generatedData)
+	if err != nil {
+		return err
+	}
+
+	for _, line := range lines {
+		slog.Info(line)
+	}
+	return nil
+}
+
+func (logger *DataComparisonLogger) CompareAllChallengers() error {
+	data, err := logger.DataComparisonService.CompareAllChallengers()
+	if err != nil {
+		return err
+	}
+
+	lines, err := logger.DataComparisonViewer.ViewChallengerComparisons(data)
+	if err != nil {
+		return err
+	}
+
+	for _, line := range lines {
+		slog.Info(line)
 	}
 
 	return nil

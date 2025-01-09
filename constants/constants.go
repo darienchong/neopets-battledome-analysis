@@ -24,7 +24,7 @@ const (
 	NUMBER_OF_ITEMS_TO_GENERATE_FOR_ESTIMATING_PROFIT_STATISTICS = 100_000_000
 
 	FILTER_ARENA = ""
-	ACTION       = "Compare"
+	ACTION       = "CompareChall"
 )
 
 var (
