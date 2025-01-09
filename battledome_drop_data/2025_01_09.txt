@@ -1,0 +1,16 @@
+$ARENA:Ugga Dome
+$CHALLENGER:Cybunny Scout
+$DIFFICULTY:Average
+Stone Muffin|3
+Tyragh the Tyrannian Buzz|1
+Hairy Snowball|1
+Tyrannian Skeith Plushie|1
+Mau Codestone|1
+Vo Codestone|1
+Scout Unit|1
+Icklesaur|1
+Tai-Kai Codestone|1
+Kew Codestone|1
+Main Codestone|1
+Camelior|1
+Unidentifiable Weak Bottled Faerie|1
