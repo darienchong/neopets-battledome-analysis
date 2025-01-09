@@ -3,6 +3,7 @@ package loggers
 import (
 	"fmt"
 	"log/slog"
+	"math"
 	"strconv"
 
 	"github.com/darienchong/neopets-battledome-analysis/caches"
@@ -40,6 +41,10 @@ func (dropsLogger *ArenaDropsLogger) Log(dataFolderPath string) error {
 	files, err := helpers.GetFilesInFolder(dataFolderPath)
 	if err != nil {
 		return fmt.Errorf("failed to get files in %s: %w", dataFolderPath, err)
+	}
+
+	if constants.NUMBER_OF_DROPS_TO_PRINT > 0 {
+		files = files[int(math.Max(float64(len(files)-constants.NUMBER_OF_DROPS_TO_PRINT), 0)):]
 	}
 
 	samplesByArena := map[string][]*models.BattledomeDrops{}
