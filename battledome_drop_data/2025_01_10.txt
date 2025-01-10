@@ -1,0 +1,15 @@
+$ARENA:Ugga Dome
+$CHALLENGER:Harry the Mutant Moehog
+$DIFFICULTY:Mighty
+Weak Bottled Earth Faerie|1
+Weak Bottled Air Faerie|2
+Weak Bottled Dark Faerie|1
+Mau Codestone|2
+Main Codestone|1
+Blue Furry Negg|1
+Har Codestone|2
+Speak Tyrannian|1
+Bri Codestone|1
+Mazzew|1
+Red Moehog Morphing Potion|1
+Kew Codestone|1
