@@ -88,6 +88,7 @@ func (service *DropRateService) CalculateDropRates(drops ...*models.BattledomeDr
 			}
 			return combined
 		})
+
 		totalNumberOfItems := helpers.Sum(
 			helpers.Map(
 				helpers.FilterPointers(helpers.PointerValues(combinedDrops.Items), func(item *models.BattledomeItem) bool {
@@ -100,6 +101,10 @@ func (service *DropRateService) CalculateDropRates(drops ...*models.BattledomeDr
 		)
 
 		for _, item := range combinedDrops.Items {
+			if item.Name == "nothing" {
+				continue
+			}
+
 			dropRatesByArena[arena] = append(dropRatesByArena[arena], &models.ItemDropRate{
 				Arena:    arena,
 				ItemName: item.Name,

@@ -31,7 +31,7 @@ func getDryChance(dropRate float64, trials int) float64 {
 func generateProfitableItemsTable(data *models.ComparisonResult, isRealData bool) *helpers.Table {
 	headers := helpers.When(isRealData, []string{
 		"i",
-		"ItemName",
+		"Item Name",
 		"Drop Rate",
 		// Don't include Dry Chance in real data
 		"Price",
@@ -39,7 +39,7 @@ func generateProfitableItemsTable(data *models.ComparisonResult, isRealData bool
 		"%",
 	}, []string{
 		"i",
-		"ItemName",
+		"Item Name",
 		"Drop Rate",
 		"Dry Chance",
 		"Price",
@@ -208,7 +208,7 @@ func (viewer *DataComparisonViewer) ViewChallengerComparison(realData *models.Co
 		return nil, err
 	}
 
-	tableSeparator := "\t"
+	tableSeparator := "  "
 
 	lines := []string{}
 	lines = append(lines, profitComparisonTable.GetLines()...)
