@@ -4,35 +4,15 @@ import (
 	"fmt"
 
 	"github.com/darienchong/neopets-battledome-analysis/caches"
-	"github.com/darienchong/neopets-battledome-analysis/constants"
 	"github.com/darienchong/neopets-battledome-analysis/helpers"
-	"github.com/dustin/go-humanize"
 )
 
+type ItemName string
+
 type BattledomeItem struct {
-	Name            string
-	Quantity        int32
-	IndividualPrice float64
-}
-
-func (item *BattledomeItem) ToProfit(arena string, dropRate float64, price float64) *ItemProfit {
-	return &ItemProfit{
-		ItemDropRate: ItemDropRate{
-			Arena:    arena,
-			ItemName: item.Name,
-			DropRate: dropRate,
-		},
-		IndividualPrice: price,
-	}
-}
-
-func (first *BattledomeItem) Combine(second *BattledomeItem) error {
-	if first.Name != second.Name {
-		return fmt.Errorf("tried to combine two items that did not have the same name: %s and %s", first, second)
-	}
-
-	first.Quantity += second.Quantity
-	return nil
+	Metadata BattledomeItemMetadata
+	Name     ItemName
+	Quantity int32
 }
 
 func (first *BattledomeItem) Union(second *BattledomeItem) (*BattledomeItem, error) {
@@ -42,46 +22,38 @@ func (first *BattledomeItem) Union(second *BattledomeItem) (*BattledomeItem, err
 
 	combined := &BattledomeItem{}
 	combined.Name = first.Name
-	combined.IndividualPrice = first.IndividualPrice
 	combined.Quantity = first.Quantity + second.Quantity
 	return combined, nil
 }
 
-func (item *BattledomeItem) AddPrice(cache *caches.ItemPriceCache) {
-	item.IndividualPrice = cache.GetPrice(item.Name)
+func (item *BattledomeItem) GetProfit(itemPriceCache *caches.ItemPriceCache) float64 {
+	return float64(item.Quantity) * itemPriceCache.GetPrice(string(item.Name))
 }
 
-func (item *BattledomeItem) GetProfit() (float64, error) {
-	if item.IndividualPrice <= 0 {
-		return 0.0, fmt.Errorf("can't calculate profit as price was not set for \"%s\"", item.Name)
-	}
+func (item *BattledomeItem) GetPercentageProfit(itemPriceCache *caches.ItemPriceCache, items NormalisedBattledomeItems) (float64, error) {
+	var defaultValue float64
 
-	return float64(item.Quantity) * item.IndividualPrice, nil
-}
-
-func (item *BattledomeItem) GetPercentageProfit(res *BattledomeDropsAnalysis) (float64, error) {
-	profit, err := item.GetProfit()
+	totalProfit, err := items.GetTotalProfit()
 	if err != nil {
-		return 0.0, err
+		return defaultValue, err
 	}
-
-	return profit / res.GetTotalProfit(), nil
+	return item.GetProfit(itemPriceCache) / totalProfit, nil
 }
 
-func (item *BattledomeItem) GetDropRate(res *BattledomeDropsAnalysis) float64 {
-	return float64(item.Quantity) / float64(helpers.Sum(helpers.Map(helpers.ToSlice(res.Items), func(tuple helpers.Tuple) int32 {
+func (item *BattledomeItem) GetDropRate(items NormalisedBattledomeItems) float64 {
+	return float64(item.Quantity) / float64(helpers.Sum(helpers.Map(helpers.ToSlice(items), func(tuple helpers.Tuple) int32 {
 		return tuple.Elements[1].(*BattledomeItem).Quantity
 	})))
 }
 
 func (item *BattledomeItem) String() string {
-	return fmt.Sprintf("%s × %d @ %s NP/ea (%s NP total)", item.Name, item.Quantity, humanize.FormatFloat(constants.FLOAT_FORMAT_LAYOUT, item.IndividualPrice), humanize.FormatFloat(constants.FLOAT_FORMAT_LAYOUT, float64(item.Quantity)*item.IndividualPrice))
+	return fmt.Sprintf("[%s] %s × %d", item.Metadata.String(), item.Name, item.Quantity)
 }
 
 func (item *BattledomeItem) Copy() *BattledomeItem {
-	copy := &BattledomeItem{}
-	copy.Name = item.Name
-	copy.Quantity = item.Quantity
-	copy.IndividualPrice = item.IndividualPrice
-	return copy
+	return &BattledomeItem{
+		Metadata: item.Metadata,
+		Name:     item.Name,
+		Quantity: item.Quantity,
+	}
 }

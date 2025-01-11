@@ -7,22 +7,22 @@ import (
 	"github.com/darienchong/neopets-battledome-analysis/parsers"
 )
 
-type ItemWeightService struct {
-	ItemWeightParser *parsers.ItemWeightParser
+type BattledomeItemWeightService struct {
+	ItemWeightParser *parsers.BattledomeItemWeightParser
 }
 
-func NewItemWeightService() *ItemWeightService {
-	return &ItemWeightService{
-		ItemWeightParser: parsers.NewItemWeightParser(),
+func NewBattledomeItemWeightService() *BattledomeItemWeightService {
+	return &BattledomeItemWeightService{
+		ItemWeightParser: parsers.NewBattledomeItemWeightParser(),
 	}
 }
 
-func (service *ItemWeightService) GetItemWeights(arena string) ([]models.ItemWeight, error) {
+func (service *BattledomeItemWeightService) GetItemWeights(arena string) ([]models.BattledomeItemWeight, error) {
 	weights, err := service.ItemWeightParser.Parse(constants.GetItemWeightsFilePath())
 	if err != nil {
 		return nil, err
 	}
-	return helpers.Filter(weights, func(weight models.ItemWeight) bool {
+	return helpers.Filter(weights, func(weight models.BattledomeItemWeight) bool {
 		return weight.Arena == arena
 	}), nil
 }

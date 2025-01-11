@@ -14,21 +14,19 @@ import (
 	"github.com/darienchong/neopets-battledome-analysis/services"
 )
 
-type ArenaDropsLogger struct {
-	DropDataService            *services.EmpiricalDropsService
-	DropDataParser             *parsers.DropDataParser
-	EmpiricalDropRateEstimator *services.DropsAnalysisService
+type BattledomeItemsLogger struct {
+	BattledomeItemsService       *services.BattledomeItemsService
+	BattledomeItemDropDataParser *parsers.BattledomeItemDropDataParser
 }
 
-func NewArenaDropsLogger() *ArenaDropsLogger {
-	return &ArenaDropsLogger{
-		DropDataService:            services.NewEmpiricalDropsService(),
-		DropDataParser:             parsers.NewDropDataParser(),
-		EmpiricalDropRateEstimator: services.NewDropsAnalysisService(),
+func NewArenaDropsLogger() *BattledomeItemsLogger {
+	return &BattledomeItemsLogger{
+		BattledomeItemsService:       services.NewBattledomeItemsService(),
+		BattledomeItemDropDataParser: parsers.NewBattledomeItemDropDataParser(),
 	}
 }
 
-func (dropsLogger *ArenaDropsLogger) Log(dataFolderPath string) error {
+func (dropsLogger *BattledomeItemsLogger) Log(dataFolderPath string) error {
 	if constants.FILTER_ARENA != "" {
 		slog.Info(fmt.Sprintf("Only displaying data related to \"%s\"", constants.FILTER_ARENA))
 	}
@@ -48,26 +46,25 @@ func (dropsLogger *ArenaDropsLogger) Log(dataFolderPath string) error {
 		files = files[int(math.Max(float64(len(files)-constants.NUMBER_OF_DROPS_TO_PRINT), 0)):]
 	}
 
-	samplesByArena := map[string][]*models.BattledomeDrops{}
+	samplesByArena := map[models.Arena]models.BattledomeItems{}
 	for _, file := range files {
-		drops, err := dropsLogger.DropDataParser.Parse(constants.GetDropDataFilePath(file))
+		items, err := dropsLogger.BattledomeItemDropDataParser.Parse(constants.GetDropDataFilePath(file))
 		if err != nil {
 			slog.Error(fmt.Sprintf("Failed to parse drop data file (%s)", file))
 			panic(err)
 		}
 
-		_, isKeyExists := samplesByArena[drops.Metadata.Arena]
+		_, isKeyExists := samplesByArena[items.Metadata.Arena]
 		if !isKeyExists {
-			samplesByArena[drops.Metadata.Arena] = []*models.BattledomeDrops{}
+			samplesByArena[items.Metadata.Arena] = models.BattledomeItems{}
 		}
-		samplesByArena[drops.Metadata.Arena] = append(samplesByArena[drops.Metadata.Arena], drops.ToBattledomeDrops())
+		samplesByArena[items.Metadata.Arena] = append(samplesByArena[items.Metadata.Arena], items.Items...)
 
-		if constants.FILTER_ARENA != "" && constants.FILTER_ARENA != drops.Metadata.Arena {
+		if constants.FILTER_ARENA != "" && constants.FILTER_ARENA != items.Metadata.Arena {
 			continue
 		}
 
 		itemCount := 0
-		res := dropsLogger.EmpiricalDropRateEstimator.Analyse(drops.ToBattledomeDrops())
 		profitBreakdownTable := helpers.NewTable([]string{
 			"i",
 			"Item Name",
@@ -78,13 +75,19 @@ func (dropsLogger *ArenaDropsLogger) Log(dataFolderPath string) error {
 		})
 		profitBreakdownTable.IsLastRowDistinct = true
 
-		for i, item := range res.GetItemsOrderedByProfit() {
+		normalisedItems, err := items.Items.Normalise()
+		if err != nil {
+			panic(err)
+		}
+		orderedNormalisedItems, err := normalisedItems.GetItemsOrderedByProfit()
+		if err != nil {
+			panic(err)
+		}
+
+		for i, item := range orderedNormalisedItems {
 			itemCount += int(item.Quantity)
-			itemProfit, err := item.GetProfit()
-			if err != nil {
-				panic(err)
-			}
-			itemPercentageProfit, err := item.GetPercentageProfit(res)
+			itemProfit := item.GetProfit(itemPriceCache)
+			itemPercentageProfit, err := item.GetPercentageProfit(itemPriceCache, normalisedItems)
 			if err != nil {
 				panic(err)
 			}
@@ -93,23 +96,29 @@ func (dropsLogger *ArenaDropsLogger) Log(dataFolderPath string) error {
 			}
 			profitBreakdownTable.AddRow([]string{
 				strconv.Itoa(i + 1),
-				item.Name,
+				string(item.Name),
 				strconv.Itoa(int(item.Quantity)),
-				helpers.FormatFloat(item.IndividualPrice) + " NP",
+				helpers.FormatFloat(itemPriceCache.GetPrice(string(item.Name))) + " NP",
 				helpers.FormatFloat(itemProfit) + " NP",
 				helpers.FormatPercentage(itemPercentageProfit) + "%",
 			})
 		}
+
+		totalProfit, err := normalisedItems.GetTotalProfit()
+		if err != nil {
+			panic(err)
+		}
+
 		profitBreakdownTable.AddRow([]string{
 			"",
 			"Total",
 			helpers.FormatFloat(float64(itemCount)),
 			"",
-			helpers.FormatFloat(res.GetTotalProfit()) + " NP",
+			helpers.FormatFloat(totalProfit) + " NP",
 			"",
 		})
 
-		slog.Info(fmt.Sprintf("%s - %s", file, res.Metadata.String()))
+		slog.Info(items.Metadata.String())
 		for _, line := range profitBreakdownTable.GetLines() {
 			slog.Info("\t" + line)
 		}

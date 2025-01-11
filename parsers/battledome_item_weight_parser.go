@@ -11,19 +11,19 @@ import (
 	"github.com/darienchong/neopets-battledome-analysis/models"
 )
 
-type ItemWeightParser struct{}
+type BattledomeItemWeightParser struct{}
 
-func NewItemWeightParser() *ItemWeightParser {
-	return &ItemWeightParser{}
+func NewBattledomeItemWeightParser() *BattledomeItemWeightParser {
+	return &BattledomeItemWeightParser{}
 }
 
-func (parser *ItemWeightParser) Parse(filePath string) ([]models.ItemWeight, error) {
+func (parser *BattledomeItemWeightParser) Parse(filePath string) ([]models.BattledomeItemWeight, error) {
 	if !helpers.IsFileExists(filePath) {
 		return nil, fmt.Errorf("item weights file does not exist: %s", filePath)
 	}
 
 	currentArena := ""
-	weights := []models.ItemWeight{}
+	weights := []models.BattledomeItemWeight{}
 	file, err := os.OpenFile(filePath, os.O_RDONLY, 0755)
 	if err != nil {
 		return nil, err
@@ -46,7 +46,7 @@ func (parser *ItemWeightParser) Parse(filePath string) ([]models.ItemWeight, err
 				return nil, err
 			}
 			itemWeight := parsedItemWeight / 100
-			weights = append(weights, models.ItemWeight{
+			weights = append(weights, models.BattledomeItemWeight{
 				Arena:  currentArena,
 				Name:   itemName,
 				Weight: itemWeight,

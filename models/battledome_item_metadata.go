@@ -2,15 +2,21 @@ package models
 
 import "fmt"
 
-type DropsMetadata struct {
-	Arena      string
-	Challenger string
-	Difficulty string
+type Arena string
+
+type Challenger string
+
+type Difficulty string
+
+type BattledomeItemMetadata struct {
+	Arena      Arena
+	Challenger Challenger
+	Difficulty Difficulty
 }
 
-func (first DropsMetadata) Combine(second *DropsMetadataWithSource) (DropsMetadata, error) {
+func (first BattledomeItemMetadata) Combine(second *DropsMetadataWithSource) (BattledomeItemMetadata, error) {
 	if first.Arena != second.Arena {
-		return DropsMetadata{}, fmt.Errorf("tried to combine two metadata that did not have the same arena: %s and %s", first, second)
+		return BattledomeItemMetadata{}, fmt.Errorf("tried to combine two metadata that did not have the same arena: %s and %s", first, second)
 	}
 
 	copy := first.Copy()
@@ -23,8 +29,8 @@ func (first DropsMetadata) Combine(second *DropsMetadataWithSource) (DropsMetada
 	return copy, nil
 }
 
-func (first DropsMetadata) Copy() DropsMetadata {
-	return DropsMetadata{
+func (first BattledomeItemMetadata) Copy() BattledomeItemMetadata {
+	return BattledomeItemMetadata{
 		Arena:      first.Arena,
 		Challenger: first.Challenger,
 		Difficulty: first.Difficulty,
@@ -33,7 +39,7 @@ func (first DropsMetadata) Copy() DropsMetadata {
 
 type DropsMetadataWithSource struct {
 	Source string
-	DropsMetadata
+	BattledomeItemMetadata
 }
 
 func (metadata *DropsMetadataWithSource) Copy() *DropsMetadataWithSource {
@@ -65,14 +71,14 @@ func (metadata *DropsMetadataWithSource) String() string {
 	return fmt.Sprintf("%s - %s - %s - %s", metadata.Source, metadata.Arena, metadata.Challenger, metadata.Difficulty)
 }
 
-func (metadata *DropsMetadata) String() string {
+func (metadata *BattledomeItemMetadata) String() string {
 	return fmt.Sprintf("%s - %s - %s", metadata.Arena, metadata.Challenger, metadata.Difficulty)
 }
 
-func GeneratedMetadata(arena string) *DropsMetadataWithSource {
+func GeneratedMetadata(arena Arena) *DropsMetadataWithSource {
 	return &DropsMetadataWithSource{
 		Source: "(generated)",
-		DropsMetadata: DropsMetadata{
+		BattledomeItemMetadata: BattledomeItemMetadata{
 			Arena:      arena,
 			Challenger: "(generated)",
 			Difficulty: "(generated)",

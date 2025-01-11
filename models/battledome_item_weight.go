@@ -1,6 +1,6 @@
 package models
 
-type ItemWeight struct {
+type BattledomeItemWeight struct {
 	Arena  string
 	Name   string
 	Weight float64

@@ -9,8 +9,8 @@ import (
 	"github.com/darienchong/neopets-battledome-analysis/parsers"
 )
 
-func shouldHaveItemAndQuantity(dropsDto *models.BattledomeDropsDto, t *testing.T, itemName string, itemQuantity int32) {
-	battledomeItem, isInItems := dropsDto.Items[itemName]
+func shouldHaveItemAndQuantity(normalisedItems models.NormalisedBattledomeItems, t *testing.T, itemName string, itemQuantity int32) {
+	battledomeItem, isInItems := normalisedItems[models.ItemName(itemName)]
 	if !isInItems {
 		t.Fatalf("Expected \"%s\" to be in items, but it was not.", itemName)
 	}
@@ -21,8 +21,8 @@ func shouldHaveItemAndQuantity(dropsDto *models.BattledomeDropsDto, t *testing.T
 }
 
 func TestDropDataParser(t *testing.T) {
-	target := new(parsers.DropDataParser)
-	drops, err := target.Parse(constants.GetDropDataFilePath("2024_12_20.txt"))
+	target := new(parsers.BattledomeItemDropDataParser)
+	dto, err := target.Parse(constants.GetDropDataFilePath("2024_12_20.txt"))
 	if err != nil {
 		t.Fatalf("Failed to parse file")
 		panic(err)
@@ -30,25 +30,30 @@ func TestDropDataParser(t *testing.T) {
 
 	expectedMetadata := new(models.DropsMetadataWithSource)
 	expectedMetadata.Source = filepath.Base(constants.GetDropDataFilePath("2024_12_20.txt"))
-	expectedMetadata.Arena = "Central Arena"
-	expectedMetadata.Challenger = "Flaming Meerca"
-	expectedMetadata.Difficulty = "Mighty"
-	if drops.Metadata != *expectedMetadata {
-		t.Fatalf("Expected metadata and actual metadata did not match:\n\tExpected: \"%s\"\n\tReceived: \"%s\"", expectedMetadata, drops.Metadata)
+	expectedMetadata.Arena = models.Arena("Central Arena")
+	expectedMetadata.Challenger = models.Challenger("Flaming Meerca")
+	expectedMetadata.Difficulty = models.Difficulty("Mighty")
+	if dto.Metadata != *expectedMetadata {
+		t.Fatalf("Expected metadata and actual metadata did not match:\n\tExpected: \"%s\"\n\tReceived: \"%s\"", expectedMetadata, dto.Metadata)
 	}
 
-	shouldHaveItemAndQuantity(drops, t, "Ridiculously Heavy Battle Hammer", 1)
-	shouldHaveItemAndQuantity(drops, t, "Cursed Wand of Shadow", 1)
-	shouldHaveItemAndQuantity(drops, t, "Chocolate Creme Pie", 1)
-	shouldHaveItemAndQuantity(drops, t, "Can of Neocola", 1)
-	shouldHaveItemAndQuantity(drops, t, "Unidentifiable Weak Bottled Faerie", 1)
-	shouldHaveItemAndQuantity(drops, t, "Har Codestone", 2)
-	shouldHaveItemAndQuantity(drops, t, "Orn Codestone", 1)
-	shouldHaveItemAndQuantity(drops, t, "Bri Codestone", 1)
-	shouldHaveItemAndQuantity(drops, t, "Main Codestone", 1)
-	shouldHaveItemAndQuantity(drops, t, "Tai-Kai Codestone", 1)
-	shouldHaveItemAndQuantity(drops, t, "Marzipan Sugared Slorg", 1)
-	shouldHaveItemAndQuantity(drops, t, "Kew Codestone", 1)
-	shouldHaveItemAndQuantity(drops, t, "Eo Codestone", 1)
-	shouldHaveItemAndQuantity(drops, t, "Robot Muffin", 1)
+	normalisedItems, err := dto.Items.Normalise()
+	if err != nil {
+		panic(err)
+	}
+
+	shouldHaveItemAndQuantity(normalisedItems, t, "Ridiculously Heavy Battle Hammer", 1)
+	shouldHaveItemAndQuantity(normalisedItems, t, "Cursed Wand of Shadow", 1)
+	shouldHaveItemAndQuantity(normalisedItems, t, "Chocolate Creme Pie", 1)
+	shouldHaveItemAndQuantity(normalisedItems, t, "Can of Neocola", 1)
+	shouldHaveItemAndQuantity(normalisedItems, t, "Unidentifiable Weak Bottled Faerie", 1)
+	shouldHaveItemAndQuantity(normalisedItems, t, "Har Codestone", 2)
+	shouldHaveItemAndQuantity(normalisedItems, t, "Orn Codestone", 1)
+	shouldHaveItemAndQuantity(normalisedItems, t, "Bri Codestone", 1)
+	shouldHaveItemAndQuantity(normalisedItems, t, "Main Codestone", 1)
+	shouldHaveItemAndQuantity(normalisedItems, t, "Tai-Kai Codestone", 1)
+	shouldHaveItemAndQuantity(normalisedItems, t, "Marzipan Sugared Slorg", 1)
+	shouldHaveItemAndQuantity(normalisedItems, t, "Kew Codestone", 1)
+	shouldHaveItemAndQuantity(normalisedItems, t, "Eo Codestone", 1)
+	shouldHaveItemAndQuantity(normalisedItems, t, "Robot Muffin", 1)
 }

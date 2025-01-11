@@ -33,7 +33,7 @@ func (logger *DataComparisonLogger) CompareAllArenas() error {
 		helpers.Map(
 			constants.ARENAS,
 			func(arena string) *helpers.Tuple {
-				realData, generatedData, err := logger.DataComparisonService.CompareArena(arena)
+				realData, generatedData, err := logger.DataComparisonService.CompareArena(models.Arena(arena))
 				if err != nil {
 					panic(err)
 				}
@@ -41,8 +41,8 @@ func (logger *DataComparisonLogger) CompareAllArenas() error {
 			},
 		),
 		func(tuple *helpers.Tuple) float64 {
-			realData := tuple.Elements[0].(*models.ComparisonResult)
-			profit, err := realData.Analysis.GetMeanDropsProfit()
+			realData := tuple.Elements[0].(models.NormalisedBattledomeItems)
+			profit, err := realData.GetMeanDropsProfit()
 			if err != nil {
 				return 0
 			}
@@ -51,18 +51,22 @@ func (logger *DataComparisonLogger) CompareAllArenas() error {
 	)
 
 	for i, comparisonDatum := range comparisonData {
-		realData := comparisonDatum.Elements[0].(*models.ComparisonResult)
-		generatedData := comparisonDatum.Elements[1].(*models.ComparisonResult)
+		realData := comparisonDatum.Elements[0].(models.NormalisedBattledomeItems)
+		generatedData := comparisonDatum.Elements[1].(models.NormalisedBattledomeItems)
 		lines, err := logger.DataComparisonViewer.ViewArenaComparison(realData, generatedData)
 		if err != nil {
 			return err
 		}
 
-		realItemCount := helpers.Sum(helpers.Map(helpers.Values(realData.Analysis.Items), func(item *models.BattledomeItem) int32 {
+		realItemCount := helpers.Sum(helpers.Map(helpers.Values(realData), func(item *models.BattledomeItem) int32 {
 			return helpers.When(item.Name == "nothing", 0, item.Quantity)
 		}))
 
-		slog.Info(fmt.Sprintf("%d. %s (%d samples)", i+1, realData.Analysis.Metadata.Arena, realItemCount))
+		metadata, err := realData.GetMetadata()
+		if err != nil {
+			return err
+		}
+		slog.Info(fmt.Sprintf("%d. %s (%d samples)", i+1, metadata.Arena, realItemCount))
 		for _, line := range lines {
 			slog.Info(getPrefix(1) + line)
 		}
@@ -72,7 +76,7 @@ func (logger *DataComparisonLogger) CompareAllArenas() error {
 	return nil
 }
 
-func (logger *DataComparisonLogger) CompareChallenger(metadata models.DropsMetadata) error {
+func (logger *DataComparisonLogger) CompareChallenger(metadata models.BattledomeItemMetadata) error {
 	realData, generatedData, err := logger.DataComparisonService.CompareByMetadata(metadata)
 	if err != nil {
 		return err

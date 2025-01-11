@@ -7,199 +7,68 @@ import (
 )
 
 type DataComparisonService struct {
-	GeneratedDropsService *GeneratedDropsService
-	EmpiricalDropsService *EmpiricalDropsService
-	DropsAnalysisService  *DropsAnalysisService
-	DropRateService       *DropRateService
+	BattledomeItemsService *BattledomeItemsService
 }
 
 func NewDataComparisonService() *DataComparisonService {
 	return &DataComparisonService{
-		GeneratedDropsService: NewGeneratedDropsService(),
-		EmpiricalDropsService: NewEmpiricalDropsService(),
-		DropsAnalysisService:  NewDropsAnalysisService(),
-		DropRateService:       NewDropRateService(),
+		BattledomeItemsService: NewBattledomeItemsService(),
 	}
 }
 
-func (service *DataComparisonService) ToComparisonResult(drop *models.BattledomeDrops) (*models.ComparisonResult, error) {
+func (service *DataComparisonService) CompareByMetadata(metadata models.BattledomeItemMetadata) (realData models.NormalisedBattledomeItems, generatedData models.NormalisedBattledomeItems, err error) {
 	itemPriceCache, err := caches.GetItemPriceCacheInstance()
 	if err != nil {
-		return nil, err
+		return
 	}
 	defer itemPriceCache.Close()
 
-	analysis := service.DropsAnalysisService.Analyse(drop)
-	dropRates, err := service.DropRateService.CalculateDropRates(&models.BattledomeDrops{
-		Metadata: models.DropsMetadataWithSource{
-			Source:        "(multiple sources)",
-			DropsMetadata: analysis.Metadata,
-		},
-		Items: helpers.ToPointerMap(
-			analysis.GetItemsOrderedByProfit(),
-			func(item *models.BattledomeItem) string {
-				return item.Name
-			},
-			func(item *models.BattledomeItem) *models.BattledomeItem {
-				return item
-			}),
-	})
+	realData, err = service.BattledomeItemsService.GetDropsByMetadata(metadata)
 	if err != nil {
-		return nil, err
+		return
 	}
 
-	profits := map[string]*models.ItemProfit{}
-	for _, itemDropRate := range dropRates[analysis.Metadata.Arena] {
-		profits[itemDropRate.ItemName] = &models.ItemProfit{
-			ItemDropRate:    *itemDropRate,
-			IndividualPrice: itemPriceCache.GetPrice(itemDropRate.ItemName),
-		}
+	generatedData, err = service.BattledomeItemsService.GenerateDropsByArena(metadata.Arena)
+	if err != nil {
+		return
 	}
 
-	return &models.ComparisonResult{
-		Analysis: analysis,
-		Profit:   profits,
-	}, nil
+	return
 }
 
-func (service *DataComparisonService) CompareByMetadata(metadata models.DropsMetadata) (*models.ComparisonResult, *models.ComparisonResult, error) {
+func (service *DataComparisonService) CompareArena(arena models.Arena) (realData models.NormalisedBattledomeItems, generatedData models.NormalisedBattledomeItems, err error) {
 	itemPriceCache, err := caches.GetItemPriceCacheInstance()
 	if err != nil {
-		return nil, nil, err
+		return
 	}
 	defer itemPriceCache.Close()
 
-	realDrops, err := service.EmpiricalDropsService.GetDropsByMetadata(metadata)
+	realData, err = service.BattledomeItemsService.GetDropsByArena(arena)
 	if err != nil {
-		return nil, nil, err
-	}
-	for _, drop := range realDrops {
-		for _, item := range drop.Items {
-			item.IndividualPrice = itemPriceCache.GetPrice(item.Name)
-		}
+		return
 	}
 
-	var combinedRealDrops *models.BattledomeDrops
-	if len(realDrops) > 0 {
-		combinedRealDrops = helpers.Reduce(realDrops, func(first *models.BattledomeDrops, second *models.BattledomeDrops) *models.BattledomeDrops {
-			combined, err := first.Union(second)
-			if err != nil {
-				panic(err)
-			}
-			return combined
-		})
-		combinedRealDrops.Metadata = realDrops[0].Metadata
-		combinedRealDrops.Metadata.Source = "(multiple sources)"
-	} else {
-		combinedRealDrops = models.NewBattledomeDrops()
-		combinedRealDrops.Metadata = models.DropsMetadataWithSource{
-			Source:        "(none)",
-			DropsMetadata: metadata,
-		}
+	generatedData, err = service.BattledomeItemsService.GenerateDropsByArena(arena)
+	if err != nil {
+		return
 	}
 
-	combinedGeneratedDrops, err := service.GeneratedDropsService.GenerateDrops(metadata.Arena)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	realComparisonResult, err := service.ToComparisonResult(combinedRealDrops)
-	if err != nil {
-		return nil, nil, err
-	}
-	generatedComparisonResult, err := service.ToComparisonResult(combinedGeneratedDrops)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	return realComparisonResult, generatedComparisonResult, nil
+	return
 }
 
-func (service *DataComparisonService) CompareArena(arena string) (*models.ComparisonResult, *models.ComparisonResult, error) {
-	itemPriceCache, err := caches.GetItemPriceCacheInstance()
-	if err != nil {
-		return nil, nil, err
-	}
-	defer itemPriceCache.Close()
-
-	realDrops, err := service.EmpiricalDropsService.GetDropsByArena(arena)
-	if err != nil {
-		return nil, nil, err
-	}
-	for _, drop := range realDrops {
-		for _, item := range drop.Items {
-			item.IndividualPrice = itemPriceCache.GetPrice(item.Name)
-		}
-	}
-
-	var combinedRealDrops *models.BattledomeDrops
-	if len(realDrops) > 0 {
-		combinedRealDrops = helpers.Reduce(realDrops, func(first *models.BattledomeDrops, second *models.BattledomeDrops) *models.BattledomeDrops {
-			combined, err := first.Union(second)
-			if err != nil {
-				panic(err)
-			}
-			return combined
-		})
-	} else {
-		combinedRealDrops = models.NewBattledomeDrops()
-		combinedRealDrops.Metadata = models.DropsMetadataWithSource{
-			Source: "(none)",
-			DropsMetadata: models.DropsMetadata{
-				Arena:      arena,
-				Challenger: "(none)",
-				Difficulty: "(none)",
-			},
-		}
-	}
-
-	combinedGeneratedDrops, err := service.GeneratedDropsService.GenerateDrops(arena)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	realComparisonResult, err := service.ToComparisonResult(combinedRealDrops)
-	if err != nil {
-		return nil, nil, err
-	}
-	generatedComparisonResult, err := service.ToComparisonResult(combinedGeneratedDrops)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	return realComparisonResult, generatedComparisonResult, nil
-}
-
-func (service *DataComparisonService) CompareAllChallengers() ([]*models.ComparisonResult, error) {
-	data, err := service.EmpiricalDropsService.GetDropsGroupedByMetadata()
+func (service *DataComparisonService) CompareAllChallengers() (challengerData []models.NormalisedBattledomeItems, err error) {
+	data, err := service.BattledomeItemsService.GetDropsGroupedByMetadata()
 	if err != nil {
 		return nil, err
 	}
 
-	comparisonResultsByMetadata := map[models.DropsMetadata]*models.ComparisonResult{}
-	for metadata, drops := range data {
-		combinedDrops := helpers.Reduce(drops, func(first *models.BattledomeDrops, second *models.BattledomeDrops) *models.BattledomeDrops {
-			combined, err := first.Union(second)
-			if err != nil {
-				panic(err)
-			}
-			return combined
-		})
-		res, err := service.ToComparisonResult(combinedDrops)
-		if err != nil {
-			return nil, err
-		}
-
-		comparisonResultsByMetadata[metadata] = res
-	}
-
-	orderedResults := helpers.OrderByDescending(helpers.Values(comparisonResultsByMetadata), func(res *models.ComparisonResult) float64 {
-		meanDropsProfit, err := res.Analysis.GetMeanDropsProfit()
+	challengerData = helpers.OrderByDescending(helpers.Values(data), func(normalisedItems models.NormalisedBattledomeItems) float64 {
+		meanDropsProfit, err := normalisedItems.GetMeanDropsProfit()
 		if err != nil {
 			panic(err)
 		}
 		return meanDropsProfit
 	})
 
-	return orderedResults, nil
+	return
 }

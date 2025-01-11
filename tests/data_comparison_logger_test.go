@@ -12,7 +12,7 @@ func TestArenaDataComparison(t *testing.T) {
 }
 
 func TestChallengerDataComparison(t *testing.T) {
-	loggers.NewDataComparisonLogger().CompareChallenger(models.DropsMetadata{
+	loggers.NewDataComparisonLogger().CompareChallenger(models.BattledomeItemMetadata{
 		Arena:      "Dome of the Deep",
 		Challenger: "Koi Warrior",
 		Difficulty: "Average",

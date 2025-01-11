@@ -71,10 +71,10 @@ func main() {
 			panic(fmt.Errorf("please provide a difficulty"))
 		}
 
-		loggers.NewDataComparisonLogger().CompareChallenger(models.DropsMetadata{
-			Arena:      strings.ReplaceAll(args[1], "_", " "),
-			Challenger: strings.ReplaceAll(args[2], "_", " "),
-			Difficulty: strings.ReplaceAll(args[3], "_", " "),
+		loggers.NewDataComparisonLogger().CompareChallenger(models.BattledomeItemMetadata{
+			Arena:      models.Arena(strings.ReplaceAll(args[1], "_", " ")),
+			Challenger: models.Challenger(strings.ReplaceAll(args[2], "_", " ")),
+			Difficulty: models.Difficulty(strings.ReplaceAll(args[3], "_", " ")),
 		})
 	default:
 		panic(fmt.Errorf("please provide an argument (one of %s)", strings.Join(possibleArgs, ", ")))

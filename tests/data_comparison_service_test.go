@@ -31,15 +31,19 @@ func TestChallengerView(t *testing.T) {
 	svc := services.NewDataComparisonService()
 	target := viewers.NewDataComparisonViewer()
 
-	metadata := models.DropsMetadata{
+	metadata := models.BattledomeItemMetadata{
 		Arena:      "Central Arena",
 		Challenger: "Flaming Meerca",
 		Difficulty: "Mighty",
 	}
 	realData, generatedData, err := svc.CompareByMetadata(metadata)
 
-	if realData.Analysis.Metadata.Arena != metadata.Arena || realData.Analysis.Metadata.Challenger != metadata.Challenger || realData.Analysis.Metadata.Difficulty != metadata.Difficulty {
-		t.Fatalf("real data's metadata did not match expected\nExpected: %s\nGot: %s", &metadata, &realData.Analysis.Metadata)
+	realMetadata, err := realData.GetMetadata()
+	if err != nil {
+		panic(err)
+	}
+	if realMetadata.Arena != metadata.Arena || realMetadata.Challenger != metadata.Challenger || realMetadata.Difficulty != metadata.Difficulty {
+		t.Fatalf("real data's metadata did not match expected\nExpected: %s\nGot: %s", &metadata, &realMetadata)
 	}
 
 	if err != nil {

@@ -14,10 +14,10 @@ import (
 	"github.com/darienchong/neopets-battledome-analysis/models"
 )
 
-type DropDataParser struct{}
+type BattledomeItemDropDataParser struct{}
 
-func NewDropDataParser() *DropDataParser {
-	return &DropDataParser{}
+func NewBattledomeItemDropDataParser() *BattledomeItemDropDataParser {
+	return &BattledomeItemDropDataParser{}
 }
 
 var (
@@ -28,22 +28,22 @@ var (
 	}
 )
 
-func (parser *DropDataParser) Parse(filePath string) (*models.BattledomeDropsDto, error) {
+func (parser *BattledomeItemDropDataParser) Parse(filePath string) (*models.BattledomeItemsDto, error) {
 	if !helpers.IsFileExists(filePath) {
-		return &models.BattledomeDropsDto{}, fmt.Errorf("file at \"%s\" does not exist", filePath)
+		return nil, fmt.Errorf("file at \"%s\" does not exist", filePath)
 	}
 
 	file, err := os.OpenFile(filePath, os.O_RDONLY, 0755)
 	if err != nil {
-		return &models.BattledomeDropsDto{}, err
+		return nil, err
 	}
 	defer file.Close()
 
-	dropsDto := &models.BattledomeDropsDto{
+	dto := &models.BattledomeItemsDto{
 		Metadata: models.DropsMetadataWithSource{},
-		Items:    map[string]*models.BattledomeItem{},
+		Items:    models.BattledomeItems{},
 	}
-	dropsDto.Metadata.Source = filepath.Base(filePath)
+	dto.Metadata.Source = filepath.Base(filePath)
 
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
@@ -53,24 +53,24 @@ func (parser *DropDataParser) Parse(filePath string) (*models.BattledomeDropsDto
 				continue
 			}
 
-			parser.Parse(line, dropsDto)
+			parser.Parse(line, dto)
 			break
 		}
 	}
 
 	itemCount := 0
-	for _, item := range dropsDto.Items {
+	for _, item := range dto.Items {
 		itemCount += int(item.Quantity)
 	}
 	if itemCount != constants.BATTLEDOME_DROPS_PER_DAY {
-		slog.Error(fmt.Sprintf("WARNING! The drop data in \"%s\" does not contain %d drops; %d drops were detected.", dropsDto.Metadata.Source, constants.BATTLEDOME_DROPS_PER_DAY, itemCount))
+		slog.Error(fmt.Sprintf("WARNING! The drop data in \"%s\" does not contain %d drops; %d drops were detected.", dto.Metadata.Source, constants.BATTLEDOME_DROPS_PER_DAY, itemCount))
 	}
-	return dropsDto, nil
+	return dto, nil
 }
 
 type DropDataLineParser interface {
 	IsApplicable(line string) bool
-	Parse(line string, drops *models.BattledomeDropsDto) error
+	Parse(line string, items *models.BattledomeItemsDto) error
 }
 
 const (
@@ -85,26 +85,27 @@ func (parser *MetadataParser) IsApplicable(line string) bool {
 	return strings.HasPrefix(line, "$")
 }
 
-func (parser *MetadataParser) Parse(line string, drops *models.BattledomeDropsDto) error {
+func (parser *MetadataParser) Parse(line string, dto *models.BattledomeItemsDto) error {
 	tokens := strings.Split(line, ":")
-	metadata := &drops.Metadata
+	metadata := dto.Metadata.Copy()
 	metadataKey := strings.ToLower(strings.TrimSpace(tokens[0]))
 	metadataValue := strings.TrimSpace(tokens[1])
 
 	switch key := metadataKey; key {
 	case ARENA_KEY:
 		slog.Debug(fmt.Sprintf("Set Arena to \"%s\"", metadataValue))
-		metadata.Arena = metadataValue
+		metadata.Arena = models.Arena(metadataValue)
 	case CHALLENGER_KEY:
 		slog.Debug(fmt.Sprintf("Set Challenger to \"%s\"", metadataValue))
-		metadata.Challenger = metadataValue
+		metadata.Challenger = models.Challenger(metadataValue)
 	case DIFFICULTY_KEY:
 		slog.Debug(fmt.Sprintf("Set Difficulty to \"%s\"", metadataValue))
-		metadata.Difficulty = metadataValue
+		metadata.Difficulty = models.Difficulty(metadataValue)
 	default:
 		slog.Warn(fmt.Sprintf("Encountered an unrecognised metadata key while parsing drop data; the unrecognised key was \"%s\"", metadataKey))
 	}
 
+	dto.Metadata = *metadata
 	return nil
 }
 
@@ -114,7 +115,7 @@ func (parser *CommentParser) IsApplicable(line string) bool {
 	return strings.HasPrefix(line, "#")
 }
 
-func (parser *CommentParser) Parse(line string, drops *models.BattledomeDropsDto) error {
+func (parser *CommentParser) Parse(line string, dto *models.BattledomeItemsDto) error {
 	return nil
 }
 
@@ -124,25 +125,19 @@ func (parser *ItemDataParser) IsApplicable(line string) bool {
 	return true
 }
 
-func (parser *ItemDataParser) Parse(line string, drops *models.BattledomeDropsDto) error {
+func (parser *ItemDataParser) Parse(line string, dto *models.BattledomeItemsDto) error {
 	tokens := strings.Split(line, "|")
-	itemName := strings.TrimSpace(tokens[0])
+	itemName := models.ItemName(strings.TrimSpace(tokens[0]))
 	itemQuantity, err := strconv.ParseInt(strings.TrimSpace(tokens[1]), 0, 32)
 	if err != nil {
-		slog.Any("error", err)
 		return err
 	}
 
-	_, isInItems := drops.Items[itemName]
-	if isInItems {
-		drops.Items[itemName].Quantity += int32(itemQuantity)
-	} else {
-		drops.Items[itemName] = &models.BattledomeItem{
-			Name:            itemName,
-			Quantity:        int32(itemQuantity),
-			IndividualPrice: 0,
-		}
-	}
+	dto.Items = append(dto.Items, &models.BattledomeItem{
+		Metadata: dto.Metadata.BattledomeItemMetadata,
+		Name:     itemName,
+		Quantity: int32(itemQuantity),
+	})
 
 	return nil
 }

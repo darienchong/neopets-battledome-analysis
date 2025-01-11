@@ -11,18 +11,18 @@ import (
 	"github.com/darienchong/neopets-battledome-analysis/models"
 )
 
-type DropRateParser struct{}
+type BattledomeItemDropRateParser struct{}
 
-func NewDropRateParser() *DropRateParser {
-	return &DropRateParser{}
+func NewBattledomeItemDropRateParser() *BattledomeItemDropRateParser {
+	return &BattledomeItemDropRateParser{}
 }
 
-func (parser *DropRateParser) Parse(filePath string) ([]models.ItemDropRate, error) {
+func (parser *BattledomeItemDropRateParser) Parse(filePath string) ([]models.BattledomeItemDropRate, error) {
 	if !helpers.IsFileExists(filePath) {
 		return nil, fmt.Errorf("item drop rates file does not exist! file path was \"%s\"", filePath)
 	}
 
-	dropRates := []models.ItemDropRate{}
+	dropRates := []models.BattledomeItemDropRate{}
 	file, err := os.OpenFile(filePath, os.O_RDONLY, 0755)
 	if err != nil {
 		return nil, err
@@ -36,22 +36,26 @@ func (parser *DropRateParser) Parse(filePath string) ([]models.ItemDropRate, err
 		if err != nil {
 			return nil, err
 		}
-		dropRates = append(dropRates, models.ItemDropRate{
-			Arena:    strings.TrimSpace(tokens[0]),
-			ItemName: strings.TrimSpace(tokens[1]),
+		dropRates = append(dropRates, models.BattledomeItemDropRate{
+			Metadata: models.BattledomeItemMetadata{
+				Arena:      models.Arena(strings.TrimSpace(tokens[0])),
+				Challenger: "(parsed)",
+				Difficulty: "(parsed)",
+			},
+			ItemName: models.ItemName(strings.TrimSpace(tokens[1])),
 			DropRate: dropRate,
 		})
 	}
 	return dropRates, nil
 }
 
-func (parser *DropRateParser) Save(data []models.ItemDropRate, filePath string) error {
+func (parser *BattledomeItemDropRateParser) Save(data []models.BattledomeItemDropRate, filePath string) error {
 	file, err := os.OpenFile(filePath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0755)
 	if err != nil {
 		return err
 	}
 	for _, dropRate := range data {
-		_, err := file.WriteString(fmt.Sprintf("%s|%s|%f\n", dropRate.Arena, dropRate.ItemName, dropRate.DropRate))
+		_, err := file.WriteString(fmt.Sprintf("%s|%s|%f\n", dropRate.Metadata.Arena, dropRate.ItemName, dropRate.DropRate))
 		if err != nil {
 			return err
 		}

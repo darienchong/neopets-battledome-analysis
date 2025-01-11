@@ -232,3 +232,19 @@ func Max[T comparable](ts []T, less func(T, T) bool) T {
 	}
 	return best
 }
+
+func FlatMap[T, V any](ts []T, arrayFn func(T) []V) []V {
+	flattened := []V{}
+	for _, t := range ts {
+		flattened = append(flattened, arrayFn(t)...)
+	}
+	return flattened
+}
+
+func FlatMapPointer[T, V any](ts []T, arrayFn func(T) []*V) []*V {
+	flattened := []*V{}
+	for _, t := range ts {
+		flattened = append(flattened, arrayFn(t)...)
+	}
+	return flattened
+}

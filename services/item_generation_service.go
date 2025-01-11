@@ -12,16 +12,16 @@ import (
 )
 
 type ItemGenerationService struct {
-	ItemWeightService *ItemWeightService
+	ItemWeightService *BattledomeItemWeightService
 }
 
 func NewItemGenerationService() *ItemGenerationService {
 	return &ItemGenerationService{
-		ItemWeightService: NewItemWeightService(),
+		ItemWeightService: NewBattledomeItemWeightService(),
 	}
 }
 
-func (generator *ItemGenerationService) generateItem(weights []models.ItemWeight) string {
+func (service *ItemGenerationService) generateItem(weights []models.BattledomeItemWeight) string {
 	rand.Shuffle(len(weights), func(i int, j int) {
 		weights[i], weights[j] = weights[j], weights[i]
 	})
@@ -43,8 +43,8 @@ func (generator *ItemGenerationService) generateItem(weights []models.ItemWeight
 	panic(fmt.Errorf("failed to generate an item - this should not happen; total was %f, sample was %f", total, sample))
 }
 
-func (generator *ItemGenerationService) GenerateItems(arena string, count int) (map[string]*models.BattledomeItem, error) {
-	weights, err := generator.ItemWeightService.GetItemWeights(arena)
+func (service *ItemGenerationService) GenerateItems(arena models.Arena, count int) (models.NormalisedBattledomeItems, error) {
+	weights, err := service.ItemWeightService.GetItemWeights(string(arena))
 	if err != nil {
 		return nil, err
 	}
@@ -65,7 +65,7 @@ func (generator *ItemGenerationService) GenerateItems(arena string, count int) (
 		go func(p *progressbar.ProgressBar) {
 			defer wg.Done()
 
-			item := generator.generateItem(append([]models.ItemWeight(nil), weights...))
+			item := service.generateItem(append([]models.BattledomeItemWeight(nil), weights...))
 			itemChannel <- item
 			progressBarMutex.Lock()
 			defer progressBarMutex.Unlock()
@@ -75,19 +75,18 @@ func (generator *ItemGenerationService) GenerateItems(arena string, count int) (
 	wg.Wait()
 	close(itemChannel)
 
-	itemNames := []string{}
+	itemNames := []models.ItemName{}
 	for range itemChannel {
-		itemNames = append(itemNames, <-itemChannel)
+		itemNames = append(itemNames, models.ItemName(<-itemChannel))
 	}
 
-	items := map[string]*models.BattledomeItem{}
+	items := models.NormalisedBattledomeItems{}
 	for _, generatedItem := range itemNames {
 		item, isInItems := items[generatedItem]
 		if !isInItems {
 			items[generatedItem] = &models.BattledomeItem{
-				Name:            generatedItem,
-				Quantity:        1,
-				IndividualPrice: itemPriceCache.GetPrice(generatedItem),
+				Name:     generatedItem,
+				Quantity: 1,
 			}
 		} else {
 			item.Quantity++
