@@ -9,6 +9,7 @@ import (
 	"github.com/darienchong/neopets-battledome-analysis/helpers"
 	"github.com/darienchong/neopets-battledome-analysis/models"
 	"github.com/darienchong/neopets-battledome-analysis/services"
+	"github.com/darienchong/neopets-battledome-analysis/viewers"
 )
 
 func getPrefix(indentLevel int) string {
@@ -17,13 +18,13 @@ func getPrefix(indentLevel int) string {
 
 type DataComparisonLogger struct {
 	DataComparisonService *services.DataComparisonService
-	DataComparisonViewer  *services.DataComparisonViewer
+	DataComparisonViewer  *viewers.DataComparisonViewer
 }
 
 func NewDataComparisonLogger() *DataComparisonLogger {
 	return &DataComparisonLogger{
 		DataComparisonService: services.NewDataComparisonService(),
-		DataComparisonViewer:  services.NewDataComparisonViewer(),
+		DataComparisonViewer:  viewers.NewDataComparisonViewer(),
 	}
 }
 

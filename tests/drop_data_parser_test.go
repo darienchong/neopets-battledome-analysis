@@ -6,7 +6,7 @@ import (
 
 	"github.com/darienchong/neopets-battledome-analysis/constants"
 	"github.com/darienchong/neopets-battledome-analysis/models"
-	"github.com/darienchong/neopets-battledome-analysis/services"
+	"github.com/darienchong/neopets-battledome-analysis/parsers"
 )
 
 func shouldHaveItemAndQuantity(dropsDto *models.BattledomeDropsDto, t *testing.T, itemName string, itemQuantity int32) {
@@ -21,7 +21,7 @@ func shouldHaveItemAndQuantity(dropsDto *models.BattledomeDropsDto, t *testing.T
 }
 
 func TestDropDataParser(t *testing.T) {
-	target := new(services.DropDataParser)
+	target := new(parsers.DropDataParser)
 	drops, err := target.Parse(constants.GetDropDataFilePath("2024_12_20.txt"))
 	if err != nil {
 		t.Fatalf("Failed to parse file")

@@ -1,4 +1,4 @@
-package services
+package parsers
 
 import (
 	"bufio"

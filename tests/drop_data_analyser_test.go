@@ -6,12 +6,13 @@ import (
 
 	"github.com/darienchong/neopets-battledome-analysis/constants"
 	"github.com/darienchong/neopets-battledome-analysis/models"
+	"github.com/darienchong/neopets-battledome-analysis/parsers"
 	"github.com/darienchong/neopets-battledome-analysis/services"
 )
 
 func TestAnalyser(t *testing.T) {
 	target := services.NewDropsAnalysisService()
-	parser := services.NewDropDataParser()
+	parser := parsers.NewDropDataParser()
 	dropsDto, err := parser.Parse(constants.GetDropDataFilePath("2024_12_20.txt"))
 	if err != nil {
 		slog.Any("error", err)

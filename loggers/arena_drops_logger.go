@@ -10,19 +10,20 @@ import (
 	"github.com/darienchong/neopets-battledome-analysis/constants"
 	"github.com/darienchong/neopets-battledome-analysis/helpers"
 	"github.com/darienchong/neopets-battledome-analysis/models"
+	"github.com/darienchong/neopets-battledome-analysis/parsers"
 	"github.com/darienchong/neopets-battledome-analysis/services"
 )
 
 type ArenaDropsLogger struct {
 	DropDataService            *services.EmpiricalDropsService
-	DropDataParser             *services.DropDataParser
+	DropDataParser             *parsers.DropDataParser
 	EmpiricalDropRateEstimator *services.DropsAnalysisService
 }
 
 func NewArenaDropsLogger() *ArenaDropsLogger {
 	return &ArenaDropsLogger{
 		DropDataService:            services.NewEmpiricalDropsService(),
-		DropDataParser:             services.NewDropDataParser(),
+		DropDataParser:             parsers.NewDropDataParser(),
 		EmpiricalDropRateEstimator: services.NewDropsAnalysisService(),
 	}
 }

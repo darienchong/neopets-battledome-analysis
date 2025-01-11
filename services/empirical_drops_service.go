@@ -8,6 +8,7 @@ import (
 	"github.com/darienchong/neopets-battledome-analysis/constants"
 	"github.com/darienchong/neopets-battledome-analysis/helpers"
 	"github.com/darienchong/neopets-battledome-analysis/models"
+	"github.com/darienchong/neopets-battledome-analysis/parsers"
 )
 
 type EmpiricalDropsService struct{}
@@ -17,7 +18,7 @@ func NewEmpiricalDropsService() *EmpiricalDropsService {
 }
 
 func (service *EmpiricalDropsService) GetAllDrops(dataFolderPath string) ([]*models.BattledomeDrops, error) {
-	parser := NewDropDataParser()
+	parser := parsers.NewDropDataParser()
 	files, err := helpers.GetFilesInFolder(dataFolderPath)
 	if err != nil {
 		// Could be due to inconsistent caller, try going down one level

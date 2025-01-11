@@ -6,12 +6,13 @@ import (
 
 	"github.com/darienchong/neopets-battledome-analysis/constants"
 	"github.com/darienchong/neopets-battledome-analysis/helpers"
+	"github.com/darienchong/neopets-battledome-analysis/parsers"
 	"github.com/darienchong/neopets-battledome-analysis/services"
 )
 
 func TestDropRateCalculation(t *testing.T) {
 	acceptableDiff := math.Pow(10, -5)
-	parser := services.NewGeneratedDropsParser()
+	parser := parsers.NewGeneratedDropsParser()
 	target := services.NewDropRateService()
 
 	arena := "Neocola Centre"

@@ -6,11 +6,11 @@ import (
 	"github.com/darienchong/neopets-battledome-analysis/constants"
 	"github.com/darienchong/neopets-battledome-analysis/helpers"
 	"github.com/darienchong/neopets-battledome-analysis/models"
-	"github.com/darienchong/neopets-battledome-analysis/services"
+	"github.com/darienchong/neopets-battledome-analysis/parsers"
 )
 
 func TestItemWeightsParser(t *testing.T) {
-	target := services.NewItemWeightParser()
+	target := parsers.NewItemWeightParser()
 	itemWeights, err := target.Parse(constants.GetItemWeightsFilePath())
 	if err != nil {
 		panic(err)

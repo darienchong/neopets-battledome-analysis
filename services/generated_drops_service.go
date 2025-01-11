@@ -7,19 +7,20 @@ import (
 	"github.com/darienchong/neopets-battledome-analysis/constants"
 	"github.com/darienchong/neopets-battledome-analysis/helpers"
 	"github.com/darienchong/neopets-battledome-analysis/models"
+	"github.com/darienchong/neopets-battledome-analysis/parsers"
 )
 
 type GeneratedDropsService struct {
-	GeneratedDropsParser *GeneratedDropsParser
+	GeneratedDropsParser *parsers.GeneratedDropsParser
 	ItemWeightService    *ItemWeightService
-	ItemGenerator        *ItemGenerator
+	ItemGenerator        *ItemGenerationService
 }
 
 func NewGeneratedDropsService() *GeneratedDropsService {
 	return &GeneratedDropsService{
-		GeneratedDropsParser: NewGeneratedDropsParser(),
+		GeneratedDropsParser: parsers.NewGeneratedDropsParser(),
 		ItemWeightService:    NewItemWeightService(),
-		ItemGenerator:        NewItemGenerator(),
+		ItemGenerator:        NewItemGenerationService(),
 	}
 }
 

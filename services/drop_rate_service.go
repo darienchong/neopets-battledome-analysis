@@ -6,16 +6,17 @@ import (
 	"github.com/darienchong/neopets-battledome-analysis/constants"
 	"github.com/darienchong/neopets-battledome-analysis/helpers"
 	"github.com/darienchong/neopets-battledome-analysis/models"
+	"github.com/darienchong/neopets-battledome-analysis/parsers"
 )
 
 type DropRateService struct {
-	DropRateParser        *DropRateParser
+	DropRateParser        *parsers.DropRateParser
 	GeneratedDropsService *GeneratedDropsService
 }
 
 func NewDropRateService() *DropRateService {
 	return &DropRateService{
-		DropRateParser:        NewDropRateParser(),
+		DropRateParser:        parsers.NewDropRateParser(),
 		GeneratedDropsService: NewGeneratedDropsService(),
 	}
 }

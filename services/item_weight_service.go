@@ -4,15 +4,16 @@ import (
 	"github.com/darienchong/neopets-battledome-analysis/constants"
 	"github.com/darienchong/neopets-battledome-analysis/helpers"
 	"github.com/darienchong/neopets-battledome-analysis/models"
+	"github.com/darienchong/neopets-battledome-analysis/parsers"
 )
 
 type ItemWeightService struct {
-	ItemWeightParser *ItemWeightParser
+	ItemWeightParser *parsers.ItemWeightParser
 }
 
 func NewItemWeightService() *ItemWeightService {
 	return &ItemWeightService{
-		ItemWeightParser: NewItemWeightParser(),
+		ItemWeightParser: parsers.NewItemWeightParser(),
 	}
 }
 

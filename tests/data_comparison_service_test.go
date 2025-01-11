@@ -6,11 +6,12 @@ import (
 
 	"github.com/darienchong/neopets-battledome-analysis/models"
 	"github.com/darienchong/neopets-battledome-analysis/services"
+	"github.com/darienchong/neopets-battledome-analysis/viewers"
 )
 
 func TestArenaView(t *testing.T) {
 	svc := services.NewDataComparisonService()
-	target := services.NewDataComparisonViewer()
+	target := viewers.NewDataComparisonViewer()
 
 	realData, generatedData, err := svc.CompareArena("Neocola Centre")
 	if err != nil {
@@ -28,7 +29,7 @@ func TestArenaView(t *testing.T) {
 
 func TestChallengerView(t *testing.T) {
 	svc := services.NewDataComparisonService()
-	target := services.NewDataComparisonViewer()
+	target := viewers.NewDataComparisonViewer()
 
 	metadata := models.DropsMetadata{
 		Arena:      "Central Arena",

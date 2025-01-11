@@ -1,4 +1,4 @@
-package services
+package viewers
 
 import (
 	"fmt"
@@ -10,17 +10,18 @@ import (
 	"github.com/darienchong/neopets-battledome-analysis/constants"
 	"github.com/darienchong/neopets-battledome-analysis/helpers"
 	"github.com/darienchong/neopets-battledome-analysis/models"
+	"github.com/darienchong/neopets-battledome-analysis/services"
 )
 
 type DataComparisonViewer struct {
-	GeneratedDropsService *GeneratedDropsService
-	DataComparisonService *DataComparisonService
+	GeneratedDropsService *services.GeneratedDropsService
+	DataComparisonService *services.DataComparisonService
 }
 
 func NewDataComparisonViewer() *DataComparisonViewer {
 	return &DataComparisonViewer{
-		GeneratedDropsService: NewGeneratedDropsService(),
-		DataComparisonService: NewDataComparisonService(),
+		GeneratedDropsService: services.NewGeneratedDropsService(),
+		DataComparisonService: services.NewDataComparisonService(),
 	}
 }
 
@@ -371,10 +372,8 @@ func (viewer *DataComparisonViewer) ViewChallengerComparisons(comparisonResults 
 		"Challenger",
 		"Difficulty",
 		"Samples",
-		"Actual Profit",
-		"Predicted Profit",
-		"Actual Stdev",
-		"Predicted Stdev",
+		"Actual Profit ± Stdev",
+		"Predicted Profit ± Stdev",
 	})
 
 	arenaAndChallengerDropRateTable := helpers.NewNamedTable("Arena/challenger-specific drop rate comparison", []string{
@@ -419,10 +418,8 @@ func (viewer *DataComparisonViewer) ViewChallengerComparisons(comparisonResults 
 			result.Analysis.Metadata.Challenger,
 			result.Analysis.Metadata.Difficulty,
 			helpers.FormatInt(result.Analysis.GetTotalItemQuantity()),
-			helpers.FormatFloat(actualProfit) + " NP",
-			helpers.FormatFloat(generatedProfit) + " NP",
-			helpers.FormatFloat(actualStdev) + " NP",
-			helpers.FormatFloat(generatedStdev) + " NP",
+			helpers.FormatFloat(actualProfit) + " ± " + helpers.FormatFloat(actualStdev) + " NP",
+			helpers.FormatFloat(generatedProfit) + " ± " + helpers.FormatFloat(generatedStdev) + " NP",
 		})
 
 		arenaDropsCount := helpers.Sum(helpers.Map(
@@ -468,7 +465,7 @@ func (viewer *DataComparisonViewer) ViewChallengerComparisons(comparisonResults 
 	}
 
 	lines := profitComparisonTable.GetLines()
-	lines = append(lines, "\n\n")
+	lines = append(lines, "\n")
 	lines = append(lines, arenaAndChallengerDropRateTable.GetLines()...)
 	return lines, nil
 }
