@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/darienchong/neopets-battledome-analysis/caches"
-	"github.com/darienchong/neopets-battledome-analysis/helpers"
 )
 
 type ItemName string
@@ -17,10 +16,15 @@ type BattledomeItem struct {
 
 func (first *BattledomeItem) Union(second *BattledomeItem) (*BattledomeItem, error) {
 	if first.Name != second.Name {
-		return nil, fmt.Errorf("tried to union two items that did not have the same name: %s and %s", first, second)
+		return nil, fmt.Errorf("tried to union two items that did not have the same name: %s and %s", first.Name, second.Name)
 	}
 
 	combined := &BattledomeItem{}
+	combinedMetadata, err := first.Metadata.Combine(second.Metadata)
+	if err != nil {
+		return nil, err
+	}
+	combined.Metadata = combinedMetadata
 	combined.Name = first.Name
 	combined.Quantity = first.Quantity + second.Quantity
 	return combined, nil
@@ -41,9 +45,7 @@ func (item *BattledomeItem) GetPercentageProfit(itemPriceCache *caches.ItemPrice
 }
 
 func (item *BattledomeItem) GetDropRate(items NormalisedBattledomeItems) float64 {
-	return float64(item.Quantity) / float64(helpers.Sum(helpers.Map(helpers.ToSlice(items), func(tuple helpers.Tuple) int32 {
-		return tuple.Elements[1].(*BattledomeItem).Quantity
-	})))
+	return float64(item.Quantity) / float64(items.GetTotalItemQuantity())
 }
 
 func (item *BattledomeItem) String() string {

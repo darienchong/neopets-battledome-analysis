@@ -2,6 +2,7 @@ package viewers
 
 import (
 	"fmt"
+	"log/slog"
 	"math"
 	"slices"
 	"strconv"
@@ -16,12 +17,14 @@ import (
 type DataComparisonViewer struct {
 	BattledomeItemsService *services.BattledomeItemsService
 	DataComparisonService  *services.DataComparisonService
+	StatisticsService      *services.StatisticsService
 }
 
 func NewDataComparisonViewer() *DataComparisonViewer {
 	return &DataComparisonViewer{
 		BattledomeItemsService: services.NewBattledomeItemsService(),
 		DataComparisonService:  services.NewDataComparisonService(),
+		StatisticsService:      services.NewStatisticsService(),
 	}
 }
 
@@ -29,7 +32,16 @@ func getDryChance(dropRate float64, trials int) float64 {
 	return math.Pow(1-dropRate, float64(trials))
 }
 
+func isCodestone(itemName models.ItemName) bool {
+	return slices.Contains(constants.BROWN_CODESTONES, string(itemName)) || slices.Contains(constants.RED_CODESTONES, string(itemName))
+}
+
 func generateProfitableItemsTable(data models.NormalisedBattledomeItems, isRealData bool) (*helpers.Table, error) {
+	dataCopy := models.NormalisedBattledomeItems{}
+	for k, v := range data {
+		dataCopy[k] = v.Copy()
+	}
+
 	itemPriceCache, err := caches.GetItemPriceCacheInstance()
 	if err != nil {
 		return nil, err
@@ -55,42 +67,60 @@ func generateProfitableItemsTable(data models.NormalisedBattledomeItems, isRealD
 	})
 	table := helpers.NewNamedTable(helpers.When(isRealData, "Actual", "Predicted"), headers)
 
-	predictedProfit := helpers.Sum(helpers.Map(helpers.Values(data), func(profit *models.BattledomeItem) float64 { return profit.GetProfit(itemPriceCache) }))
-	profitableItems := helpers.OrderByDescending(helpers.Values(data), func(profit *models.BattledomeItem) float64 {
-		return profit.GetProfit(itemPriceCache)
+	_, err = data.GetMetadata()
+	if err != nil {
+		// Means there isn't any data to render
+		return table, nil
+	}
+
+	predictedProfit := helpers.Sum(helpers.Map(helpers.Values(dataCopy), func(item *models.BattledomeItem) float64 {
+		return item.GetProfit(itemPriceCache)
+	}))
+	profitableItems := helpers.OrderByDescending(helpers.Values(dataCopy), func(item *models.BattledomeItem) float64 {
+		return item.GetProfit(itemPriceCache)
 	})
-	for i, itemProfit := range profitableItems {
-		if i > constants.NUMBER_OF_ITEMS_TO_PRINT-1 {
+
+	runningIndex := 1
+	for _, item := range profitableItems {
+		if runningIndex > constants.NUMBER_OF_ITEMS_TO_PRINT {
 			break
 		}
 
+		if item.Name == "nothing" {
+			continue
+		}
+
+		itemDropRate := item.GetDropRate(data)
+		expectedItemProfit := itemDropRate * itemPriceCache.GetPrice(string(item.Name)) * constants.BATTLEDOME_DROPS_PER_DAY
 		row := helpers.When(isRealData,
 			[]string{
-				strconv.Itoa(i + 1),
-				string(itemProfit.Name),
-				helpers.FormatPercentage(itemProfit.GetDropRate(data)) + "%",
+				strconv.Itoa(runningIndex),
+				string(item.Name),
+				helpers.FormatPercentage(itemDropRate) + "%",
 				// Don't include dry chance in real data
-				helpers.FormatFloat(itemPriceCache.GetPrice(string(itemProfit.Name))) + " NP",
-				helpers.FormatFloat(itemProfit.GetProfit(itemPriceCache)*constants.BATTLEDOME_DROPS_PER_DAY) + " NP",
-				helpers.FormatPercentage(itemProfit.GetProfit(itemPriceCache)/predictedProfit) + "%",
+				helpers.FormatFloat(itemPriceCache.GetPrice(string(item.Name))) + " NP",
+				helpers.FormatFloat(expectedItemProfit) + " NP",
+				helpers.FormatPercentage(item.GetProfit(itemPriceCache)/predictedProfit) + "%",
 			},
 			[]string{
-				strconv.Itoa(i + 1),
-				string(itemProfit.Name),
-				helpers.FormatPercentage(itemProfit.GetDropRate(data)) + "%",
-				helpers.FormatPercentage(getDryChance(itemProfit.GetDropRate(data), 30*constants.NUMBER_OF_ITEMS_TO_PRINT)) + "%",
-				helpers.FormatFloat(itemPriceCache.GetPrice(string(itemProfit.Name))) + " NP",
-				helpers.FormatFloat(itemProfit.GetProfit(itemPriceCache)*constants.BATTLEDOME_DROPS_PER_DAY) + " NP",
-				helpers.FormatPercentage(itemProfit.GetProfit(itemPriceCache)/predictedProfit) + "%",
+				strconv.Itoa(runningIndex),
+				string(item.Name),
+				helpers.FormatPercentage(item.GetDropRate(data)) + "%",
+				helpers.FormatPercentage(getDryChance(item.GetDropRate(data), 30*constants.BATTLEDOME_DROPS_PER_DAY)) + "%",
+				helpers.FormatFloat(itemPriceCache.GetPrice(string(item.Name))) + " NP",
+				helpers.FormatFloat(expectedItemProfit) + " NP",
+				helpers.FormatPercentage(item.GetProfit(itemPriceCache)/predictedProfit) + "%",
 			},
 		)
 		table.AddRow(row)
+
+		runningIndex++
 	}
 
 	return table, nil
 }
 
-func generateCodestoneDropRatesTable(realData models.NormalisedBattledomeItems, generatedData models.NormalisedBattledomeItems, codestoneList []string /* Keep as string to prevent circular dependency*/) *helpers.Table {
+func (viewer *DataComparisonViewer) generateCodestoneDropRatesTable(realData models.NormalisedBattledomeItems, generatedData models.NormalisedBattledomeItems, codestoneList []string /* Keep as string to prevent circular dependency*/) (*helpers.Table, error) {
 	var tableName string
 	if slices.Contains(codestoneList, constants.BROWN_CODESTONES[0]) {
 		tableName = "Brown Codestone Drop Rates"
@@ -104,18 +134,17 @@ func generateCodestoneDropRatesTable(realData models.NormalisedBattledomeItems, 
 		"Item Name",
 		"Predicted",
 		"Real",
-		"Diff",
 	})
 	table.IsLastRowDistinct = true
 
-	realCodestoneProfits := helpers.ToMap(helpers.Filter(helpers.Values(realData), func(itemProfit *models.BattledomeItem) bool {
+	realCodestones := helpers.ToMap(helpers.Filter(helpers.Values(realData), func(itemProfit *models.BattledomeItem) bool {
 		return slices.Contains(codestoneList, string(itemProfit.Name))
 	}), func(itemProfit *models.BattledomeItem) models.ItemName {
 		return itemProfit.Name
 	}, func(itemProfit *models.BattledomeItem) *models.BattledomeItem {
 		return itemProfit
 	})
-	generatedCodestoneProfits := helpers.ToMap(helpers.Filter(helpers.Values(generatedData), func(itemProfit *models.BattledomeItem) bool {
+	generatedCodestones := helpers.ToMap(helpers.Filter(helpers.Values(generatedData), func(itemProfit *models.BattledomeItem) bool {
 		return slices.Contains(codestoneList, string(itemProfit.Name))
 	}), func(itemProfit *models.BattledomeItem) models.ItemName {
 		return itemProfit.Name
@@ -123,42 +152,54 @@ func generateCodestoneDropRatesTable(realData models.NormalisedBattledomeItems, 
 		return itemProfit
 	})
 
-	realTotalCodestoneDropRate := helpers.Sum(helpers.Map(helpers.Values(realCodestoneProfits), func(profit *models.BattledomeItem) float64 {
-		return profit.GetDropRate(realData)
+	realTotalCodestoneCount := helpers.Sum(helpers.Map(helpers.Values(realCodestones), func(item *models.BattledomeItem) float64 {
+		return float64(item.Quantity)
 	}))
-	generatedTotalCodestoneDropRate := helpers.Sum(helpers.Map(helpers.Values(generatedCodestoneProfits), func(profit *models.BattledomeItem) float64 {
+	generatedTotalCodestoneDropRate := helpers.Sum(helpers.Map(helpers.Values(generatedCodestones), func(profit *models.BattledomeItem) float64 {
 		return profit.GetDropRate(generatedData)
 	}))
 
 	slices.Sort(codestoneList)
 	for _, codestoneName := range codestoneList {
-		realCodestoneProfit, existsInReal := realCodestoneProfits[models.ItemName(codestoneName)]
-		generatedCodestoneProfit, existsInGenerated := generatedCodestoneProfits[models.ItemName(codestoneName)]
-		var realCodestoneDropRate float64 = 0.0
+		realCodestones, existsInReal := realCodestones[models.ItemName(codestoneName)]
+		generatedCodestones, existsInGenerated := generatedCodestones[models.ItemName(codestoneName)]
+		var realMinDropRate float64 = 0.0
+		var realMaxDropRate float64 = 0.0
+
 		var generatedCodestoneDropRate float64 = 0.0
 
 		if existsInGenerated {
-			generatedCodestoneDropRate = generatedCodestoneProfit.GetDropRate(generatedData)
+			generatedCodestoneDropRate = generatedCodestones.GetDropRate(generatedData)
 		}
+
 		if existsInReal {
-			realCodestoneDropRate = realCodestoneProfit.GetDropRate(realData)
+			leftBound, rightBound, err := viewer.StatisticsService.ClopperPearsonInterval(int(realCodestones.Quantity), realData.GetTotalItemQuantity(), constants.SIGNIFICANCE_LEVEL)
+			if err != nil {
+				return nil, err
+			}
+			realMinDropRate = leftBound
+			realMaxDropRate = rightBound
 		}
 
 		table.AddRow([]string{
 			codestoneName,
 			helpers.FormatPercentage(generatedCodestoneDropRate) + "%",
-			helpers.FormatPercentage(realCodestoneDropRate) + "%",
-			helpers.FormatPercentage(realCodestoneDropRate-generatedCodestoneDropRate) + "%",
+			helpers.When(realMinDropRate == realMaxDropRate, helpers.FormatPercentage(realMinDropRate)+"%", fmt.Sprintf("[%s, %s]%%", helpers.FormatPercentage(realMinDropRate), helpers.FormatPercentage(realMaxDropRate))),
 		})
 	}
+
+	realTotalMinDropRate, realTotalMaxDropRate, err := viewer.StatisticsService.ClopperPearsonInterval(int(realTotalCodestoneCount), realData.GetTotalItemQuantity(), constants.SIGNIFICANCE_LEVEL)
+	if err != nil {
+		return nil, err
+	}
+
 	table.AddRow([]string{
 		"Sum",
 		helpers.FormatPercentage(generatedTotalCodestoneDropRate) + "%",
-		helpers.FormatPercentage(realTotalCodestoneDropRate) + "%",
-		helpers.FormatPercentage(realTotalCodestoneDropRate-generatedTotalCodestoneDropRate) + "%",
+		helpers.When(realTotalMinDropRate == realTotalMaxDropRate, helpers.FormatPercentage(realTotalMinDropRate)+"%", fmt.Sprintf("[%s, %s]%%", helpers.FormatPercentage(realTotalMinDropRate), helpers.FormatPercentage(realTotalMaxDropRate))),
 	})
 
-	return table
+	return table, nil
 }
 
 func (viewer *DataComparisonViewer) ViewChallengerComparison(realData models.NormalisedBattledomeItems, generatedData models.NormalisedBattledomeItems) ([]string, error) {
@@ -213,8 +254,15 @@ func (viewer *DataComparisonViewer) ViewChallengerComparison(realData models.Nor
 		return nil, err
 	}
 
-	brownCodestoneDropRatesTable := generateCodestoneDropRatesTable(realData, generatedData, constants.BROWN_CODESTONES)
-	redCodestoneDropRatesTable := generateCodestoneDropRatesTable(realData, generatedData, constants.RED_CODESTONES)
+	brownCodestoneDropRatesTable, err := viewer.generateCodestoneDropRatesTable(realData, generatedData, constants.BROWN_CODESTONES)
+	if err != nil {
+		return nil, err
+	}
+
+	redCodestoneDropRatesTable, err := viewer.generateCodestoneDropRatesTable(realData, generatedData, constants.RED_CODESTONES)
+	if err != nil {
+		return nil, err
+	}
 
 	arenaSpecificDropsTable, err := generateArenaSpecificDropsTable(realData, generatedData)
 	if err != nil {
@@ -489,13 +537,12 @@ func (viewer *DataComparisonViewer) ViewChallengerComparisons(challengerItems []
 }
 
 func (viewer *DataComparisonViewer) ViewArenaComparison(realData models.NormalisedBattledomeItems, generatedData models.NormalisedBattledomeItems) ([]string, error) {
-	metadata, err := realData.GetMetadata()
+	metadata, err := generatedData.GetMetadata()
 	if err != nil {
 		return nil, err
 	}
-	arena := metadata.Arena
 
-	profitComparisonTable := helpers.NewNamedTable(fmt.Sprintf("Profit in %s", arena), []string{
+	profitComparisonTable := helpers.NewNamedTable(fmt.Sprintf("Profit in %s", metadata.Arena), []string{
 		"Type",
 		"Value",
 	})
@@ -541,18 +588,90 @@ func (viewer *DataComparisonViewer) ViewArenaComparison(realData models.Normalis
 		return nil, err
 	}
 
-	brownCodestoneDropRatesTable := generateCodestoneDropRatesTable(realData, generatedData, constants.BROWN_CODESTONES)
-	redCodestoneDropRatesTable := generateCodestoneDropRatesTable(realData, generatedData, constants.RED_CODESTONES)
+	brownCodestoneDropRatesTable, err := viewer.generateCodestoneDropRatesTable(realData, generatedData, constants.BROWN_CODESTONES)
+	if err != nil {
+		return nil, err
+	}
+
+	redCodestoneDropRatesTable, err := viewer.generateCodestoneDropRatesTable(realData, generatedData, constants.RED_CODESTONES)
+	if err != nil {
+		return nil, err
+	}
 
 	tableSeparator := "\t"
 
 	lines := []string{}
 	lines = append(lines, profitComparisonTable.GetLines()...)
 	lines = append(lines, "\n")
-	lines = append(lines, fmt.Sprintf("Top %d most profitable items in %s", constants.NUMBER_OF_ITEMS_TO_PRINT, arena))
+	lines = append(lines, fmt.Sprintf("Top %d most profitable items in %s", constants.NUMBER_OF_ITEMS_TO_PRINT, metadata.Arena))
 	lines = append(lines, generatedProfitableItemsTable.GetLinesWith(tableSeparator, realProfitableItemsTable)...)
 	lines = append(lines, "\n")
-	lines = append(lines, fmt.Sprintf("Codestone drop rates in %s", arena))
+	lines = append(lines, fmt.Sprintf("Codestone drop rates in %s", metadata.Arena))
 	lines = append(lines, brownCodestoneDropRatesTable.GetLinesWith(tableSeparator, redCodestoneDropRatesTable)...)
 	return lines, nil
+}
+
+func (viewer *DataComparisonViewer) ViewBriefArenaComparisons(realData map[models.Arena]models.NormalisedBattledomeItems, generatedData map[models.Arena]models.NormalisedBattledomeItems) ([]string, error) {
+	orderedArenas := helpers.OrderByDescending(constants.ARENAS, func(arena string) float64 {
+		normalisedItems, exists := realData[models.Arena(arena)]
+		if !exists || normalisedItems.GetTotalItemQuantity() == 0 {
+			return 0.0
+		}
+
+		profit, err := normalisedItems.GetMeanDropsProfit()
+		if err != nil {
+			panic(err)
+		}
+
+		return profit
+	})
+
+	table := helpers.NewNamedTable("Profit", []string{
+		"i",
+		"Arena",
+		"Predicted",
+		"Actual",
+	})
+
+	for i, arena := range orderedArenas {
+		slog.Debug(fmt.Sprintf("Generating comparison for %s", arena))
+		var realMeanProfit float64 = 0.0
+		var realProfitStdev float64 = 0.0
+		var err error
+
+		realArenaData, exists := realData[models.Arena(arena)]
+		if exists {
+			realMeanProfit, err = realArenaData.GetMeanDropsProfit()
+			if err != nil {
+				return nil, fmt.Errorf("failed to generate real mean drops profit for \"%s\": %w", arena, err)
+			}
+			realProfitStdev, err = realArenaData.GetDropsProfitStdev()
+			if err != nil {
+				return nil, fmt.Errorf("failed to generate real drops profit stdev for \"%s\": %w", arena, err)
+			}
+		}
+
+		var generatedMeanProfit float64 = 0.0
+		var generatedProfitStdev float64 = 0.0
+		generatedArenaData, exists := generatedData[models.Arena(arena)]
+		if exists {
+			generatedMeanProfit, err = generatedArenaData.GetMeanDropsProfit()
+			if err != nil {
+				return nil, fmt.Errorf("failed to generate predicted mean drops profit for \"%s\": %w", arena, err)
+			}
+			generatedProfitStdev, err = generatedArenaData.GetDropsProfitStdev()
+			if err != nil {
+				return nil, fmt.Errorf("failed to generate predicted mean drops stdev for \"%s\": %w", arena, err)
+			}
+		}
+
+		table.AddRow([]string{
+			strconv.Itoa(i + 1),
+			arena,
+			fmt.Sprintf("%s ± %s NP", helpers.FormatFloat(generatedMeanProfit), helpers.FormatFloat(generatedProfitStdev)),
+			fmt.Sprintf("%s ± %s NP", helpers.FormatFloat(realMeanProfit), helpers.FormatFloat(realProfitStdev)),
+		})
+	}
+
+	return table.GetLines(), nil
 }

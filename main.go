@@ -46,6 +46,7 @@ func callClear() {
 }
 
 func main() {
+
 	callClear()
 
 	args := os.Args[1:]
@@ -57,9 +58,22 @@ func main() {
 	case possibleArgs[0]:
 		loggers.NewArenaDropsLogger().Log(dataFolderPath)
 	case possibleArgs[1]:
-		loggers.NewDataComparisonLogger().CompareAllArenas()
+		if len(args) > 1 && args[1] == "brief" {
+			err := loggers.NewDataComparisonLogger().BriefCompareAllArenas()
+			if err != nil {
+				panic(err)
+			}
+		} else {
+			err := loggers.NewDataComparisonLogger().CompareAllArenas()
+			if err != nil {
+				panic(err)
+			}
+		}
 	case possibleArgs[2]:
-		loggers.NewDataComparisonLogger().CompareAllChallengers()
+		err := loggers.NewDataComparisonLogger().CompareAllChallengers()
+		if err != nil {
+			panic(err)
+		}
 	case possibleArgs[3]:
 		if len(args) == 1 || args[1] == "" {
 			panic(fmt.Errorf("please provide an arena"))
@@ -71,13 +85,15 @@ func main() {
 			panic(fmt.Errorf("please provide a difficulty"))
 		}
 
-		loggers.NewDataComparisonLogger().CompareChallenger(models.BattledomeItemMetadata{
+		err := loggers.NewDataComparisonLogger().CompareChallenger(models.BattledomeItemMetadata{
 			Arena:      models.Arena(strings.ReplaceAll(args[1], "_", " ")),
 			Challenger: models.Challenger(strings.ReplaceAll(args[2], "_", " ")),
 			Difficulty: models.Difficulty(strings.ReplaceAll(args[3], "_", " ")),
 		})
+		if err != nil {
+			panic(err)
+		}
 	default:
 		panic(fmt.Errorf("please provide an argument (one of %s)", strings.Join(possibleArgs, ", ")))
 	}
-
 }

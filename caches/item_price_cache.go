@@ -19,8 +19,9 @@ import (
 var lock = &sync.Mutex{}
 
 type ItemPriceCache struct {
-	expiry       time.Time
-	cachedPrices map[string]float64
+	expiry        time.Time
+	cachedPrices  map[string]float64
+	specialPrices map[string]float64
 }
 
 var cacheInstance *ItemPriceCache
@@ -34,16 +35,26 @@ func GetItemPriceCacheInstance() (*ItemPriceCache, error) {
 		lock.Lock()
 		defer lock.Unlock()
 		if cacheInstance == nil {
-			cacheInstance = &ItemPriceCache{}
+			cacheInstance = &ItemPriceCache{
+				cachedPrices:  map[string]float64{},
+				specialPrices: map[string]float64{},
+			}
 			cacheInstance.generateExpiry()
-			cacheInstance.cachedPrices = map[string]float64{}
 			err := cacheInstance.loadFromFile()
+			if err != nil {
+				return nil, err
+			}
+			err = cacheInstance.loadSpecialPrices()
 			if err != nil {
 				return nil, err
 			}
 		}
 	}
 	return cacheInstance, nil
+}
+
+func (cache ItemPriceCache) loadSpecialPrices() error {
+	return nil
 }
 
 func (cache *ItemPriceCache) generateExpiry() {
@@ -90,8 +101,16 @@ func (cache *ItemPriceCache) getPriceFromItemDb(itemName string) float64 {
 }
 
 func (cache *ItemPriceCache) GetPrice(itemName string) float64 {
+	if itemName == "nothing" {
+		return 0.0
+	}
+
 	if maybeCachedValue, existsInCache := cache.cachedPrices[itemName]; existsInCache {
 		return maybeCachedValue
+	}
+
+	if maybeSpecialPrice, existsInSpecialPrices := cache.specialPrices[itemName]; existsInSpecialPrices {
+		return maybeSpecialPrice
 	}
 
 	cache.cachedPrices[itemName] = cache.getPriceFromItemDb(itemName)
@@ -165,5 +184,6 @@ func (cache *ItemPriceCache) loadFromFile() error {
 			cache.cachedPrices[itemName] = itemPrice
 		}
 	}
+
 	return nil
 }

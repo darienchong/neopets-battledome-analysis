@@ -62,6 +62,10 @@ func generateProfitData(items NormalisedBattledomeItems) ([]float64, error) {
 
 func (items NormalisedBattledomeItems) GetMeanDropsProfit() (float64, error) {
 	profitData, err := generateProfitData(items)
+	if len(profitData) == 0 {
+		return 0.0, nil
+	}
+
 	if err != nil {
 		return 0.0, err
 	}
@@ -76,6 +80,10 @@ func (items NormalisedBattledomeItems) GetMeanDropsProfit() (float64, error) {
 
 func (items NormalisedBattledomeItems) GetDropsProfitStdev() (float64, error) {
 	profitData, err := generateProfitData(items)
+	if len(profitData) == 0 {
+		return 0.0, nil
+	}
+
 	if err != nil {
 		return 0.0, err
 	}
@@ -142,7 +150,7 @@ func (items NormalisedBattledomeItems) GetTotalProfit() (float64, error) {
 
 func (items NormalisedBattledomeItems) GetTotalItemQuantity() int {
 	quantities := helpers.Map(helpers.Values(items), func(item *BattledomeItem) int {
-		return int(item.Quantity)
+		return helpers.When(string(item.Name) == "nothing", 0, int(item.Quantity))
 	})
 	return helpers.Sum(quantities)
 }

@@ -28,6 +28,32 @@ func NewDataComparisonLogger() *DataComparisonLogger {
 	}
 }
 
+func (logger *DataComparisonLogger) BriefCompareAllArenas() error {
+	realData := map[models.Arena]models.NormalisedBattledomeItems{}
+	generatedData := map[models.Arena]models.NormalisedBattledomeItems{}
+
+	for _, arenaString := range constants.ARENAS {
+		arena := models.Arena(arenaString)
+		realArenaData, generatedArenaData, err := logger.DataComparisonService.CompareArena(arena)
+		if err != nil {
+			return fmt.Errorf("failed to compare arena \"%s\": %w", arenaString, err)
+		}
+		realData[arena] = realArenaData
+		generatedData[arena] = generatedArenaData
+	}
+
+	lines, err := logger.DataComparisonViewer.ViewBriefArenaComparisons(realData, generatedData)
+	if err != nil {
+		return fmt.Errorf("failed to generate brief arena comparisons: %w", err)
+	}
+
+	for _, line := range lines {
+		slog.Info(line)
+	}
+
+	return nil
+}
+
 func (logger *DataComparisonLogger) CompareAllArenas() error {
 	comparisonData := helpers.OrderByDescending(
 		helpers.Map(
@@ -35,13 +61,13 @@ func (logger *DataComparisonLogger) CompareAllArenas() error {
 			func(arena string) *helpers.Tuple {
 				realData, generatedData, err := logger.DataComparisonService.CompareArena(models.Arena(arena))
 				if err != nil {
-					panic(err)
+					panic(fmt.Errorf("failed to compare %s: %w", arena, err))
 				}
-				return &helpers.Tuple{Elements: []any{realData, generatedData}}
+				return &helpers.Tuple{Elements: []any{models.Arena(arena), realData, generatedData}}
 			},
 		),
 		func(tuple *helpers.Tuple) float64 {
-			realData := tuple.Elements[0].(models.NormalisedBattledomeItems)
+			realData := tuple.Elements[1].(models.NormalisedBattledomeItems)
 			profit, err := realData.GetMeanDropsProfit()
 			if err != nil {
 				return 0
@@ -51,22 +77,15 @@ func (logger *DataComparisonLogger) CompareAllArenas() error {
 	)
 
 	for i, comparisonDatum := range comparisonData {
-		realData := comparisonDatum.Elements[0].(models.NormalisedBattledomeItems)
-		generatedData := comparisonDatum.Elements[1].(models.NormalisedBattledomeItems)
+		arena := comparisonDatum.Elements[0].(models.Arena)
+		realData := comparisonDatum.Elements[1].(models.NormalisedBattledomeItems)
+		generatedData := comparisonDatum.Elements[2].(models.NormalisedBattledomeItems)
 		lines, err := logger.DataComparisonViewer.ViewArenaComparison(realData, generatedData)
 		if err != nil {
-			return err
+			return fmt.Errorf("failed to get arena comparison for \"%s\": %w", arena, err)
 		}
 
-		realItemCount := helpers.Sum(helpers.Map(helpers.Values(realData), func(item *models.BattledomeItem) int32 {
-			return helpers.When(item.Name == "nothing", 0, item.Quantity)
-		}))
-
-		metadata, err := realData.GetMetadata()
-		if err != nil {
-			return err
-		}
-		slog.Info(fmt.Sprintf("%d. %s (%d samples)", i+1, metadata.Arena, realItemCount))
+		slog.Info(fmt.Sprintf("%d. %s (%d samples)", i+1, arena, realData.GetTotalItemQuantity()))
 		for _, line := range lines {
 			slog.Info(getPrefix(1) + line)
 		}

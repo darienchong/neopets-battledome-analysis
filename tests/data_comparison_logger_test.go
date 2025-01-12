@@ -11,6 +11,10 @@ func TestArenaDataComparison(t *testing.T) {
 	loggers.NewDataComparisonLogger().CompareAllArenas()
 }
 
+func TestBriefArenaDataComparison(t *testing.T) {
+	loggers.NewDataComparisonLogger().BriefCompareAllArenas()
+}
+
 func TestChallengerDataComparison(t *testing.T) {
 	loggers.NewDataComparisonLogger().CompareChallenger(models.BattledomeItemMetadata{
 		Arena:      "Dome of the Deep",

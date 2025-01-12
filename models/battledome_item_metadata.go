@@ -14,7 +14,7 @@ type BattledomeItemMetadata struct {
 	Difficulty Difficulty
 }
 
-func (first BattledomeItemMetadata) Combine(second *DropsMetadataWithSource) (BattledomeItemMetadata, error) {
+func (first BattledomeItemMetadata) Combine(second BattledomeItemMetadata) (BattledomeItemMetadata, error) {
 	if first.Arena != second.Arena {
 		return BattledomeItemMetadata{}, fmt.Errorf("tried to combine two metadata that did not have the same arena: %s and %s", first, second)
 	}
@@ -45,9 +45,7 @@ type DropsMetadataWithSource struct {
 func (metadata *DropsMetadataWithSource) Copy() *DropsMetadataWithSource {
 	copy := new(DropsMetadataWithSource)
 	copy.Source = metadata.Source
-	copy.Arena = metadata.Arena
-	copy.Challenger = metadata.Challenger
-	copy.Difficulty = metadata.Difficulty
+	copy.BattledomeItemMetadata = metadata.BattledomeItemMetadata
 	return copy
 }
 
@@ -58,12 +56,6 @@ func (first *DropsMetadataWithSource) Combine(second *DropsMetadataWithSource) (
 
 	copy := first.Copy()
 	copy.Source = "(multiple sources)"
-	if first.Challenger != second.Challenger {
-		copy.Challenger = "(multiple challengers)"
-	}
-	if first.Difficulty != second.Difficulty {
-		copy.Difficulty = "(multiple difficulties)"
-	}
 	return copy, nil
 }
 
