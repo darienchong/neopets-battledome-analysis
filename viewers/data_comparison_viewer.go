@@ -36,7 +36,7 @@ func isCodestone(itemName models.ItemName) bool {
 	return slices.Contains(constants.BROWN_CODESTONES, string(itemName)) || slices.Contains(constants.RED_CODESTONES, string(itemName))
 }
 
-func generateProfitableItemsTable(data models.NormalisedBattledomeItems, isRealData bool) (*helpers.Table, error) {
+func (viewer *DataComparisonViewer) generateProfitableItemsTable(data models.NormalisedBattledomeItems, isRealData bool) (*helpers.Table, error) {
 	dataCopy := models.NormalisedBattledomeItems{}
 	for k, v := range data {
 		dataCopy[k] = v.Copy()
@@ -92,11 +92,15 @@ func generateProfitableItemsTable(data models.NormalisedBattledomeItems, isRealD
 
 		itemDropRate := item.GetDropRate(data)
 		expectedItemProfit := itemDropRate * itemPriceCache.GetPrice(string(item.Name)) * constants.BATTLEDOME_DROPS_PER_DAY
+		itemDropRateLeftBound, itemDropRateRightBound, err := viewer.StatisticsService.ClopperPearsonInterval(int(item.Quantity), data.GetTotalItemQuantity(), constants.SIGNIFICANCE_LEVEL)
+		if err != nil {
+			return nil, fmt.Errorf("failed to generate Clopper-Pearson interval: %w", err)
+		}
 		row := helpers.When(isRealData,
 			[]string{
 				strconv.Itoa(runningIndex),
 				string(item.Name),
-				helpers.FormatPercentage(itemDropRate) + "%",
+				helpers.When(itemDropRateLeftBound == itemDropRateRightBound, fmt.Sprintf("%s%%", helpers.FormatPercentage(itemDropRateLeftBound)), fmt.Sprintf("[%s, %s]%%", helpers.FormatPercentage(itemDropRateLeftBound), helpers.FormatPercentage(itemDropRateRightBound))),
 				// Don't include dry chance in real data
 				helpers.FormatFloat(itemPriceCache.GetPrice(string(item.Name))) + " NP",
 				helpers.FormatFloat(expectedItemProfit) + " NP",
@@ -245,11 +249,11 @@ func (viewer *DataComparisonViewer) ViewChallengerComparison(realData models.Nor
 		fmt.Sprintf("%s NP", helpers.FormatFloat(realMeanProfit-generatedMeanProfit)),
 	})
 
-	realProfitableItemsTable, err := generateProfitableItemsTable(realData, true)
+	realProfitableItemsTable, err := viewer.generateProfitableItemsTable(realData, true)
 	if err != nil {
 		return nil, err
 	}
-	generatedProfitableItemsTable, err := generateProfitableItemsTable(generatedData, false)
+	generatedProfitableItemsTable, err := viewer.generateProfitableItemsTable(generatedData, false)
 	if err != nil {
 		return nil, err
 	}
@@ -579,11 +583,11 @@ func (viewer *DataComparisonViewer) ViewArenaComparison(realData models.Normalis
 		fmt.Sprintf("%s NP", helpers.FormatFloat(realMeanProfit-generatedMeanProfit)),
 	})
 
-	realProfitableItemsTable, err := generateProfitableItemsTable(realData, true)
+	realProfitableItemsTable, err := viewer.generateProfitableItemsTable(realData, true)
 	if err != nil {
 		return nil, err
 	}
-	generatedProfitableItemsTable, err := generateProfitableItemsTable(generatedData, false)
+	generatedProfitableItemsTable, err := viewer.generateProfitableItemsTable(generatedData, false)
 	if err != nil {
 		return nil, err
 	}

@@ -70,5 +70,5 @@ func (service *DataComparisonService) CompareAllChallengers() (challengerData []
 		return meanDropsProfit
 	})
 
-	return
+	return challengerData, nil
 }

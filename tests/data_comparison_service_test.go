@@ -33,10 +33,13 @@ func TestChallengerView(t *testing.T) {
 
 	metadata := models.BattledomeItemMetadata{
 		Arena:      "Central Arena",
-		Challenger: "Flaming Meerca",
+		Challenger: "Kasuki Lu",
 		Difficulty: "Mighty",
 	}
 	realData, generatedData, err := svc.CompareByMetadata(metadata)
+	if err != nil {
+		panic(err)
+	}
 
 	realMetadata, err := realData.GetMetadata()
 	if err != nil {
@@ -50,6 +53,25 @@ func TestChallengerView(t *testing.T) {
 		panic(err)
 	}
 	lines, err := target.ViewChallengerComparison(realData, generatedData)
+	if err != nil {
+		panic(err)
+	}
+
+	for _, line := range lines {
+		slog.Info(line)
+	}
+}
+
+func TestChallengersView(t *testing.T) {
+	svc := services.NewDataComparisonService()
+	target := viewers.NewDataComparisonViewer()
+
+	challengerData, err := svc.CompareAllChallengers()
+	if err != nil {
+		panic(err)
+	}
+
+	lines, err := target.ViewChallengerComparisons(challengerData)
 	if err != nil {
 		panic(err)
 	}

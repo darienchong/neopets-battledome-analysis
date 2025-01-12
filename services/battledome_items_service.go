@@ -25,7 +25,7 @@ func NewBattledomeItemsService() *BattledomeItemsService {
 	}
 }
 
-func (service *BattledomeItemsService) GetAllDrops() (map[models.Arena]models.NormalisedBattledomeItems, error) {
+func (service *BattledomeItemsService) GetAllDrops() (map[models.Arena]models.BattledomeItems, error) {
 	files, err := helpers.GetFilesInFolder(constants.BATTLEDOME_DROPS_FOLDER)
 	if err != nil {
 		// Could be due to inconsistent caller, try going down one level
@@ -49,16 +49,7 @@ func (service *BattledomeItemsService) GetAllDrops() (map[models.Arena]models.No
 		itemsByArena[dto.Metadata.Arena] = append(itemsByArena[dto.Metadata.Arena], dto.Items...)
 	}
 
-	normalisedItemsByArena := map[models.Arena]models.NormalisedBattledomeItems{}
-	for arena, items := range itemsByArena {
-		normalisedItems, err := items.Normalise()
-		if err != nil {
-			return nil, err
-		}
-		normalisedItemsByArena[arena] = normalisedItems
-	}
-
-	return normalisedItemsByArena, nil
+	return itemsByArena, nil
 }
 
 func (service *BattledomeItemsService) GetDropsByMetadata(metadata models.BattledomeItemMetadata) (models.NormalisedBattledomeItems, error) {
@@ -67,8 +58,8 @@ func (service *BattledomeItemsService) GetDropsByMetadata(metadata models.Battle
 		return nil, err
 	}
 
-	arenaDrops := allDrops[metadata.Arena]
-	matchingArenaDrops := helpers.Filter(helpers.Values(arenaDrops), func(item *models.BattledomeItem) bool {
+	arenaItems := allDrops[metadata.Arena]
+	matchingArenaDrops := helpers.Filter(arenaItems, func(item *models.BattledomeItem) bool {
 		return item.Metadata == metadata
 	})
 
@@ -76,12 +67,12 @@ func (service *BattledomeItemsService) GetDropsByMetadata(metadata models.Battle
 }
 
 func (service *BattledomeItemsService) GetDropsGroupedByMetadata() (map[models.BattledomeItemMetadata]models.NormalisedBattledomeItems, error) {
-	dropsByArena, err := service.GetAllDrops()
+	itemsByArena, err := service.GetAllDrops()
 	if err != nil {
 		return nil, err
 	}
-	allDrops := helpers.FlatMap(helpers.Values(dropsByArena), func(items models.NormalisedBattledomeItems) []*models.BattledomeItem {
-		return helpers.Values(items)
+	allDrops := helpers.FlatMap(helpers.Values(itemsByArena), func(items models.BattledomeItems) []*models.BattledomeItem {
+		return items
 	})
 	allDropsGroupedByMetadata := helpers.GroupBy(allDrops, func(item *models.BattledomeItem) models.BattledomeItemMetadata {
 		return item.Metadata
@@ -102,7 +93,11 @@ func (service *BattledomeItemsService) GetDropsByArena(arena models.Arena) (mode
 	if err != nil {
 		return nil, err
 	}
-	return allDrops[arena], nil
+	normalisedDrops, err := allDrops[arena].Normalise()
+	if err != nil {
+		return nil, err
+	}
+	return normalisedDrops, nil
 }
 
 func (service *BattledomeItemsService) GenerateDropsByArena(arena models.Arena) (models.NormalisedBattledomeItems, error) {
