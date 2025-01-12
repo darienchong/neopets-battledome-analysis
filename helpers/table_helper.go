@@ -111,8 +111,8 @@ func (table *Table) GetLines() []string {
 		numSpaces := len(" ") + len(rowSeparator) - len(table.Name) - 3
 
 		lines = append(lines, rowSeparator)
-		leftPadding := int(math.Floor(float64(numSpaces) / 2.0))
-		rightPadding := int(math.Ceil(float64(numSpaces) / 2.0))
+		leftPadding := int(math.Ceil(float64(numSpaces) / 2.0))
+		rightPadding := int(math.Floor(float64(numSpaces) / 2.0))
 		lines = append(lines, "|"+strings.Repeat(" ", leftPadding)+table.Name+strings.Repeat(" ", rightPadding)+"|")
 	}
 
