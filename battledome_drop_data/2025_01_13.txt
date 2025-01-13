@@ -1,0 +1,17 @@
+$ARENA:Ugga Dome
+$CHALLENGER:Harry the Mutant Moehog
+$DIFFICULTY:Mighty
+Bri Codestone|1
+Tyrannian Acara Plushie|1
+Mau Codestone|1
+Weak Bottled Dark Faerie|2
+Moehog Transmogrification Potion|1
+Tyrannian Usuki|1
+Bang Bang Negg|1
+Tai-Kai Codestone|1
+Unidentifiable Weak Bottled Faerie|1
+Weak Bottled Earth Faerie|1
+Har Codestone|1
+Tusk Care For Moehogs|1
+Zed Codestone|1
+Red Moehog Morphing Potion|1
