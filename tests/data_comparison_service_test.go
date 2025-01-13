@@ -15,11 +15,11 @@ func TestArenaView(t *testing.T) {
 
 	realData, generatedData, err := svc.CompareArena("Neocola Centre")
 	if err != nil {
-		panic(err)
+		t.Fatalf("%s", err)
 	}
 	lines, err := target.ViewArenaComparison(realData, generatedData)
 	if err != nil {
-		panic(err)
+		t.Fatalf("%s", err)
 	}
 
 	for _, line := range lines {
@@ -38,23 +38,23 @@ func TestChallengerView(t *testing.T) {
 	}
 	realData, generatedData, err := svc.CompareByMetadata(metadata)
 	if err != nil {
-		panic(err)
+		t.Fatalf("%s", err)
 	}
 
 	realMetadata, err := realData.GetMetadata()
 	if err != nil {
-		panic(err)
+		t.Fatalf("%s", err)
 	}
 	if realMetadata.Arena != metadata.Arena || realMetadata.Challenger != metadata.Challenger || realMetadata.Difficulty != metadata.Difficulty {
 		t.Fatalf("real data's metadata did not match expected\nExpected: %s\nGot: %s", &metadata, &realMetadata)
 	}
 
 	if err != nil {
-		panic(err)
+		t.Fatalf("%s", err)
 	}
 	lines, err := target.ViewChallengerComparison(realData, generatedData)
 	if err != nil {
-		panic(err)
+		t.Fatalf("%s", err)
 	}
 
 	for _, line := range lines {
@@ -68,12 +68,12 @@ func TestChallengersView(t *testing.T) {
 
 	challengerData, err := svc.CompareAllChallengers()
 	if err != nil {
-		panic(err)
+		t.Fatalf("%s", err)
 	}
 
 	lines, err := target.ViewChallengerComparisons(challengerData)
 	if err != nil {
-		panic(err)
+		t.Fatalf("%s", err)
 	}
 
 	for _, line := range lines {

@@ -24,8 +24,7 @@ func TestDropDataParser(t *testing.T) {
 	target := new(parsers.BattledomeItemDropDataParser)
 	dto, err := target.Parse(constants.GetDropDataFilePath("2024_12_20.txt"))
 	if err != nil {
-		t.Fatalf("Failed to parse file")
-		panic(err)
+		t.Fatalf("Failed to parse file: %s", err)
 	}
 
 	expectedMetadata := new(models.DropsMetadataWithSource)
@@ -39,7 +38,7 @@ func TestDropDataParser(t *testing.T) {
 
 	normalisedItems, err := dto.Items.Normalise()
 	if err != nil {
-		panic(err)
+		t.Fatalf("%s", err)
 	}
 
 	shouldHaveItemAndQuantity(normalisedItems, t, "Ridiculously Heavy Battle Hammer", 1)

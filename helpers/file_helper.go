@@ -4,19 +4,21 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/palantir/stacktrace"
 )
 
 func GetFilesInFolder(folderPath string) ([]string, error) {
 	if strings.HasPrefix(folderPath, ".") {
 		absoluteFolderPath, err := filepath.Abs(folderPath)
 		if err != nil {
-			return nil, err
+			return nil, stacktrace.Propagate(err, "failed to get files in folder: %s", folderPath)
 		}
 		folderPath = absoluteFolderPath
 	}
 	files, err := os.ReadDir(folderPath)
 	if err != nil {
-		return nil, err
+		return nil, stacktrace.Propagate(err, "failed to read directory: %s", folderPath)
 	}
 
 	to_return := []string{}

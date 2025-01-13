@@ -65,7 +65,7 @@ func (service *DataComparisonService) CompareAllChallengers() (challengerData []
 	challengerData = helpers.OrderByDescending(helpers.Values(data), func(normalisedItems models.NormalisedBattledomeItems) float64 {
 		meanDropsProfit, err := normalisedItems.GetMeanDropsProfit()
 		if err != nil {
-			panic(err)
+			return 0.0
 		}
 		return meanDropsProfit
 	})

@@ -430,7 +430,7 @@ func (viewer *DataComparisonViewer) ViewChallengerComparisons(challengerItems []
 	challengerItems = helpers.OrderByDescending(challengerItems, func(items models.NormalisedBattledomeItems) float64 {
 		meanDropsProfit, err := items.GetMeanDropsProfit()
 		if err != nil {
-			panic(err)
+			return 0.0
 		}
 		return meanDropsProfit
 	})
@@ -624,7 +624,7 @@ func (viewer *DataComparisonViewer) ViewBriefArenaComparisons(realData map[model
 
 		profit, err := normalisedItems.GetMeanDropsProfit()
 		if err != nil {
-			panic(err)
+			return 0.0
 		}
 
 		return profit

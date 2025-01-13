@@ -13,7 +13,7 @@ func TestBattledomeItemWeightsParser(t *testing.T) {
 	target := parsers.NewBattledomeItemWeightParser()
 	itemWeights, err := target.Parse(constants.GetItemWeightsFilePath())
 	if err != nil {
-		panic(err)
+		t.Fatalf("%s", err)
 	}
 	diamondSnowballWeight := helpers.Filter(itemWeights, func(itemWeight models.BattledomeItemWeight) bool {
 		return itemWeight.Name == "Diamond Snowball"

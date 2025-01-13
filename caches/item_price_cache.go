@@ -14,6 +14,7 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/darienchong/neopets-battledome-analysis/constants"
+	"github.com/palantir/stacktrace"
 )
 
 var lock = &sync.Mutex{}
@@ -42,11 +43,11 @@ func GetItemPriceCacheInstance() (*ItemPriceCache, error) {
 			cacheInstance.generateExpiry()
 			err := cacheInstance.loadFromFile()
 			if err != nil {
-				return nil, err
+				return nil, stacktrace.Propagate(err, "failed to load cache data from file")
 			}
 			err = cacheInstance.loadSpecialPrices()
 			if err != nil {
-				return nil, err
+				return nil, stacktrace.Propagate(err, "failed to load special prices")
 			}
 		}
 	}
@@ -120,13 +121,15 @@ func (cache *ItemPriceCache) GetPrice(itemName string) float64 {
 func (cache *ItemPriceCache) flushToFile() error {
 	file, err := os.OpenFile(constants.GetItemPriceCacheFilePath(), os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0755)
 	if err != nil {
-		return fmt.Errorf("failed to open item price cache file when flushing to disk: %w", err)
+		return stacktrace.Propagate(err, "failed to open item price cache file when flushing to disk")
 	}
 	defer file.Close()
+
 	file.WriteString(fmt.Sprintf("%s\n", cache.expiry.Format(constants.DATA_EXPIRY_TIME_LAYOUT)))
 	for key, value := range cache.cachedPrices {
 		file.WriteString(fmt.Sprintf("%s|%f\n", key, value))
 	}
+
 	return nil
 }
 
@@ -147,7 +150,7 @@ func (cache *ItemPriceCache) loadFromFile() error {
 
 	file, err := os.Open(constants.GetItemPriceCacheFilePath())
 	if err != nil {
-		return err
+		return stacktrace.Propagate(err, "failed to open the item price cache file path: %s", constants.GetItemPriceCacheFilePath())
 	}
 	defer file.Close()
 
@@ -159,7 +162,7 @@ func (cache *ItemPriceCache) loadFromFile() error {
 			// It's the expiry date
 			parsedExpiry, err := time.Parse(constants.DATA_EXPIRY_TIME_LAYOUT, line)
 			if err != nil {
-				slog.Warn(fmt.Sprintf("Failed to parse expiry for item price cache file; the line was \"%s\"", line))
+				slog.Warn(fmt.Sprintf("Failed to parse expiry for item price cache file; the line was \"%s\": %s", line, err))
 				cache.generateExpiry()
 			} else {
 				cache.expiry = parsedExpiry
@@ -167,12 +170,9 @@ func (cache *ItemPriceCache) loadFromFile() error {
 
 			if parsedExpiry.Before(time.Now()) {
 				slog.Info("Deleting item price cache file as it was expired.")
-				err := os.Remove(constants.GetItemPriceCacheFilePath())
+				// We don't really care if it succeeds or not
+				os.Remove(constants.GetItemPriceCacheFilePath())
 				cache.generateExpiry()
-				if err != nil {
-					return nil
-				}
-				return nil
 			}
 		} else {
 			data := strings.Split(line, "|")

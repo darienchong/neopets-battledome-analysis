@@ -12,6 +12,7 @@ import (
 	"github.com/darienchong/neopets-battledome-analysis/models"
 	"github.com/darienchong/neopets-battledome-analysis/parsers"
 	"github.com/darienchong/neopets-battledome-analysis/services"
+	"github.com/palantir/stacktrace"
 )
 
 type BattledomeItemsLogger struct {
@@ -33,13 +34,13 @@ func (dropsLogger *BattledomeItemsLogger) Log(dataFolderPath string) error {
 
 	itemPriceCache, err := caches.GetItemPriceCacheInstance()
 	if err != nil {
-		return fmt.Errorf("failed to get item price cache instance: %w", err)
+		return stacktrace.Propagate(err, "failed to get item price cache instance")
 	}
 	defer itemPriceCache.Close()
 
 	files, err := helpers.GetFilesInFolder(dataFolderPath)
 	if err != nil {
-		return fmt.Errorf("failed to get files in %s: %w", dataFolderPath, err)
+		return stacktrace.Propagate(err, "failed to get files in %s", dataFolderPath)
 	}
 
 	if constants.NUMBER_OF_DROPS_TO_PRINT > 0 {
@@ -50,8 +51,7 @@ func (dropsLogger *BattledomeItemsLogger) Log(dataFolderPath string) error {
 	for _, file := range files {
 		items, err := dropsLogger.BattledomeItemDropDataParser.Parse(constants.GetDropDataFilePath(file))
 		if err != nil {
-			slog.Error(fmt.Sprintf("Failed to parse drop data file (%s)", file))
-			panic(err)
+			return stacktrace.Propagate(err, "failed to parse drop data file: %s", file)
 		}
 
 		_, isKeyExists := samplesByArena[items.Metadata.Arena]
@@ -77,11 +77,12 @@ func (dropsLogger *BattledomeItemsLogger) Log(dataFolderPath string) error {
 
 		normalisedItems, err := items.Items.Normalise()
 		if err != nil {
-			panic(err)
+			return helpers.PropagateWithSerialisedValue(err, "failed to normalise items: %s", "failed to normalise items; another error occurred while trying to serialise the input: %s", items)
 		}
+
 		orderedNormalisedItems, err := normalisedItems.GetItemsOrderedByProfit()
 		if err != nil {
-			panic(err)
+			return helpers.PropagateWithSerialisedValue(err, "failed to get items ordered by profit: %s", "failed to get items ordered by profit; another error occurred while trying to serialise the input: %s", normalisedItems)
 		}
 
 		for i, item := range orderedNormalisedItems {
@@ -89,7 +90,7 @@ func (dropsLogger *BattledomeItemsLogger) Log(dataFolderPath string) error {
 			itemProfit := item.GetProfit(itemPriceCache)
 			itemPercentageProfit, err := item.GetPercentageProfit(itemPriceCache, normalisedItems)
 			if err != nil {
-				panic(err)
+				return helpers.PropagateWithSerialisedValue(err, "failed to get percentage profit: %s", "failed to get percentage profit; another error occurred while trying to serialise the input: %s", items)
 			}
 			if itemPercentageProfit < 0.01 {
 				continue
@@ -106,7 +107,7 @@ func (dropsLogger *BattledomeItemsLogger) Log(dataFolderPath string) error {
 
 		totalProfit, err := normalisedItems.GetTotalProfit()
 		if err != nil {
-			panic(err)
+			return helpers.PropagateWithSerialisedValue(err, "failed to get total profit: %s", "failed to get total profit; an error occurred while trying to serialise the input to log: %s", normalisedItems)
 		}
 
 		profitBreakdownTable.AddRow([]string{
