@@ -12,6 +12,7 @@ import (
 	"github.com/darienchong/neopets-battledome-analysis/helpers"
 	"github.com/darienchong/neopets-battledome-analysis/models"
 	"github.com/darienchong/neopets-battledome-analysis/services"
+	"github.com/palantir/stacktrace"
 )
 
 type DataComparisonViewer struct {
@@ -268,12 +269,12 @@ func (viewer *DataComparisonViewer) ViewChallengerComparison(realData models.Nor
 		return nil, err
 	}
 
-	arenaSpecificDropsTable, err := generateArenaSpecificDropsTable(realData, generatedData)
+	arenaSpecificDropsTable, err := viewer.generateArenaSpecificDropsTable(realData, generatedData)
 	if err != nil {
 		return nil, err
 	}
 
-	challengerSpecificDropsTable, err := generateChallengerSpecificDropsTable(realData, generatedData)
+	challengerSpecificDropsTable, err := viewer.generateChallengerSpecificDropsTable(realData, generatedData)
 	if err != nil {
 		return nil, err
 	}
@@ -298,7 +299,7 @@ func isArenaSpecificDrop(itemName models.ItemName, items models.NormalisedBattle
 	return exists
 }
 
-func generateArenaSpecificDropsTable(realData models.NormalisedBattledomeItems, generatedData models.NormalisedBattledomeItems) (*helpers.Table, error) {
+func (viewer *DataComparisonViewer) generateArenaSpecificDropsTable(realData models.NormalisedBattledomeItems, generatedData models.NormalisedBattledomeItems) (*helpers.Table, error) {
 	itemPriceCache, err := caches.GetItemPriceCacheInstance()
 	if err != nil {
 		return nil, err
@@ -327,15 +328,28 @@ func generateArenaSpecificDropsTable(realData models.NormalisedBattledomeItems, 
 	arenaSpecificDropsExpectation := helpers.Sum(helpers.Map(realItems, func(item *models.BattledomeItem) float64 {
 		return item.GetDropRate(realData) * itemPriceCache.GetPrice(string(item.Name)) * constants.BATTLEDOME_DROPS_PER_DAY
 	}))
-	totalDropRate := helpers.Sum(helpers.Map(realItems, func(item *models.BattledomeItem) float64 {
-		return item.GetDropRate(realData)
+
+	totalArenaItemCount := helpers.Sum(helpers.Map(realItems, func(item *models.BattledomeItem) int {
+		if item.Name == "nothing" {
+			return 0
+		}
+
+		return int(item.Quantity)
 	}))
+	totalDropRateLeftBound, totalDropRateRightBound, err := viewer.StatisticsService.ClopperPearsonInterval(totalArenaItemCount, realData.GetTotalItemQuantity(), constants.SIGNIFICANCE_LEVEL)
+	if err != nil {
+		return nil, stacktrace.Propagate(err, "failed to generate total drop rate bounds")
+	}
 
 	for i, item := range orderedRealItems {
 		if i > constants.NUMBER_OF_ITEMS_TO_PRINT-1 {
 			break
 		}
 
+		itemDropRateLeftBound, itemDropRateRightBound, err := viewer.StatisticsService.ClopperPearsonInterval(int(item.Quantity), realData.GetTotalItemQuantity(), constants.SIGNIFICANCE_LEVEL)
+		if err != nil {
+			return nil, stacktrace.Propagate(err, "failed to generate item drop bounds")
+		}
 		itemDropRate := item.GetDropRate(realData)
 		itemPrice := itemPriceCache.GetPrice(string(item.Name))
 		itemExpectation := itemDropRate * itemPrice * constants.BATTLEDOME_DROPS_PER_DAY
@@ -343,7 +357,7 @@ func generateArenaSpecificDropsTable(realData models.NormalisedBattledomeItems, 
 		table.AddRow([]string{
 			strconv.Itoa(i + 1),
 			string(item.Name),
-			helpers.FormatPercentage(itemDropRate) + "%",
+			helpers.When(itemDropRateLeftBound == itemDropRateRightBound, fmt.Sprintf("%s%%", helpers.FormatPercentage(itemDropRateLeftBound)), fmt.Sprintf("[%s, %s]%%", helpers.FormatPercentage(itemDropRateLeftBound), helpers.FormatPercentage(itemDropRateRightBound))),
 			helpers.FormatFloat(itemPrice) + " NP",
 			helpers.FormatFloat(itemExpectation) + " NP",
 			helpers.FormatPercentage(itemExpectation/totalExpectation) + "%",
@@ -353,7 +367,9 @@ func generateArenaSpecificDropsTable(realData models.NormalisedBattledomeItems, 
 	table.AddRow([]string{
 		"",
 		"Total",
-		helpers.FormatPercentage(totalDropRate) + "%",
+		helpers.When(totalDropRateLeftBound == totalDropRateRightBound,
+			fmt.Sprintf("%s%%", helpers.FormatPercentage(totalDropRateLeftBound)),
+			fmt.Sprintf("[%s, %s]%%", helpers.FormatPercentage(totalDropRateLeftBound), helpers.FormatPercentage(totalDropRateRightBound))),
 		"",
 		helpers.FormatFloat(arenaSpecificDropsExpectation) + " NP",
 		helpers.FormatPercentage(arenaSpecificDropsExpectation/totalExpectation) + "%",
@@ -362,7 +378,7 @@ func generateArenaSpecificDropsTable(realData models.NormalisedBattledomeItems, 
 	return table, nil
 }
 
-func generateChallengerSpecificDropsTable(realData models.NormalisedBattledomeItems, generatedData models.NormalisedBattledomeItems) (*helpers.Table, error) {
+func (viewer *DataComparisonViewer) generateChallengerSpecificDropsTable(realData models.NormalisedBattledomeItems, generatedData models.NormalisedBattledomeItems) (*helpers.Table, error) {
 	itemPriceCache, err := caches.GetItemPriceCacheInstance()
 	if err != nil {
 		return nil, err
@@ -391,15 +407,28 @@ func generateChallengerSpecificDropsTable(realData models.NormalisedBattledomeIt
 	challengerSpecificDropsExpectation := helpers.Sum(helpers.Map(realItems, func(item *models.BattledomeItem) float64 {
 		return item.GetDropRate(realData) * itemPriceCache.GetPrice(string(item.Name)) * constants.BATTLEDOME_DROPS_PER_DAY
 	}))
-	totalDropRate := helpers.Sum(helpers.Map(realItems, func(item *models.BattledomeItem) float64 {
-		return item.GetDropRate(realData)
+
+	totalChallengerItemCount := helpers.Sum(helpers.Map(realItems, func(item *models.BattledomeItem) int {
+		if item.Name == "nothing" {
+			return 0
+		}
+
+		return int(item.Quantity)
 	}))
+	totalDropRateLeftBound, totalDropRateRightBound, err := viewer.StatisticsService.ClopperPearsonInterval(totalChallengerItemCount, realData.GetTotalItemQuantity(), constants.SIGNIFICANCE_LEVEL)
+	if err != nil {
+		return nil, stacktrace.Propagate(err, "failed to generate total drop rate bounds")
+	}
 
 	for i, item := range orderedRealItems {
 		if i > constants.NUMBER_OF_ITEMS_TO_PRINT-1 {
 			break
 		}
 
+		itemDropRateLeftBound, itemDropRateRightBound, err := viewer.StatisticsService.ClopperPearsonInterval(int(item.Quantity), realData.GetTotalItemQuantity(), constants.SIGNIFICANCE_LEVEL)
+		if err != nil {
+			return nil, stacktrace.Propagate(err, "failed to generate item drop bounds")
+		}
 		itemDropRate := item.GetDropRate(realData)
 		itemPrice := itemPriceCache.GetPrice(string(item.Name))
 		itemExpectation := itemDropRate * itemPrice * constants.BATTLEDOME_DROPS_PER_DAY
@@ -407,7 +436,7 @@ func generateChallengerSpecificDropsTable(realData models.NormalisedBattledomeIt
 		table.AddRow([]string{
 			strconv.Itoa(i + 1),
 			string(item.Name),
-			helpers.FormatPercentage(itemDropRate) + "%",
+			helpers.When(itemDropRateLeftBound == itemDropRateRightBound, fmt.Sprintf("%s%%", helpers.FormatPercentage(itemDropRateLeftBound)), fmt.Sprintf("[%s, %s]%%", helpers.FormatPercentage(itemDropRateLeftBound), helpers.FormatPercentage(itemDropRateRightBound))),
 			helpers.FormatFloat(itemPrice) + " NP",
 			helpers.FormatFloat(itemExpectation) + " NP",
 			helpers.FormatPercentage(itemExpectation/totalExpectation) + "%",
@@ -417,7 +446,9 @@ func generateChallengerSpecificDropsTable(realData models.NormalisedBattledomeIt
 	table.AddRow([]string{
 		"",
 		"Total",
-		helpers.FormatPercentage(totalDropRate) + "%",
+		helpers.When(totalDropRateLeftBound == totalDropRateRightBound,
+			fmt.Sprintf("%s%%", helpers.FormatPercentage(totalDropRateLeftBound)),
+			fmt.Sprintf("[%s, %s]%%", helpers.FormatPercentage(totalDropRateLeftBound), helpers.FormatPercentage(totalDropRateRightBound))),
 		"",
 		helpers.FormatFloat(challengerSpecificDropsExpectation) + " NP",
 		helpers.FormatPercentage(challengerSpecificDropsExpectation/totalExpectation) + "%",
