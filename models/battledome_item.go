@@ -4,6 +4,8 @@ import (
 	"fmt"
 
 	"github.com/darienchong/neopets-battledome-analysis/caches"
+	"github.com/darienchong/neopets-battledome-analysis/helpers"
+	"github.com/palantir/stacktrace"
 )
 
 type ItemName string
@@ -22,7 +24,7 @@ func (first *BattledomeItem) Union(second *BattledomeItem) (*BattledomeItem, err
 	combined := &BattledomeItem{}
 	combinedMetadata, err := first.Metadata.Combine(second.Metadata)
 	if err != nil {
-		return nil, err
+		return nil, stacktrace.Propagate(err, "failed to combine metadata \"%s\" and \"%s\"", first.Metadata, second.Metadata)
 	}
 	combined.Metadata = combinedMetadata
 	combined.Name = first.Name
@@ -39,7 +41,7 @@ func (item *BattledomeItem) GetPercentageProfit(itemPriceCache *caches.ItemPrice
 
 	totalProfit, err := items.GetTotalProfit()
 	if err != nil {
-		return defaultValue, err
+		return defaultValue, helpers.PropagateWithSerialisedValue(err, "failed to get total profit for \"%s\"", "failed to get total profit for a battledome item; additionally encountered an error while trying to serialise the value to log: %s", item)
 	}
 	return item.GetProfit(itemPriceCache) / totalProfit, nil
 }

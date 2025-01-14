@@ -8,6 +8,7 @@ import (
 	"github.com/darienchong/neopets-battledome-analysis/constants"
 	"github.com/darienchong/neopets-battledome-analysis/helpers"
 	"github.com/montanaflynn/stats"
+	"github.com/palantir/stacktrace"
 )
 
 type BattledomeItems []*BattledomeItem
@@ -21,7 +22,7 @@ func (items BattledomeItems) Normalise() (NormalisedBattledomeItems, error) {
 		} else {
 			combined, err := normalisedItems[item.Name].Union(item)
 			if err != nil {
-				return nil, err
+				return nil, helpers.PropagateWithSerialisedValue(err, "failed to add %s to normalised items", "failed to add item to normalised items; additionally encountered an error while trying to serialise the item to log: %s", item)
 			}
 			normalisedItems[item.Name] = combined
 		}
@@ -43,7 +44,7 @@ func (normalisedItems NormalisedBattledomeItems) GetMetadata() (BattledomeItemMe
 func generateProfitData(items NormalisedBattledomeItems) ([]float64, error) {
 	itemPriceCache, err := caches.GetItemPriceCacheInstance()
 	if err != nil {
-		return nil, err
+		return nil, stacktrace.Propagate(err, "failed to get item price cache")
 	}
 	defer itemPriceCache.Close()
 
@@ -67,12 +68,12 @@ func (items NormalisedBattledomeItems) GetMeanDropsProfit() (float64, error) {
 	}
 
 	if err != nil {
-		return 0.0, err
+		return 0.0, stacktrace.Propagate(err, "failed to generate profit data")
 	}
 
 	mean, err := stats.Mean(profitData)
 	if err != nil {
-		return 0.0, err
+		return 0.0, stacktrace.Propagate(err, "failed to get mean of profit data")
 	}
 
 	return mean * constants.BATTLEDOME_DROPS_PER_DAY, nil
@@ -85,12 +86,12 @@ func (items NormalisedBattledomeItems) GetDropsProfitStdev() (float64, error) {
 	}
 
 	if err != nil {
-		return 0.0, err
+		return 0.0, stacktrace.Propagate(err, "failed to generate profit data")
 	}
 
 	stdev, err := stats.StandardDeviationSample(profitData)
 	if err != nil {
-		return 0.0, err
+		return 0.0, stacktrace.Propagate(err, "failed to get sample standard deviation")
 	}
 	return stdev * math.Sqrt(constants.BATTLEDOME_DROPS_PER_DAY), nil
 }
@@ -98,7 +99,7 @@ func (items NormalisedBattledomeItems) GetDropsProfitStdev() (float64, error) {
 func (items NormalisedBattledomeItems) GetItemsOrderedByPrice() ([]*BattledomeItem, error) {
 	itemPriceCache, err := caches.GetItemPriceCacheInstance()
 	if err != nil {
-		return nil, err
+		return nil, stacktrace.Propagate(err, "failed to get item price cache")
 	}
 	defer itemPriceCache.Close()
 
@@ -114,7 +115,7 @@ func (items NormalisedBattledomeItems) GetItemsOrderedByPrice() ([]*BattledomeIt
 func (items NormalisedBattledomeItems) GetItemsOrderedByProfit() ([]*BattledomeItem, error) {
 	itemPriceCache, err := caches.GetItemPriceCacheInstance()
 	if err != nil {
-		return nil, err
+		return nil, stacktrace.Propagate(err, "failed to get item price cache")
 	}
 	defer itemPriceCache.Close()
 
@@ -133,7 +134,7 @@ func (items NormalisedBattledomeItems) GetTotalProfit() (float64, error) {
 
 	itemPriceCache, err := caches.GetItemPriceCacheInstance()
 	if err != nil {
-		return defaultValue, err
+		return defaultValue, stacktrace.Propagate(err, "failed to get item price cache")
 	}
 	defer itemPriceCache.Close()
 

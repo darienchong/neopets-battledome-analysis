@@ -9,6 +9,7 @@ import (
 
 	"github.com/darienchong/neopets-battledome-analysis/helpers"
 	"github.com/darienchong/neopets-battledome-analysis/models"
+	"github.com/palantir/stacktrace"
 )
 
 type BattledomeItemWeightParser struct{}
@@ -26,7 +27,7 @@ func (parser *BattledomeItemWeightParser) Parse(filePath string) ([]models.Battl
 	weights := []models.BattledomeItemWeight{}
 	file, err := os.OpenFile(filePath, os.O_RDONLY, 0755)
 	if err != nil {
-		return nil, err
+		return nil, stacktrace.Propagate(err, "failed to open file: \"%s\"", filePath)
 	}
 	defer file.Close()
 	scanner := bufio.NewScanner(file)
@@ -41,9 +42,10 @@ func (parser *BattledomeItemWeightParser) Parse(filePath string) ([]models.Battl
 			}
 			tokens := strings.Split(line, " - ")
 			itemName := strings.TrimSpace(tokens[0])
-			parsedItemWeight, err := strconv.ParseFloat(strings.TrimSpace(strings.ReplaceAll(tokens[1], "%", "")), 64)
+			itemWeightString := strings.TrimSpace(strings.ReplaceAll(tokens[1], "%", ""))
+			parsedItemWeight, err := strconv.ParseFloat(itemWeightString, 64)
 			if err != nil {
-				return nil, err
+				return nil, stacktrace.Propagate(err, "failed to parse \"%s\" as float64", itemWeightString)
 			}
 			itemWeight := parsedItemWeight / 100
 			weights = append(weights, models.BattledomeItemWeight{

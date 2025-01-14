@@ -12,6 +12,7 @@ import (
 	"github.com/darienchong/neopets-battledome-analysis/constants"
 	"github.com/darienchong/neopets-battledome-analysis/helpers"
 	"github.com/darienchong/neopets-battledome-analysis/models"
+	"github.com/palantir/stacktrace"
 )
 
 type BattledomeItemDropDataParser struct{}
@@ -35,7 +36,7 @@ func (parser *BattledomeItemDropDataParser) Parse(filePath string) (*models.Batt
 
 	file, err := os.OpenFile(filePath, os.O_RDONLY, 0755)
 	if err != nil {
-		return nil, err
+		return nil, stacktrace.Propagate(err, "failed to open file: %s", filePath)
 	}
 	defer file.Close()
 
@@ -130,7 +131,7 @@ func (parser *ItemDataParser) Parse(line string, dto *models.BattledomeItemsDto)
 	itemName := models.ItemName(strings.TrimSpace(tokens[0]))
 	itemQuantity, err := strconv.ParseInt(strings.TrimSpace(tokens[1]), 0, 32)
 	if err != nil {
-		return err
+		return stacktrace.Propagate(err, "failed to parse \"%s\" as integer", strings.TrimSpace(tokens[1]))
 	}
 
 	dto.Items = append(dto.Items, &models.BattledomeItem{

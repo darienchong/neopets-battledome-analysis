@@ -9,6 +9,7 @@ import (
 
 	"github.com/darienchong/neopets-battledome-analysis/helpers"
 	"github.com/darienchong/neopets-battledome-analysis/models"
+	"github.com/palantir/stacktrace"
 )
 
 type BattledomeItemDropRateParser struct{}
@@ -25,7 +26,7 @@ func (parser *BattledomeItemDropRateParser) Parse(filePath string) ([]models.Bat
 	dropRates := []models.BattledomeItemDropRate{}
 	file, err := os.OpenFile(filePath, os.O_RDONLY, 0755)
 	if err != nil {
-		return nil, err
+		return nil, stacktrace.Propagate(err, "failed to open file: \"%s\"", filePath)
 	}
 	defer file.Close()
 	scanner := bufio.NewScanner(file)
@@ -34,7 +35,7 @@ func (parser *BattledomeItemDropRateParser) Parse(filePath string) ([]models.Bat
 		tokens := strings.Split(strings.TrimSpace(line), "|")
 		dropRate, err := strconv.ParseFloat(strings.TrimSpace(tokens[2]), 64)
 		if err != nil {
-			return nil, err
+			return nil, stacktrace.Propagate(err, "failed to parse \"%s\" as float", strings.TrimSpace(tokens[2]))
 		}
 		dropRates = append(dropRates, models.BattledomeItemDropRate{
 			Metadata: models.BattledomeItemMetadata{
@@ -52,12 +53,13 @@ func (parser *BattledomeItemDropRateParser) Parse(filePath string) ([]models.Bat
 func (parser *BattledomeItemDropRateParser) Save(data []models.BattledomeItemDropRate, filePath string) error {
 	file, err := os.OpenFile(filePath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0755)
 	if err != nil {
-		return err
+		return stacktrace.Propagate(err, "failed to open file \"%s\"", filePath)
 	}
 	for _, dropRate := range data {
-		_, err := file.WriteString(fmt.Sprintf("%s|%s|%f\n", dropRate.Metadata.Arena, dropRate.ItemName, dropRate.DropRate))
+		data := fmt.Sprintf("%s|%s|%f\n", dropRate.Metadata.Arena, dropRate.ItemName, dropRate.DropRate)
+		_, err := file.WriteString(data)
 		if err != nil {
-			return err
+			return stacktrace.Propagate(err, "failed to write \"%s\" to \"%s\"", data, filePath)
 		}
 	}
 
