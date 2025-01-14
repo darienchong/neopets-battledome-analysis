@@ -10,6 +10,7 @@ import (
 	"github.com/darienchong/neopets-battledome-analysis/models"
 	"github.com/darienchong/neopets-battledome-analysis/services"
 	"github.com/darienchong/neopets-battledome-analysis/viewers"
+	"github.com/palantir/stacktrace"
 )
 
 func getPrefix(indentLevel int) string {
@@ -36,7 +37,7 @@ func (logger *DataComparisonLogger) BriefCompareAllArenas() error {
 		arena := models.Arena(arenaString)
 		realArenaData, generatedArenaData, err := logger.DataComparisonService.CompareArena(arena)
 		if err != nil {
-			return fmt.Errorf("failed to compare arena \"%s\": %w", arenaString, err)
+			return stacktrace.Propagate(err, "failed to compare arena \"%s\"", arenaString)
 		}
 		realData[arena] = realArenaData
 		generatedData[arena] = generatedArenaData
@@ -44,7 +45,7 @@ func (logger *DataComparisonLogger) BriefCompareAllArenas() error {
 
 	lines, err := logger.DataComparisonViewer.ViewBriefArenaComparisons(realData, generatedData)
 	if err != nil {
-		return fmt.Errorf("failed to generate brief arena comparisons: %w", err)
+		return stacktrace.Propagate(err, "failed to generate brief arena comparisons")
 	}
 
 	for _, line := range lines {
@@ -61,7 +62,7 @@ func (logger *DataComparisonLogger) CompareAllArenas() error {
 			func(arena string) *helpers.Tuple {
 				realData, generatedData, err := logger.DataComparisonService.CompareArena(models.Arena(arena))
 				if err != nil {
-					panic(fmt.Errorf("failed to compare %s: %w", arena, err))
+					panic(stacktrace.Propagate(err, "failed to compare %s", arena))
 				}
 				return &helpers.Tuple{Elements: []any{models.Arena(arena), realData, generatedData}}
 			},
@@ -82,7 +83,7 @@ func (logger *DataComparisonLogger) CompareAllArenas() error {
 		generatedData := comparisonDatum.Elements[2].(models.NormalisedBattledomeItems)
 		lines, err := logger.DataComparisonViewer.ViewArenaComparison(realData, generatedData)
 		if err != nil {
-			return fmt.Errorf("failed to get arena comparison for \"%s\": %w", arena, err)
+			return stacktrace.Propagate(err, "failed to get arena comparison for \"%s\"", arena)
 		}
 
 		slog.Info(fmt.Sprintf("%d. %s (%d samples)", i+1, arena, realData.GetTotalItemQuantity()))
@@ -98,11 +99,11 @@ func (logger *DataComparisonLogger) CompareAllArenas() error {
 func (logger *DataComparisonLogger) CompareChallenger(metadata models.BattledomeItemMetadata) error {
 	realData, generatedData, err := logger.DataComparisonService.CompareByMetadata(metadata)
 	if err != nil {
-		return err
+		return stacktrace.Propagate(err, "failed to generate metadata comparison for \"%s\"", metadata)
 	}
 	lines, err := logger.DataComparisonViewer.ViewChallengerComparison(realData, generatedData)
 	if err != nil {
-		return err
+		return stacktrace.Propagate(err, "failed to generate challenger comparison for \"%s\"", metadata)
 	}
 
 	for _, line := range lines {
@@ -114,12 +115,12 @@ func (logger *DataComparisonLogger) CompareChallenger(metadata models.Battledome
 func (logger *DataComparisonLogger) CompareAllChallengers() error {
 	data, err := logger.DataComparisonService.CompareAllChallengers()
 	if err != nil {
-		return err
+		return stacktrace.Propagate(err, "failed to compare all challengers")
 	}
 
 	lines, err := logger.DataComparisonViewer.ViewChallengerComparisons(data)
 	if err != nil {
-		return err
+		return stacktrace.Propagate(err, "failed to generate challenger comparison view")
 	}
 
 	for _, line := range lines {
