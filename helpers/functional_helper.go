@@ -59,6 +59,17 @@ func Filter[T any](ts []T, predicate func(T) bool) []T {
 	return filteredTs
 }
 
+func FilterMap[K comparable, V any](m map[K]V, predicate func(V) bool) map[K]V {
+	filteredMap := map[K]V{}
+
+	for k, v := range m {
+		if predicate(v) {
+			filteredMap[k] = v
+		}
+	}
+	return filteredMap
+}
+
 func FilterPointers[T any](ts []*T, predicate func(*T) bool) []*T {
 	filteredTs := []*T{}
 	for _, elt := range ts {
