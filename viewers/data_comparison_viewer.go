@@ -671,40 +671,43 @@ func (viewer *DataComparisonViewer) ViewBriefArenaComparisons(realData map[model
 	for i, arena := range orderedArenas {
 		slog.Debug(fmt.Sprintf("Generating comparison for %s", arena))
 		var realMeanProfit float64 = 0.0
-		var realProfitStdev float64 = 0.0
+		var realProfitLeftBound float64 = 0.0
+		var realProfitRightBound float64 = 0.0
 		var err error
 
 		realArenaData, exists := realData[models.Arena(arena)]
 		if exists {
+			realProfitLeftBound, realProfitRightBound, err = realArenaData.GetProfitConfidenceInterval()
+			if err != nil {
+				return nil, stacktrace.Propagate(err, "failed to get real profit confidence interval")
+			}
 			realMeanProfit, err = realArenaData.GetMeanDropsProfit()
 			if err != nil {
-				return nil, stacktrace.Propagate(err, "failed to generate real mean drops profit for \"%s\"", arena)
-			}
-			realProfitStdev, err = realArenaData.GetDropsProfitStdev()
-			if err != nil {
-				return nil, stacktrace.Propagate(err, "failed to generate real drops profit stdev for \"%s\"", arena)
+				return nil, stacktrace.Propagate(err, "failed to get real mean profit")
 			}
 		}
 
+		var generatedProfitLeftBound float64 = 0.0
+		var generatedProfitRightBound float64 = 0.0
 		var generatedMeanProfit float64 = 0.0
-		var generatedProfitStdev float64 = 0.0
+
 		generatedArenaData, exists := generatedData[models.Arena(arena)]
 		if exists {
+			generatedProfitLeftBound, generatedProfitRightBound, err = generatedArenaData.GetProfitConfidenceInterval()
+			if err != nil {
+				return nil, stacktrace.Propagate(err, "failed to get generated profit confidence interval")
+			}
 			generatedMeanProfit, err = generatedArenaData.GetMeanDropsProfit()
 			if err != nil {
-				return nil, stacktrace.Propagate(err, "failed to generate predicted mean drops profit for \"%s\"", arena)
-			}
-			generatedProfitStdev, err = generatedArenaData.GetDropsProfitStdev()
-			if err != nil {
-				return nil, stacktrace.Propagate(err, "failed to generate predicted mean drops stdev for \"%s\"", arena)
+				return nil, stacktrace.Propagate(err, "failed to get generated mean profit")
 			}
 		}
 
 		table.AddRow([]string{
 			strconv.Itoa(i + 1),
 			arena,
-			fmt.Sprintf("%s ± %s NP", helpers.FormatFloat(generatedMeanProfit), helpers.FormatFloat(generatedProfitStdev)),
-			fmt.Sprintf("%s ± %s NP", helpers.FormatFloat(realMeanProfit), helpers.FormatFloat(realProfitStdev)),
+			fmt.Sprintf("%s ∈ %s NP", helpers.FormatFloat(generatedMeanProfit), helpers.FormatFloatRange("[%s, %s]", generatedProfitLeftBound, generatedProfitRightBound)),
+			fmt.Sprintf("%s ∈ %s NP", helpers.FormatFloat(realMeanProfit), helpers.FormatFloatRange("[%s, %s]", realProfitLeftBound, realProfitRightBound)),
 		})
 	}
 

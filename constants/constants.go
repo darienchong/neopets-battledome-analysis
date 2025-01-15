@@ -8,21 +8,22 @@ import (
 )
 
 const (
-	DATA_FOLDER                                                  = "./../data/"
-	ITEM_PRICE_CACHE_FILE                                        = "neopets_item_price_cache.txt"
-	ITEW_WEIGHTS_FILE                                            = "neopets_battledome_item_weights.txt"
-	ITEM_DROP_RATES_FILE_TEMPLATE                                = "neopets_battledome_item_drop_rates_%s_%d.txt"
-	GENERATED_DROPS_FILE_TEMPLATE                                = "neopets_battledome_generated_items_%s_%d.txt"
-	DATA_EXPIRY_TIME_LAYOUT                                      = "2006-01-02 15:04:05.000000"
-	TIME_LAYOUT                                                  = "2006/01/02 15:04:05"
-	BATTLEDOME_DROPS_FOLDER                                      = "./../battledome_drop_data/"
-	FLOAT_FORMAT_LAYOUT                                          = "#,###."
-	PERCENTAGE_FORMAT_LAYOUT                                     = "#,###.##"
-	NUMBER_OF_ITEMS_TO_PRINT                                     = 15
-	BATTLEDOME_DROPS_PER_DAY                                     = 15
-	NUMBER_OF_ITEMS_TO_GENERATE_FOR_ESTIMATING_DROP_RATES        = 100_000_000
-	NUMBER_OF_ITEMS_TO_GENERATE_FOR_ESTIMATING_PROFIT_STATISTICS = 100_000_000
-	SIGNIFICANCE_LEVEL                                           = 0.05
+	DATA_FOLDER                                                    = "./../data/"
+	ITEM_PRICE_CACHE_FILE                                          = "neopets_item_price_cache.txt"
+	ITEW_WEIGHTS_FILE                                              = "neopets_battledome_item_weights.txt"
+	ITEM_DROP_RATES_FILE_TEMPLATE                                  = "neopets_battledome_item_drop_rates_%s_%d.txt"
+	GENERATED_DROPS_FILE_TEMPLATE                                  = "neopets_battledome_generated_items_%s_%d.txt"
+	DATA_EXPIRY_TIME_LAYOUT                                        = "2006-01-02 15:04:05.000000"
+	TIME_LAYOUT                                                    = "2006/01/02 15:04:05"
+	BATTLEDOME_DROPS_FOLDER                                        = "./../battledome_drop_data/"
+	FLOAT_FORMAT_LAYOUT                                            = "#,###."
+	PERCENTAGE_FORMAT_LAYOUT                                       = "#,###.##"
+	NUMBER_OF_ITEMS_TO_PRINT                                       = 15
+	BATTLEDOME_DROPS_PER_DAY                                       = 15
+	NUMBER_OF_ITEMS_TO_GENERATE_FOR_ESTIMATING_DROP_RATES          = 100_000_000
+	NUMBER_OF_ITEMS_TO_GENERATE_FOR_ESTIMATING_PROFIT_STATISTICS   = 100_000_000
+	SIGNIFICANCE_LEVEL                                             = 0.05
+	NUMBER_OF_BOOTSTRAP_SAMPLES_FOR_ESTIMATING_CONFIDENCE_INTERVAL = 100_000
 
 	FILTER_ARENA             = ""
 	NUMBER_OF_DROPS_TO_PRINT = 3
