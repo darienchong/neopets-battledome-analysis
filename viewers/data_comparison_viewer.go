@@ -101,7 +101,7 @@ func (viewer *DataComparisonViewer) generateProfitableItemsTable(data models.Nor
 			[]string{
 				strconv.Itoa(runningIndex),
 				string(item.Name),
-				helpers.When(itemDropRateLeftBound == itemDropRateRightBound, fmt.Sprintf("%s%%", helpers.FormatPercentage(itemDropRateLeftBound)), fmt.Sprintf("[%s, %s]%%", helpers.FormatPercentage(itemDropRateLeftBound), helpers.FormatPercentage(itemDropRateRightBound))),
+				fmt.Sprintf("%s ∈ %s%%", helpers.FormatPercentage(itemDropRate), helpers.FormatPercentageRange("[%s, %s]", itemDropRateLeftBound, itemDropRateRightBound)),
 				// Don't include dry chance in real data
 				helpers.FormatFloat(itemPriceCache.GetPrice(string(item.Name))) + " NP",
 				helpers.FormatFloat(expectedItemProfit) + " NP",
@@ -168,8 +168,10 @@ func (viewer *DataComparisonViewer) generateCodestoneDropRatesTable(realData mod
 	for _, codestoneName := range codestoneList {
 		realCodestones, existsInReal := realCodestones[models.ItemName(codestoneName)]
 		generatedCodestones, existsInGenerated := generatedCodestones[models.ItemName(codestoneName)]
+		var realDropRate float64 = 0.0
 		var realMinDropRate float64 = 0.0
 		var realMaxDropRate float64 = 0.0
+		var err error
 
 		var generatedCodestoneDropRate float64 = 0.0
 
@@ -178,18 +180,17 @@ func (viewer *DataComparisonViewer) generateCodestoneDropRatesTable(realData mod
 		}
 
 		if existsInReal {
-			leftBound, rightBound, err := viewer.StatisticsService.ClopperPearsonInterval(int(realCodestones.Quantity), realData.GetTotalItemQuantity(), constants.SIGNIFICANCE_LEVEL)
+			realDropRate = realCodestones.GetDropRate(realData)
+			realMinDropRate, realMaxDropRate, err = viewer.StatisticsService.ClopperPearsonInterval(int(realCodestones.Quantity), realData.GetTotalItemQuantity(), constants.SIGNIFICANCE_LEVEL)
 			if err != nil {
 				return nil, stacktrace.Propagate(err, "failed to generate drop rate confidence interval")
 			}
-			realMinDropRate = leftBound
-			realMaxDropRate = rightBound
 		}
 
 		table.AddRow([]string{
 			codestoneName,
 			helpers.FormatPercentage(generatedCodestoneDropRate) + "%",
-			helpers.When(realMinDropRate == realMaxDropRate, helpers.FormatPercentage(realMinDropRate)+"%", fmt.Sprintf("[%s, %s]%%", helpers.FormatPercentage(realMinDropRate), helpers.FormatPercentage(realMaxDropRate))),
+			fmt.Sprintf("%s ∈ %s%%", helpers.FormatPercentage(realDropRate), helpers.FormatPercentageRange("[%s, %s]", realMinDropRate, realMaxDropRate)),
 		})
 	}
 
