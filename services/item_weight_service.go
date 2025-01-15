@@ -5,6 +5,7 @@ import (
 	"github.com/darienchong/neopets-battledome-analysis/helpers"
 	"github.com/darienchong/neopets-battledome-analysis/models"
 	"github.com/darienchong/neopets-battledome-analysis/parsers"
+	"github.com/palantir/stacktrace"
 )
 
 type BattledomeItemWeightService struct {
@@ -20,7 +21,7 @@ func NewBattledomeItemWeightService() *BattledomeItemWeightService {
 func (service *BattledomeItemWeightService) GetItemWeights(arena string) ([]models.BattledomeItemWeight, error) {
 	weights, err := service.ItemWeightParser.Parse(constants.GetItemWeightsFilePath())
 	if err != nil {
-		return nil, err
+		return nil, stacktrace.Propagate(err, "failed to parse \"%s\" as item weights", constants.GetItemWeightsFilePath())
 	}
 	return helpers.Filter(weights, func(weight models.BattledomeItemWeight) bool {
 		return weight.Arena == arena

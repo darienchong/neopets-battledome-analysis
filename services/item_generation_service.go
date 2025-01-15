@@ -8,6 +8,7 @@ import (
 
 	"github.com/darienchong/neopets-battledome-analysis/caches"
 	"github.com/darienchong/neopets-battledome-analysis/models"
+	"github.com/palantir/stacktrace"
 	"github.com/schollz/progressbar/v3"
 )
 
@@ -46,12 +47,12 @@ func (service *ItemGenerationService) generateItem(weights []models.BattledomeIt
 func (service *ItemGenerationService) GenerateItems(arena models.Arena, count int) (models.NormalisedBattledomeItems, error) {
 	weights, err := service.ItemWeightService.GetItemWeights(string(arena))
 	if err != nil {
-		return nil, err
+		return nil, stacktrace.Propagate(err, "failed to get item weights for \"%s\"", arena)
 	}
 
 	itemPriceCache, err := caches.GetItemPriceCacheInstance()
 	if err != nil {
-		return nil, err
+		return nil, stacktrace.Propagate(err, "failed to get item price cache instance")
 	}
 	defer itemPriceCache.Close()
 
