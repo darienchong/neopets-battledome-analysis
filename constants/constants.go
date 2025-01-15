@@ -25,8 +25,9 @@ const (
 	SIGNIFICANCE_LEVEL                                             = 0.05
 	NUMBER_OF_BOOTSTRAP_SAMPLES_FOR_ESTIMATING_CONFIDENCE_INTERVAL = 100_000
 
-	FILTER_ARENA             = ""
-	NUMBER_OF_DROPS_TO_PRINT = 3
+	FILTER_ARENA                                       = ""
+	NUMBER_OF_DROPS_TO_PRINT                           = 3
+	SHOULD_IGNORE_CHALLENGER_DROPS_IN_ARENA_COMPARISON = true
 )
 
 var (

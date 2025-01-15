@@ -587,27 +587,27 @@ func (viewer *DataComparisonViewer) ViewArenaComparison(realData models.Normalis
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to get mean drops profit")
 	}
-	generatedProfitStdev, err := generatedData.GetDropsProfitStdev()
+	generatedProfitLeftBound, generatedProfitRightBound, err := generatedData.GetProfitConfidenceInterval()
 	if err != nil {
-		return nil, stacktrace.Propagate(err, "failed to get drops profit stdev")
+		return nil, stacktrace.Propagate(err, "failed to get profit confidence interval")
 	}
 
 	realMeanProfit, err := realData.GetMeanDropsProfit()
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to get mean drops profit")
 	}
-	realProfitStdev, err := realData.GetDropsProfitStdev()
+	realProfitLeftBound, realProfitRightBound, err := realData.GetProfitConfidenceInterval()
 	if err != nil {
-		return nil, stacktrace.Propagate(err, "failed to get drops profit stdev")
+		return nil, stacktrace.Propagate(err, "failed to get profit confidence interval")
 	}
 
 	profitComparisonTable.AddRow([]string{
 		"Predicted",
-		fmt.Sprintf("%s ± %s NP", helpers.FormatFloat(generatedMeanProfit), helpers.FormatFloat(generatedProfitStdev)),
+		fmt.Sprintf("%s ∈ %s NP", helpers.FormatFloat(generatedMeanProfit), helpers.FormatFloatRange("[%s, %s]", generatedProfitLeftBound, generatedProfitRightBound)),
 	})
 	profitComparisonTable.AddRow([]string{
 		"Actual",
-		fmt.Sprintf("%s ± %s NP", helpers.FormatFloat(realMeanProfit), helpers.FormatFloat(realProfitStdev)),
+		fmt.Sprintf("%s ∈ %s NP", helpers.FormatFloat(realMeanProfit), helpers.FormatFloatRange("[%s, %s]", realProfitLeftBound, realProfitRightBound)),
 	})
 	profitComparisonTable.AddRow([]string{
 		"Difference",
