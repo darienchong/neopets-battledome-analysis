@@ -74,7 +74,39 @@ func (cache ItemPriceCache) getItemDbPriceUrl(itemName string) string {
 	return fmt.Sprintf("https://itemdb.com.br/item/%s", cache.getNormalisedItemName(itemName))
 }
 
-func (cache *ItemPriceCache) getPriceFromItemDb(itemName string) float64 {
+func (cache ItemPriceCache) getJellyNeoPriceUrl(itemName string) string {
+	return fmt.Sprintf("https://items.jellyneo.net/search/?name=%s&name_type=3", cache.getNormalisedItemName(itemName))
+}
+
+func (cache *ItemPriceCache) GetPriceFromJellyNeo(itemName string) float64 {
+	if slices.Contains(bannedItems, itemName) {
+		return 0.0
+	}
+
+	res, err := http.Get(cache.getJellyNeoPriceUrl(itemName))
+	if err != nil {
+		return 0.0
+	}
+	defer res.Body.Close()
+	doc, err := goquery.NewDocumentFromReader(res.Body)
+	if err != nil {
+		return 0.0
+	}
+
+	price := 0.0
+	doc.Find(".price-history-link").Each(func(index int, item *goquery.Selection) {
+		currPrice, err := strconv.ParseFloat(strings.ReplaceAll(strings.ReplaceAll(item.Text(), " NP", ""), ",", ""), 64)
+		if err == nil {
+			price = currPrice
+		}
+	})
+	if price == 0.0 {
+		slog.Warn(fmt.Sprintf("Failed to retrieve price for \"%s\" from JellyNeo!", itemName))
+	}
+	return price
+}
+
+func (cache *ItemPriceCache) GetPriceFromItemDb(itemName string) float64 {
 	if slices.Contains(bannedItems, itemName) {
 		return 0.0
 	}
@@ -114,7 +146,7 @@ func (cache *ItemPriceCache) GetPrice(itemName string) float64 {
 		return maybeSpecialPrice
 	}
 
-	cache.cachedPrices[itemName] = cache.getPriceFromItemDb(itemName)
+	cache.cachedPrices[itemName] = cache.GetPriceFromItemDb(itemName)
 	return cache.cachedPrices[itemName]
 }
 

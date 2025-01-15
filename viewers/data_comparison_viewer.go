@@ -473,8 +473,8 @@ func (viewer *DataComparisonViewer) ViewChallengerComparisons(challengerItems []
 		"Challenger",
 		"Difficulty",
 		"Samples",
-		"Actual Profit ± Stdev",
-		"Predicted Profit ± Stdev",
+		"Actual Profit",
+		"Predicted Profit",
 	})
 
 	arenaAndChallengerDropRateTable := helpers.NewNamedTable("Arena/challenger-specific drop rate comparison", []string{
@@ -496,9 +496,9 @@ func (viewer *DataComparisonViewer) ViewChallengerComparisons(challengerItems []
 		if err != nil {
 			return nil, helpers.PropagateWithSerialisedValue(err, "failed to get mean drops profit from %s", "failed to get mean drops profit from items; additionally encountered an error when trying to serialise the items for logging: %s", items)
 		}
-		actualStdev, err := items.GetDropsProfitStdev()
+		actualProfitLeftBound, actualProfitRightBound, err := items.GetProfitConfidenceInterval()
 		if err != nil {
-			return nil, helpers.PropagateWithSerialisedValue(err, "failed to get drops profit stdev from %s", "failed to get drops profit stdev from items; additionally encountered an error when trying to serialise the items for logging: %s", items)
+			return nil, helpers.PropagateWithSerialisedValue(err, "failed to get profit confidence interval from %s", "failed to get profit confidence interval from items; additionally encountered an error when trying to serialise the items for logging: %s", items)
 		}
 
 		generatedItems, err := viewer.BattledomeItemsService.GenerateDropsByArena(metadata.Arena)
@@ -509,9 +509,9 @@ func (viewer *DataComparisonViewer) ViewChallengerComparisons(challengerItems []
 		if err != nil {
 			return nil, stacktrace.Propagate(err, "failed to get mean drops profit for generated items")
 		}
-		generatedStdev, err := generatedItems.GetDropsProfitStdev()
+		generatedProfitLeftBound, generatedProfitRightBound, err := generatedItems.GetProfitConfidenceInterval()
 		if err != nil {
-			return nil, stacktrace.Propagate(err, "failed to get drops profit stdev for generated items")
+			return nil, helpers.PropagateWithSerialisedValue(err, "failed to get profit confidence interval from %s", "failed to get profit confidence interval from items; additionally encountered an error when trying to serialise the items for logging: %s", items)
 		}
 
 		profitComparisonTable.AddRow([]string{
@@ -520,8 +520,8 @@ func (viewer *DataComparisonViewer) ViewChallengerComparisons(challengerItems []
 			string(metadata.Challenger),
 			string(metadata.Difficulty),
 			helpers.FormatInt(items.GetTotalItemQuantity()),
-			helpers.FormatFloat(actualProfit) + " ± " + helpers.FormatFloat(actualStdev) + " NP",
-			helpers.FormatFloat(generatedProfit) + " ± " + helpers.FormatFloat(generatedStdev) + " NP",
+			fmt.Sprintf("%s ∈ %s NP", helpers.FormatFloat(actualProfit), helpers.FormatFloatRange("[%s, %s]", actualProfitLeftBound, actualProfitRightBound)),
+			fmt.Sprintf("%s ∈ %s NP", helpers.FormatFloat(generatedProfit), helpers.FormatFloatRange("[%s, %s]", generatedProfitLeftBound, generatedProfitRightBound)),
 		})
 
 		arenaDropsCount := helpers.Sum(helpers.Map(
