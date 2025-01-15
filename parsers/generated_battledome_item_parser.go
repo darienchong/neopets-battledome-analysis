@@ -10,6 +10,7 @@ import (
 	"github.com/darienchong/neopets-battledome-analysis/caches"
 	"github.com/darienchong/neopets-battledome-analysis/helpers"
 	"github.com/darienchong/neopets-battledome-analysis/models"
+	"github.com/palantir/stacktrace"
 )
 
 type GeneratedBattledomeItemParser struct{}
@@ -21,7 +22,7 @@ func NewGeneratedBattledomeItemParser() *GeneratedBattledomeItemParser {
 func (parser *GeneratedBattledomeItemParser) Save(items models.NormalisedBattledomeItems, filePath string) error {
 	file, err := os.OpenFile(filePath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0755)
 	if err != nil {
-		return err
+		return stacktrace.Propagate(err, "failed to open file: \"%s\"", filePath)
 	}
 	defer file.Close()
 	for _, item := range items {
@@ -37,13 +38,13 @@ func (parser *GeneratedBattledomeItemParser) Parse(filePath string) (models.Norm
 
 	file, err := os.OpenFile(filePath, os.O_RDONLY, 0755)
 	if err != nil {
-		return nil, err
+		return nil, stacktrace.Propagate(err, "failed to open file: \"%s\"", filePath)
 	}
 	defer file.Close()
 
 	itemPriceCache, err := caches.GetItemPriceCacheInstance()
 	if err != nil {
-		return nil, err
+		return nil, stacktrace.Propagate(err, "failed to get item price cache instance")
 	}
 	defer itemPriceCache.Close()
 
@@ -57,7 +58,7 @@ func (parser *GeneratedBattledomeItemParser) Parse(filePath string) (models.Norm
 		itemName := models.ItemName(strings.TrimSpace(tokens[1]))
 		itemQuantity, err := strconv.ParseInt(strings.TrimSpace(tokens[2]), 0, 32)
 		if err != nil {
-			return nil, err
+			return nil, stacktrace.Propagate(err, "failed to parse %s as int", strings.TrimSpace(tokens[2]))
 		}
 
 		_, exists := items[itemName]

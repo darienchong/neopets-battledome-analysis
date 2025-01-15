@@ -1,7 +1,6 @@
 package services
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/darienchong/neopets-battledome-analysis/caches"
@@ -9,6 +8,7 @@ import (
 	"github.com/darienchong/neopets-battledome-analysis/helpers"
 	"github.com/darienchong/neopets-battledome-analysis/models"
 	"github.com/darienchong/neopets-battledome-analysis/parsers"
+	"github.com/palantir/stacktrace"
 )
 
 type BattledomeItemsService struct {
@@ -29,9 +29,10 @@ func (service *BattledomeItemsService) GetAllDrops() (map[models.Arena]models.Ba
 	files, err := helpers.GetFilesInFolder(constants.BATTLEDOME_DROPS_FOLDER)
 	if err != nil {
 		// Could be due to inconsistent caller, try going down one level
-		files, err = helpers.GetFilesInFolder(strings.Replace(constants.BATTLEDOME_DROPS_FOLDER, "../", "", 1))
+		newPath := strings.Replace(constants.BATTLEDOME_DROPS_FOLDER, "../", "", 1)
+		files, err = helpers.GetFilesInFolder(newPath)
 		if err != nil {
-			return nil, err
+			return nil, stacktrace.Propagate(err, "failed to get files in \"%s\"", newPath)
 		}
 	}
 
@@ -39,7 +40,7 @@ func (service *BattledomeItemsService) GetAllDrops() (map[models.Arena]models.Ba
 	for _, file := range files {
 		dto, err := service.BattledomeItemDropDataParser.Parse(constants.GetDropDataFilePath(file))
 		if err != nil {
-			return nil, fmt.Errorf("BattledomeItemsService.GetAllDrops(%s): %w", file, err)
+			return nil, stacktrace.Propagate(err, "failed to parse \"%s\" as battledome drop data", file)
 		}
 		_, exists := itemsByArena[models.Arena(dto.Metadata.Arena)]
 		if !exists {
@@ -55,7 +56,7 @@ func (service *BattledomeItemsService) GetAllDrops() (map[models.Arena]models.Ba
 func (service *BattledomeItemsService) GetDropsByMetadata(metadata models.BattledomeItemMetadata) (models.NormalisedBattledomeItems, error) {
 	allDrops, err := service.GetAllDrops()
 	if err != nil {
-		return nil, err
+		return nil, stacktrace.Propagate(err, "failed to get all drops")
 	}
 
 	arenaItems := allDrops[metadata.Arena]
@@ -69,7 +70,7 @@ func (service *BattledomeItemsService) GetDropsByMetadata(metadata models.Battle
 func (service *BattledomeItemsService) GetDropsGroupedByMetadata() (map[models.BattledomeItemMetadata]models.NormalisedBattledomeItems, error) {
 	itemsByArena, err := service.GetAllDrops()
 	if err != nil {
-		return nil, err
+		return nil, stacktrace.Propagate(err, "failed to get all drops")
 	}
 	allDrops := helpers.FlatMap(helpers.Values(itemsByArena), func(items models.BattledomeItems) []*models.BattledomeItem {
 		return items
@@ -81,7 +82,7 @@ func (service *BattledomeItemsService) GetDropsGroupedByMetadata() (map[models.B
 	for k, v := range allDropsGroupedByMetadata {
 		normalisedItems, err := models.BattledomeItems(v).Normalise()
 		if err != nil {
-			return nil, err
+			return nil, helpers.PropagateWithSerialisedValue(err, "failed to normalise %s", "failed to normalise items; additionally encountered an error while trying to serialise the item for logging: %s", v)
 		}
 		normalisedItemsGroupedByMetadata[k] = normalisedItems
 	}
@@ -91,11 +92,11 @@ func (service *BattledomeItemsService) GetDropsGroupedByMetadata() (map[models.B
 func (service *BattledomeItemsService) GetDropsByArena(arena models.Arena) (models.NormalisedBattledomeItems, error) {
 	allDrops, err := service.GetAllDrops()
 	if err != nil {
-		return nil, err
+		return nil, stacktrace.Propagate(err, "failed to get all drops")
 	}
 	normalisedDrops, err := allDrops[arena].Normalise()
 	if err != nil {
-		return nil, err
+		return nil, helpers.PropagateWithSerialisedValue(err, "failed to normalise %s", "failed to normalise items; additional encountered an error while trying to serialise the item for logging: %s", allDrops[arena])
 	}
 	return normalisedDrops, nil
 }
@@ -104,25 +105,25 @@ func (service *BattledomeItemsService) GenerateDropsByArena(arena models.Arena) 
 	if helpers.IsFileExists(constants.GetGeneratedDropsFilePath(string(arena))) {
 		parsedDrops, err := service.GeneratedBattledomeItemParser.Parse(constants.GetGeneratedDropsFilePath(string(arena)))
 		if err != nil {
-			return nil, err
+			return nil, stacktrace.Propagate(err, "failed to parse \"%s\" as battledome drops", arena)
 		}
 
 		return parsedDrops, nil
 	} else {
 		itemPriceCache, err := caches.GetItemPriceCacheInstance()
 		if err != nil {
-			return nil, err
+			return nil, stacktrace.Propagate(err, "failed to get item price cache instance")
 		}
 		defer itemPriceCache.Close()
 
 		items, err := service.ItemGenerationService.GenerateItems(arena, constants.NUMBER_OF_ITEMS_TO_GENERATE_FOR_ESTIMATING_PROFIT_STATISTICS)
 		if err != nil {
-			return nil, err
+			return nil, stacktrace.Propagate(err, "failed to generate items for \"%s\"", arena)
 		}
 
 		err = service.GeneratedBattledomeItemParser.Save(items, constants.GetGeneratedDropsFilePath(string(arena)))
 		if err != nil {
-			return nil, err
+			return nil, stacktrace.Propagate(err, "falled to save generated drops to \"%s\"", constants.GetGeneratedDropsFilePath(string(arena)))
 		}
 
 		return items, nil
