@@ -125,6 +125,98 @@ func (viewer *DataComparisonViewer) generateProfitableItemsTable(data models.Nor
 	return table, nil
 }
 
+func (viewer *DataComparisonViewer) generateArenaProfitableItemsTable(data models.NormalisedBattledomeItems, generatedItems models.NormalisedBattledomeItems, isRealData bool) (*helpers.Table, error) {
+	dataCopy := models.NormalisedBattledomeItems{}
+	for k, v := range data {
+		dataCopy[k] = v.Copy()
+	}
+
+	itemPriceCache, err := caches.GetItemPriceCacheInstance()
+	if err != nil {
+		return nil, stacktrace.Propagate(err, "failed to get item price cache instance")
+	}
+	defer itemPriceCache.Close()
+
+	headers := helpers.When(isRealData, []string{
+		"i",
+		"Item Name",
+		"Drop Rate",
+		// Don't include Dry Chance in real data
+		"Price",
+		"Expectation",
+		"%",
+	}, []string{
+		"i",
+		"Item Name",
+		"Drop Rate",
+		"Dry Chance",
+		"Price",
+		"Expectation",
+		"%",
+	})
+	table := helpers.NewNamedTable(helpers.When(isRealData, "Actual", "Predicted"), headers)
+
+	_, err = data.GetMetadata()
+	if err != nil {
+		// Means there isn't any data to render
+		return table, nil
+	}
+
+	predictedProfit := helpers.Sum(helpers.Map(helpers.Values(dataCopy), func(item *models.BattledomeItem) float64 {
+		return item.GetProfit(itemPriceCache)
+	}))
+	arenaSpecificItems := helpers.Filter(helpers.Values(dataCopy), func(item *models.BattledomeItem) bool {
+		_, exists := generatedItems[item.Name]
+		return exists
+	})
+	profitableItems := helpers.OrderByDescending(arenaSpecificItems, func(item *models.BattledomeItem) float64 {
+		return item.GetProfit(itemPriceCache)
+	})
+
+	runningIndex := 1
+	for _, item := range profitableItems {
+		if runningIndex > constants.NUMBER_OF_ITEMS_TO_PRINT {
+			break
+		}
+
+		if item.Name == "nothing" {
+			continue
+		}
+
+		itemDropRate := item.GetDropRate(data)
+		expectedItemProfit := itemDropRate * itemPriceCache.GetPrice(string(item.Name)) * constants.BATTLEDOME_DROPS_PER_DAY
+		itemDropRateLeftBound, itemDropRateRightBound, err := viewer.StatisticsService.ClopperPearsonInterval(int(item.Quantity), data.GetTotalItemQuantity(), constants.SIGNIFICANCE_LEVEL)
+		if err != nil {
+			return nil, stacktrace.Propagate(err, "failed to generate drop rate confidence interval")
+		}
+		row := helpers.When(isRealData,
+			[]string{
+				strconv.Itoa(runningIndex),
+				string(item.Name),
+				fmt.Sprintf("%s ∈ %s%%", helpers.FormatPercentage(itemDropRate), helpers.FormatPercentageRange("[%s, %s]", itemDropRateLeftBound, itemDropRateRightBound)),
+				// Don't include dry chance in real data
+				helpers.FormatFloat(itemPriceCache.GetPrice(string(item.Name))) + " NP",
+				helpers.FormatFloat(expectedItemProfit) + " NP",
+				helpers.FormatPercentage(item.GetProfit(itemPriceCache)/predictedProfit) + "%",
+			},
+			[]string{
+				strconv.Itoa(runningIndex),
+				string(item.Name),
+				helpers.FormatPercentage(item.GetDropRate(data)) + "%",
+				helpers.FormatPercentage(getDryChance(item.GetDropRate(data), 30*constants.BATTLEDOME_DROPS_PER_DAY)) + "%",
+				helpers.FormatFloat(itemPriceCache.GetPrice(string(item.Name))) + " NP",
+				helpers.FormatFloat(expectedItemProfit) + " NP",
+				helpers.FormatPercentage(item.GetProfit(itemPriceCache)/predictedProfit) + "%",
+			},
+		)
+		table.AddRow(row)
+
+		runningIndex++
+	}
+
+	return table, nil
+}
+
 func (viewer *DataComparisonViewer) generateCodestoneDropRatesTable(realData models.NormalisedBattledomeItems, generatedData models.NormalisedBattledomeItems, codestoneList []string /* Keep as string to prevent circular dependency*/) (*helpers.Table, error) {
 	var tableName string
 	if slices.Contains(codestoneList, constants.BROWN_CODESTONES[0]) {
@@ -593,20 +685,23 @@ func (viewer *DataComparisonViewer) ViewArenaComparison(realData models.Normalis
 		return nil, stacktrace.Propagate(err, "failed to get profit confidence interval")
 	}
 
-	realDataCopy := models.NormalisedBattledomeItems{}
-	for k, v := range realData {
-		if _, exists := generatedData[k]; constants.SHOULD_IGNORE_CHALLENGER_DROPS_IN_ARENA_COMPARISON && !exists {
-			continue
-		}
-
-		realDataCopy[k] = v
+	var realMeanProfit float64 = 0.0
+	if constants.SHOULD_IGNORE_CHALLENGER_DROPS_IN_ARENA_COMPARISON {
+		realMeanProfit, err = realData.GetArenaMeanDropsProfit(generatedData)
+	} else {
+		realMeanProfit, err = realData.GetMeanDropsProfit()
 	}
-
-	realMeanProfit, err := realDataCopy.GetMeanDropsProfit()
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to get mean drops profit")
 	}
-	realProfitLeftBound, realProfitRightBound, err := realDataCopy.GetProfitConfidenceInterval()
+
+	var realProfitLeftBound float64 = 0.0
+	var realProfitRightBound float64 = 0.0
+	if constants.SHOULD_IGNORE_CHALLENGER_DROPS_IN_ARENA_COMPARISON {
+		realProfitLeftBound, realProfitRightBound, err = realData.GetArenaProfitConfidenceInterval(generatedData)
+	} else {
+		realProfitLeftBound, realProfitRightBound, err = realData.GetProfitConfidenceInterval()
+	}
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to get profit confidence interval")
 	}
@@ -624,21 +719,34 @@ func (viewer *DataComparisonViewer) ViewArenaComparison(realData models.Normalis
 		fmt.Sprintf("%s NP", helpers.FormatFloat(realMeanProfit-generatedMeanProfit)),
 	})
 
-	realProfitableItemsTable, err := viewer.generateProfitableItemsTable(realDataCopy, true)
-	if err != nil {
-		return nil, stacktrace.Propagate(err, "failed to generate profitable items table")
+	var realProfitableItemsTable *helpers.Table
+	if constants.SHOULD_IGNORE_CHALLENGER_DROPS_IN_ARENA_COMPARISON {
+		realProfitableItemsTable, err = viewer.generateArenaProfitableItemsTable(realData, generatedData, true)
+	} else {
+		realProfitableItemsTable, err = viewer.generateProfitableItemsTable(realData, true)
 	}
-	generatedProfitableItemsTable, err := viewer.generateProfitableItemsTable(generatedData, false)
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to generate profitable items table")
 	}
 
-	brownCodestoneDropRatesTable, err := viewer.generateCodestoneDropRatesTable(realDataCopy, generatedData, constants.BROWN_CODESTONES)
+	var generatedProfitableItemsTable *helpers.Table
+	if constants.SHOULD_IGNORE_CHALLENGER_DROPS_IN_ARENA_COMPARISON {
+		generatedProfitableItemsTable, err = viewer.generateArenaProfitableItemsTable(generatedData, generatedData, false)
+	} else {
+		generatedProfitableItemsTable, err = viewer.generateProfitableItemsTable(generatedData, false)
+	}
+	if err != nil {
+		return nil, stacktrace.Propagate(err, "failed to generate profitable items table")
+	}
+
+	var brownCodestoneDropRatesTable *helpers.Table
+	brownCodestoneDropRatesTable, err = viewer.generateCodestoneDropRatesTable(realData, generatedData, constants.BROWN_CODESTONES)
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to generate brown codestones drop rates table")
 	}
 
-	redCodestoneDropRatesTable, err := viewer.generateCodestoneDropRatesTable(realDataCopy, generatedData, constants.RED_CODESTONES)
+	var redCodestoneDropRatesTable *helpers.Table
+	redCodestoneDropRatesTable, err = viewer.generateCodestoneDropRatesTable(realData, generatedData, constants.RED_CODESTONES)
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to generate red codestones drop rates table")
 	}

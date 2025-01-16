@@ -70,11 +70,13 @@ func (logger *DataComparisonLogger) CompareAllArenas() error {
 		func(tuple *helpers.Tuple) float64 {
 			realData := tuple.Elements[1].(models.NormalisedBattledomeItems)
 			generatedData := tuple.Elements[2].(models.NormalisedBattledomeItems)
-			profit, err := helpers.LazyWhenError(
-				constants.SHOULD_IGNORE_CHALLENGER_DROPS_IN_ARENA_COMPARISON,
-				func() (float64, error) { return realData.GetArenaMeanDropsProfit(generatedData) },
-				func() (float64, error) { return realData.GetMeanDropsProfit() },
-			)
+			var profit float64 = 0.0
+			var err error
+			if constants.SHOULD_IGNORE_CHALLENGER_DROPS_IN_ARENA_COMPARISON {
+				profit, err = realData.GetArenaMeanDropsProfit(generatedData)
+			} else {
+				profit, err = realData.GetMeanDropsProfit()
+			}
 			if err != nil {
 				return 0
 			}
