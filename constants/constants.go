@@ -29,7 +29,7 @@ const (
 
 	FILTER_ARENA                                       = ""
 	NUMBER_OF_DROPS_TO_PRINT                           = 3
-	SHOULD_IGNORE_CHALLENGER_DROPS_IN_ARENA_COMPARISON = false
+	SHOULD_IGNORE_CHALLENGER_DROPS_IN_ARENA_COMPARISON = true
 )
 
 var (

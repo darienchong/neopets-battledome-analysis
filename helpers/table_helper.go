@@ -5,6 +5,8 @@ import (
 	"math"
 	"strconv"
 	"strings"
+
+	"github.com/palantir/stacktrace"
 )
 
 type Table struct {
@@ -105,14 +107,18 @@ func (table *Table) GetLines() []string {
 
 	if table.Name != "" {
 		rowSeparator := table.generateTableLineWithoutColumnSeparators()
-		if len(table.Name) > len(rowSeparator) {
-			table.Name = table.Name[:len(" ")+len(rowSeparator)-8] + "..."
+		if len(strings.TrimSpace(table.Name)) >= len(rowSeparator)-2 {
+			table.Name = strings.TrimSpace(table.Name[:len(" ")+len(rowSeparator)-8]) + "..."
 		}
 		numSpaces := len(" ") + len(rowSeparator) - len(table.Name) - 3
 
 		lines = append(lines, rowSeparator)
 		leftPadding := int(math.Ceil(float64(numSpaces) / 2.0))
 		rightPadding := int(math.Floor(float64(numSpaces) / 2.0))
+		if leftPadding < 0 || rightPadding < 0 {
+			errorMsg := fmt.Sprintf("generated a negative left/right padding value (left: %d, right: %d) for the table name! the table name was \"%s\" (%d chars), and the table width was %d chars", leftPadding, rightPadding, table.Name, len(table.Name), len(rowSeparator))
+			panic(stacktrace.NewError(errorMsg))
+		}
 		lines = append(lines, "|"+strings.Repeat(" ", leftPadding)+table.Name+strings.Repeat(" ", rightPadding)+"|")
 	}
 

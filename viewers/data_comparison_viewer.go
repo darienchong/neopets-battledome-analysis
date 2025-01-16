@@ -670,7 +670,14 @@ func (viewer *DataComparisonViewer) ViewArenaComparison(realData models.Normalis
 		return nil, stacktrace.Propagate(err, "failed to get metadata")
 	}
 
-	profitComparisonTable := helpers.NewNamedTable(fmt.Sprintf("Profit in %s", metadata.Arena), []string{
+	var tableName string
+	if constants.SHOULD_IGNORE_CHALLENGER_DROPS_IN_ARENA_COMPARISON {
+		tableName = fmt.Sprintf("Profit in %s (exc. challenger drops)", metadata.Arena)
+	} else {
+		tableName = fmt.Sprintf("Profit in %s (inc. challenger drops)", metadata.Arena)
+	}
+
+	profitComparisonTable := helpers.NewNamedTable(tableName, []string{
 		"Type",
 		"Value",
 	})
@@ -771,7 +778,13 @@ func (viewer *DataComparisonViewer) ViewBriefArenaComparisons(realData map[model
 			return 0.0
 		}
 
-		profit, err := normalisedItems.GetMeanDropsProfit()
+		var profit float64 = 0.0
+		var err error
+		if constants.SHOULD_IGNORE_CHALLENGER_DROPS_IN_ARENA_COMPARISON {
+			profit, err = normalisedItems.GetArenaMeanDropsProfit(generatedData[models.Arena(arena)])
+		} else {
+			profit, err = normalisedItems.GetMeanDropsProfit()
+		}
 		if err != nil {
 			return 0.0
 		}
@@ -779,7 +792,13 @@ func (viewer *DataComparisonViewer) ViewBriefArenaComparisons(realData map[model
 		return profit
 	})
 
-	table := helpers.NewNamedTable("Profit", []string{
+	var tableName string
+	if constants.SHOULD_IGNORE_CHALLENGER_DROPS_IN_ARENA_COMPARISON {
+		tableName = "Profit (excluding challenger-specific drops)"
+	} else {
+		tableName = "Profit (including challenger-specific drops)"
+	}
+	table := helpers.NewNamedTable(tableName, []string{
 		"i",
 		"Arena",
 		"Predicted",
@@ -795,11 +814,20 @@ func (viewer *DataComparisonViewer) ViewBriefArenaComparisons(realData map[model
 
 		realArenaData, exists := realData[models.Arena(arena)]
 		if exists {
-			realProfitLeftBound, realProfitRightBound, err = realArenaData.GetProfitConfidenceInterval()
+			if constants.SHOULD_IGNORE_CHALLENGER_DROPS_IN_ARENA_COMPARISON {
+				realProfitLeftBound, realProfitRightBound, err = realArenaData.GetArenaProfitConfidenceInterval(generatedData[models.Arena(arena)])
+			} else {
+				realProfitLeftBound, realProfitRightBound, err = realArenaData.GetProfitConfidenceInterval()
+			}
 			if err != nil {
 				return nil, stacktrace.Propagate(err, "failed to get real profit confidence interval")
 			}
-			realMeanProfit, err = realArenaData.GetMeanDropsProfit()
+
+			if constants.SHOULD_IGNORE_CHALLENGER_DROPS_IN_ARENA_COMPARISON {
+				realMeanProfit, err = realArenaData.GetArenaMeanDropsProfit(generatedData[models.Arena(arena)])
+			} else {
+				realMeanProfit, err = realArenaData.GetMeanDropsProfit()
+			}
 			if err != nil {
 				return nil, stacktrace.Propagate(err, "failed to get real mean profit")
 			}
