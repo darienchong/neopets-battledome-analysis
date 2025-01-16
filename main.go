@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/exec"
 	"runtime"
+	"strconv"
 	"strings"
 
 	"github.com/darienchong/neopets-battledome-analysis/constants"
@@ -56,7 +57,16 @@ func main() {
 	dataFolderPath := strings.Replace(constants.BATTLEDOME_DROPS_FOLDER, "../", "", 1)
 	switch args[0] {
 	case possibleArgs[0]:
-		loggers.NewArenaDropsLogger().Log(dataFolderPath)
+		var numDropsToLog int64
+		var err error
+		numDropsToLog = constants.NUMBER_OF_DROPS_TO_PRINT
+		if len(args) > 1 {
+			numDropsToLog, err = strconv.ParseInt(args[1], 0, 64)
+			if err != nil {
+				panic(err)
+			}
+		}
+		loggers.NewArenaDropsLogger().Log(dataFolderPath, int(numDropsToLog))
 	case possibleArgs[1]:
 		if len(args) > 1 && args[1] == "brief" {
 			err := loggers.NewDataComparisonLogger().BriefCompareAllArenas()

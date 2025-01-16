@@ -27,7 +27,11 @@ func NewArenaDropsLogger() *BattledomeItemsLogger {
 	}
 }
 
-func (dropsLogger *BattledomeItemsLogger) Log(dataFolderPath string) error {
+func (dropsLogger *BattledomeItemsLogger) Log(dataFolderPath string, numDropsToPrint int) error {
+	if numDropsToPrint <= 0 {
+		numDropsToPrint = constants.NUMBER_OF_DROPS_TO_PRINT
+	}
+
 	if constants.FILTER_ARENA != "" {
 		slog.Info(fmt.Sprintf("Only displaying data related to \"%s\"", constants.FILTER_ARENA))
 	}
@@ -43,8 +47,8 @@ func (dropsLogger *BattledomeItemsLogger) Log(dataFolderPath string) error {
 		return stacktrace.Propagate(err, "failed to get files in %s", dataFolderPath)
 	}
 
-	if constants.NUMBER_OF_DROPS_TO_PRINT > 0 {
-		files = files[int(math.Max(float64(len(files)-constants.NUMBER_OF_DROPS_TO_PRINT), 0)):]
+	if numDropsToPrint > 0 {
+		files = files[int(math.Max(float64(len(files)-numDropsToPrint), 0)):]
 	}
 
 	samplesByArena := map[models.Arena]models.BattledomeItems{}
