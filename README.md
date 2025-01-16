@@ -7,6 +7,10 @@ A project written in Go that does analysis of datamined and empirical Neopets Ba
 - Profit breakdown (profit contribution, expected profit per item, etc.) on an arena/challenger level
 - And more...? 
 
+# Example of program output
+![Example program output](https://github.com/darienchong/neopets-battledome-analysis/blob/master/example.png?raw=true)
+![Example program output 2](https://github.com/darienchong/neopets-battledome-analysis/blob/master/example2.png?raw=true)
+
 # Roadmap
 - [x] [Add arena comparison](https://github.com/darienchong/neopets-battledome-analysis/commit/146edd8d8014ab56d39e4fbb014bfd698d73df3a)
 - [x] [Add challenger comparison](https://github.com/darienchong/neopets-battledome-analysis/commit/724c4c6986900cdaa751a98b1ff00d31f74d3b42)
