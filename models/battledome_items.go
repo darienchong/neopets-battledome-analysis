@@ -82,6 +82,36 @@ func (items NormalisedBattledomeItems) GetMeanDropsProfit() (float64, error) {
 	return mean * constants.BATTLEDOME_DROPS_PER_DAY, nil
 }
 
+func (items NormalisedBattledomeItems) GetArenaMeanDropsProfit(generatedItems NormalisedBattledomeItems) (float64, error) {
+	itemsCopy := NormalisedBattledomeItems{}
+
+	// Filter only arena-specific items
+	for k, v := range items {
+		_, exists := generatedItems[k]
+		if !exists {
+			continue
+		}
+
+		itemsCopy[k] = v
+	}
+
+	profitData, err := generateProfitData(itemsCopy)
+	if len(profitData) == 0 {
+		return 0.0, nil
+	}
+
+	if err != nil {
+		return 0.0, stacktrace.Propagate(err, "failed to generate profit data")
+	}
+
+	mean, err := stats.Mean(profitData)
+	if err != nil {
+		return 0.0, stacktrace.Propagate(err, "failed to get mean of profit data")
+	}
+
+	return mean * constants.BATTLEDOME_DROPS_PER_DAY, nil
+}
+
 func (items NormalisedBattledomeItems) GetDropsProfitStdev() (float64, error) {
 	profitData, err := generateProfitData(items)
 	if len(profitData) == 0 {

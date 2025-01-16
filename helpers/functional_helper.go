@@ -213,6 +213,13 @@ func LazyWhen[T any](pred bool, ifTrue func() T, ifFalse func() T) T {
 	return ifFalse()
 }
 
+func LazyWhenError[T any](pred bool, ifTrue func() (T, error), ifFalse func() (T, error)) (T, error) {
+	if pred {
+		return ifTrue()
+	}
+	return ifFalse()
+}
+
 func When[T any](pred bool, ifTrue T, ifFalse T) T {
 	if pred {
 		return ifTrue

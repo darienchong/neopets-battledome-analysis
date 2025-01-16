@@ -593,11 +593,20 @@ func (viewer *DataComparisonViewer) ViewArenaComparison(realData models.Normalis
 		return nil, stacktrace.Propagate(err, "failed to get profit confidence interval")
 	}
 
-	realMeanProfit, err := realData.GetMeanDropsProfit()
+	realDataCopy := models.NormalisedBattledomeItems{}
+	for k, v := range realData {
+		if _, exists := generatedData[k]; constants.SHOULD_IGNORE_CHALLENGER_DROPS_IN_ARENA_COMPARISON && !exists {
+			continue
+		}
+
+		realDataCopy[k] = v
+	}
+
+	realMeanProfit, err := realDataCopy.GetMeanDropsProfit()
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to get mean drops profit")
 	}
-	realProfitLeftBound, realProfitRightBound, err := realData.GetProfitConfidenceInterval()
+	realProfitLeftBound, realProfitRightBound, err := realDataCopy.GetProfitConfidenceInterval()
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to get profit confidence interval")
 	}
@@ -615,7 +624,7 @@ func (viewer *DataComparisonViewer) ViewArenaComparison(realData models.Normalis
 		fmt.Sprintf("%s NP", helpers.FormatFloat(realMeanProfit-generatedMeanProfit)),
 	})
 
-	realProfitableItemsTable, err := viewer.generateProfitableItemsTable(realData, true)
+	realProfitableItemsTable, err := viewer.generateProfitableItemsTable(realDataCopy, true)
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to generate profitable items table")
 	}
@@ -624,12 +633,12 @@ func (viewer *DataComparisonViewer) ViewArenaComparison(realData models.Normalis
 		return nil, stacktrace.Propagate(err, "failed to generate profitable items table")
 	}
 
-	brownCodestoneDropRatesTable, err := viewer.generateCodestoneDropRatesTable(realData, generatedData, constants.BROWN_CODESTONES)
+	brownCodestoneDropRatesTable, err := viewer.generateCodestoneDropRatesTable(realDataCopy, generatedData, constants.BROWN_CODESTONES)
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to generate brown codestones drop rates table")
 	}
 
-	redCodestoneDropRatesTable, err := viewer.generateCodestoneDropRatesTable(realData, generatedData, constants.RED_CODESTONES)
+	redCodestoneDropRatesTable, err := viewer.generateCodestoneDropRatesTable(realDataCopy, generatedData, constants.RED_CODESTONES)
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to generate red codestones drop rates table")
 	}
