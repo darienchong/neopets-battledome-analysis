@@ -17,52 +17,60 @@ import (
 	"github.com/palantir/stacktrace"
 )
 
-var lock = &sync.Mutex{}
+type ItemPriceCache interface {
+	GetPrice(itemName string) float64
+	Close() error
+}
 
-type ItemPriceCache struct {
+type RealItemPriceCache struct {
 	expiry        time.Time
 	cachedPrices  map[string]float64
 	specialPrices map[string]float64
 }
 
-var cacheInstance *ItemPriceCache
+var (
+	_             ItemPriceCache = (*RealItemPriceCache)(nil)
+	cacheInstance ItemPriceCache
+	lock          = &sync.Mutex{}
+	bannedItems   = []string{
+		"nothing",
+	}
+)
 
-var bannedItems = []string{
-	"nothing",
-}
-
-func GetItemPriceCacheInstance() (*ItemPriceCache, error) {
+func GetItemPriceCacheInstance() (ItemPriceCache, error) {
 	if cacheInstance == nil {
 		lock.Lock()
 		defer lock.Unlock()
 		if cacheInstance == nil {
-			cacheInstance = &ItemPriceCache{
+			realCacheInstance := &RealItemPriceCache{
 				cachedPrices:  map[string]float64{},
 				specialPrices: map[string]float64{},
 			}
-			cacheInstance.generateExpiry()
-			err := cacheInstance.loadFromFile()
+			realCacheInstance.generateExpiry()
+			err := realCacheInstance.loadFromFile()
 			if err != nil {
 				return nil, stacktrace.Propagate(err, "failed to load cache data from file")
 			}
-			err = cacheInstance.loadSpecialPrices()
+			err = realCacheInstance.loadSpecialPrices()
 			if err != nil {
 				return nil, stacktrace.Propagate(err, "failed to load special prices")
 			}
+
+			cacheInstance = realCacheInstance
 		}
 	}
 	return cacheInstance, nil
 }
 
-func (cache ItemPriceCache) loadSpecialPrices() error {
+func (cache RealItemPriceCache) loadSpecialPrices() error {
 	return nil
 }
 
-func (cache *ItemPriceCache) generateExpiry() {
+func (cache *RealItemPriceCache) generateExpiry() {
 	cache.expiry = time.Now().AddDate(0, 0, 7)
 }
 
-func (cache ItemPriceCache) getNormalisedItemName(itemName string) string {
+func (cache RealItemPriceCache) getNormalisedItemName(itemName string) string {
 	itemName = strings.ToLower(itemName)
 	itemName = strings.ReplaceAll(itemName, " ", "-")
 	itemName = strings.ReplaceAll(itemName, ":", "")
@@ -70,15 +78,15 @@ func (cache ItemPriceCache) getNormalisedItemName(itemName string) string {
 	return itemName
 }
 
-func (cache ItemPriceCache) getItemDbPriceUrl(itemName string) string {
+func (cache RealItemPriceCache) getItemDbPriceUrl(itemName string) string {
 	return fmt.Sprintf("https://itemdb.com.br/item/%s", cache.getNormalisedItemName(itemName))
 }
 
-func (cache ItemPriceCache) getJellyNeoPriceUrl(itemName string) string {
+func (cache RealItemPriceCache) getJellyNeoPriceUrl(itemName string) string {
 	return fmt.Sprintf("https://items.jellyneo.net/search/?name=%s&name_type=3", cache.getNormalisedItemName(itemName))
 }
 
-func (cache *ItemPriceCache) GetPriceFromJellyNeo(itemName string) float64 {
+func (cache *RealItemPriceCache) GetPriceFromJellyNeo(itemName string) float64 {
 	if slices.Contains(bannedItems, itemName) {
 		return 0.0
 	}
@@ -106,7 +114,7 @@ func (cache *ItemPriceCache) GetPriceFromJellyNeo(itemName string) float64 {
 	return price
 }
 
-func (cache *ItemPriceCache) GetPriceFromItemDb(itemName string) float64 {
+func (cache *RealItemPriceCache) GetPriceFromItemDb(itemName string) float64 {
 	if slices.Contains(bannedItems, itemName) {
 		return 0.0
 	}
@@ -133,7 +141,7 @@ func (cache *ItemPriceCache) GetPriceFromItemDb(itemName string) float64 {
 	return price
 }
 
-func (cache *ItemPriceCache) GetPrice(itemName string) float64 {
+func (cache *RealItemPriceCache) GetPrice(itemName string) float64 {
 	if itemName == "nothing" {
 		return 0.0
 	}
@@ -150,7 +158,7 @@ func (cache *ItemPriceCache) GetPrice(itemName string) float64 {
 	return cache.cachedPrices[itemName]
 }
 
-func (cache *ItemPriceCache) flushToFile() error {
+func (cache *RealItemPriceCache) flushToFile() error {
 	file, err := os.OpenFile(constants.GetItemPriceCacheFilePath(), os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0755)
 	if err != nil {
 		return stacktrace.Propagate(err, "failed to open item price cache file when flushing to disk")
@@ -165,11 +173,11 @@ func (cache *ItemPriceCache) flushToFile() error {
 	return nil
 }
 
-func (cache *ItemPriceCache) Close() error {
+func (cache *RealItemPriceCache) Close() error {
 	return cache.flushToFile()
 }
 
-func (cache *ItemPriceCache) loadFromFile() error {
+func (cache *RealItemPriceCache) loadFromFile() error {
 	if cache.cachedPrices == nil {
 		cache.cachedPrices = map[string]float64{}
 	}

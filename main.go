@@ -8,9 +8,11 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/darienchong/neopets-battledome-analysis/caches"
 	"github.com/darienchong/neopets-battledome-analysis/constants"
 	"github.com/darienchong/neopets-battledome-analysis/loggers"
 	"github.com/darienchong/neopets-battledome-analysis/models"
+	"github.com/palantir/stacktrace"
 )
 
 var (
@@ -47,8 +49,13 @@ func callClear() {
 }
 
 func main() {
-
 	callClear()
+
+	cache, err := caches.GetItemPriceCacheInstance()
+	if err != nil {
+		panic(stacktrace.Propagate(err, "failed to get item price cache instance"))
+	}
+	defer cache.Close()
 
 	args := os.Args[1:]
 	if len(args) == 0 {

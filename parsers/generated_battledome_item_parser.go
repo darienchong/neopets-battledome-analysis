@@ -7,7 +7,6 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/darienchong/neopets-battledome-analysis/caches"
 	"github.com/darienchong/neopets-battledome-analysis/helpers"
 	"github.com/darienchong/neopets-battledome-analysis/models"
 	"github.com/palantir/stacktrace"
@@ -41,12 +40,6 @@ func (parser *GeneratedBattledomeItemParser) Parse(filePath string) (models.Norm
 		return nil, stacktrace.Propagate(err, "failed to open file: \"%s\"", filePath)
 	}
 	defer file.Close()
-
-	itemPriceCache, err := caches.GetItemPriceCacheInstance()
-	if err != nil {
-		return nil, stacktrace.Propagate(err, "failed to get item price cache instance")
-	}
-	defer itemPriceCache.Close()
 
 	items := models.NormalisedBattledomeItems{}
 	scanner := bufio.NewScanner(file)

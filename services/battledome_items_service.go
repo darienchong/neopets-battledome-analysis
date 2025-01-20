@@ -3,7 +3,6 @@ package services
 import (
 	"strings"
 
-	"github.com/darienchong/neopets-battledome-analysis/caches"
 	"github.com/darienchong/neopets-battledome-analysis/constants"
 	"github.com/darienchong/neopets-battledome-analysis/helpers"
 	"github.com/darienchong/neopets-battledome-analysis/models"
@@ -110,12 +109,6 @@ func (service *BattledomeItemsService) GenerateDropsByArena(arena models.Arena) 
 
 		return parsedDrops, nil
 	} else {
-		itemPriceCache, err := caches.GetItemPriceCacheInstance()
-		if err != nil {
-			return nil, stacktrace.Propagate(err, "failed to get item price cache instance")
-		}
-		defer itemPriceCache.Close()
-
 		items, err := service.ItemGenerationService.GenerateItems(arena, constants.NUMBER_OF_ITEMS_TO_GENERATE_FOR_ESTIMATING_PROFIT_STATISTICS)
 		if err != nil {
 			return nil, stacktrace.Propagate(err, "failed to generate items for \"%s\"", arena)

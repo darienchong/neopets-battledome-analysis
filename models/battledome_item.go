@@ -32,11 +32,11 @@ func (first *BattledomeItem) Union(second *BattledomeItem) (*BattledomeItem, err
 	return combined, nil
 }
 
-func (item *BattledomeItem) GetProfit(itemPriceCache *caches.ItemPriceCache) float64 {
+func (item *BattledomeItem) GetProfit(itemPriceCache caches.ItemPriceCache) float64 {
 	return float64(item.Quantity) * itemPriceCache.GetPrice(string(item.Name))
 }
 
-func (item *BattledomeItem) GetPercentageProfit(itemPriceCache *caches.ItemPriceCache, items NormalisedBattledomeItems) (float64, error) {
+func (item *BattledomeItem) GetPercentageProfit(itemPriceCache caches.ItemPriceCache, items NormalisedBattledomeItems) (float64, error) {
 	var defaultValue float64
 
 	totalProfit, err := items.GetTotalProfit()
