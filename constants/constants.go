@@ -7,8 +7,16 @@ import (
 	"strings"
 )
 
+type ItemPriceDataSourceType int
+
 const (
-	ITEM_PRICE_SOURCE                                              = "JellyNeo"
+	Unknown ItemPriceDataSourceType = iota
+	JellyNeo
+	ItemDb
+)
+
+const (
+	ITEM_PRICE_DATA_SOURCE                                         = JellyNeo
 	DATA_FOLDER                                                    = "./../data/"
 	ITEMDB_ITEM_PRICE_CACHE_FILE                                   = "neopets_itemdb_item_price_cache.txt"
 	JELLYNEO_ITEM_PRICE_CACHE_FILE                                 = "neopets_jellyneo_item_price_cache.txt"
@@ -69,17 +77,6 @@ func combineRelativeFolderAndFilename(folder string, fileName string) string {
 	_, b, _, _ := runtime.Caller(0)
 	exPath := filepath.Dir(b)
 	return filepath.Join(exPath, folder, fileName)
-}
-
-func GetItemPriceCacheFilePath() string {
-	switch ITEM_PRICE_SOURCE {
-	case "ItemDb":
-		return combineRelativeFolderAndFilename(DATA_FOLDER, ITEMDB_ITEM_PRICE_CACHE_FILE)
-	case "JellyNeo":
-		return combineRelativeFolderAndFilename(DATA_FOLDER, JELLYNEO_ITEM_PRICE_CACHE_FILE)
-	default:
-		panic(fmt.Errorf("please specify a valid item price source"))
-	}
 }
 
 func GetDropDataFilePath(fileName string) string {

@@ -36,11 +36,10 @@ func (dropsLogger *BattledomeItemsLogger) Log(dataFolderPath string, numDropsToP
 		slog.Info(fmt.Sprintf("Only displaying data related to \"%s\"", constants.FILTER_ARENA))
 	}
 
-	itemPriceCache, err := caches.GetItemPriceCacheInstance()
+	itemPriceCache, err := caches.GetCurrentItemPriceCacheInstance()
 	if err != nil {
 		return stacktrace.Propagate(err, "failed to get item price cache instance")
 	}
-	defer itemPriceCache.Close()
 
 	files, err := helpers.GetFilesInFolder(dataFolderPath)
 	if err != nil {

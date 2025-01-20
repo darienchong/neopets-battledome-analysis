@@ -4,15 +4,12 @@ import (
 	"bufio"
 	"fmt"
 	"log/slog"
-	"net/http"
 	"os"
-	"slices"
 	"strconv"
 	"strings"
 	"sync"
 	"time"
 
-	"github.com/PuerkitoBio/goquery"
 	"github.com/darienchong/neopets-battledome-analysis/constants"
 	"github.com/palantir/stacktrace"
 )
@@ -23,6 +20,7 @@ type ItemPriceCache interface {
 }
 
 type RealItemPriceCache struct {
+	dataSource    ItemPriceDataSource
 	expiry        time.Time
 	cachedPrices  map[string]float64
 	specialPrices map[string]float64
@@ -37,12 +35,21 @@ var (
 	}
 )
 
-func GetItemPriceCacheInstance() (ItemPriceCache, error) {
+func GetCurrentItemPriceCacheInstance() (ItemPriceCache, error) {
+	if cacheInstance == nil {
+		return nil, stacktrace.NewError("tried to get current item price cache instance when it was not yet initialised")
+	}
+	return cacheInstance, nil
+}
+
+// Note: the first invocation of this method will determine what the data source is
+func GetItemPriceCacheInstance(dataSource ItemPriceDataSource) (ItemPriceCache, error) {
 	if cacheInstance == nil {
 		lock.Lock()
 		defer lock.Unlock()
 		if cacheInstance == nil {
 			realCacheInstance := &RealItemPriceCache{
+				dataSource:    dataSource,
 				cachedPrices:  map[string]float64{},
 				specialPrices: map[string]float64{},
 			}
@@ -70,77 +77,6 @@ func (cache *RealItemPriceCache) generateExpiry() {
 	cache.expiry = time.Now().AddDate(0, 0, 7)
 }
 
-func (cache RealItemPriceCache) getNormalisedItemName(itemName string) string {
-	itemName = strings.ToLower(itemName)
-	itemName = strings.ReplaceAll(itemName, " ", "-")
-	itemName = strings.ReplaceAll(itemName, ":", "")
-	itemName = strings.ReplaceAll(itemName, "!", "")
-	return itemName
-}
-
-func (cache RealItemPriceCache) getItemDbPriceUrl(itemName string) string {
-	return fmt.Sprintf("https://itemdb.com.br/item/%s", cache.getNormalisedItemName(itemName))
-}
-
-func (cache RealItemPriceCache) getJellyNeoPriceUrl(itemName string) string {
-	return fmt.Sprintf("https://items.jellyneo.net/search/?name=%s&name_type=3", cache.getNormalisedItemName(itemName))
-}
-
-func (cache *RealItemPriceCache) GetPriceFromJellyNeo(itemName string) float64 {
-	if slices.Contains(bannedItems, itemName) {
-		return 0.0
-	}
-
-	res, err := http.Get(cache.getJellyNeoPriceUrl(itemName))
-	if err != nil {
-		return 0.0
-	}
-	defer res.Body.Close()
-	doc, err := goquery.NewDocumentFromReader(res.Body)
-	if err != nil {
-		return 0.0
-	}
-
-	price := 0.0
-	doc.Find(".price-history-link").Each(func(index int, item *goquery.Selection) {
-		currPrice, err := strconv.ParseFloat(strings.ReplaceAll(strings.ReplaceAll(item.Text(), " NP", ""), ",", ""), 64)
-		if err == nil {
-			price = currPrice
-		}
-	})
-	if price == 0.0 {
-		slog.Warn(fmt.Sprintf("Failed to retrieve price for \"%s\" from JellyNeo!", itemName))
-	}
-	return price
-}
-
-func (cache *RealItemPriceCache) GetPriceFromItemDb(itemName string) float64 {
-	if slices.Contains(bannedItems, itemName) {
-		return 0.0
-	}
-
-	res, err := http.Get(cache.getItemDbPriceUrl(itemName))
-	if err != nil {
-		return 0.0
-	}
-	defer res.Body.Close()
-	doc, err := goquery.NewDocumentFromReader(res.Body)
-	if err != nil {
-		return 0.0
-	}
-	price := 0.0
-	doc.Find(".chakra-stat__number").Each(func(index int, item *goquery.Selection) {
-		curr_price, err := strconv.ParseFloat(strings.ReplaceAll(strings.ReplaceAll(item.Text(), " NP", ""), ",", ""), 64)
-		if err == nil {
-			price = curr_price
-		}
-	})
-	if price == 0.0 {
-		slog.Warn(fmt.Sprintf("Failed to retrieve price for \"%s\" from ItemDb!", itemName))
-	}
-	return price
-}
-
 func (cache *RealItemPriceCache) GetPrice(itemName string) float64 {
 	if itemName == "nothing" {
 		return 0.0
@@ -154,14 +90,14 @@ func (cache *RealItemPriceCache) GetPrice(itemName string) float64 {
 		return maybeSpecialPrice
 	}
 
-	cache.cachedPrices[itemName] = cache.GetPriceFromItemDb(itemName)
+	cache.cachedPrices[itemName] = cache.dataSource.GetPrice(itemName)
 	return cache.cachedPrices[itemName]
 }
 
 func (cache *RealItemPriceCache) flushToFile() error {
-	file, err := os.OpenFile(constants.GetItemPriceCacheFilePath(), os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0755)
+	file, err := os.OpenFile(cache.dataSource.GetFilePath(), os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0755)
 	if err != nil {
-		return stacktrace.Propagate(err, "failed to open item price cache file when flushing to disk")
+		return stacktrace.Propagate(err, "failed to open item price cache file (%s) when flushing to disk", cache.dataSource.GetFilePath())
 	}
 	defer file.Close()
 
@@ -182,15 +118,15 @@ func (cache *RealItemPriceCache) loadFromFile() error {
 		cache.cachedPrices = map[string]float64{}
 	}
 
-	_, err := os.Stat(constants.GetItemPriceCacheFilePath())
+	_, err := os.Stat(cache.dataSource.GetFilePath())
 	if os.IsNotExist(err) {
 		cache.generateExpiry()
 		return nil
 	}
 
-	file, err := os.Open(constants.GetItemPriceCacheFilePath())
+	file, err := os.Open(cache.dataSource.GetFilePath())
 	if err != nil {
-		return stacktrace.Propagate(err, "failed to open the item price cache file path: %s", constants.GetItemPriceCacheFilePath())
+		return stacktrace.Propagate(err, "failed to open the item price cache file path: %s", cache.dataSource.GetFilePath())
 	}
 	defer file.Close()
 
@@ -211,7 +147,7 @@ func (cache *RealItemPriceCache) loadFromFile() error {
 			if parsedExpiry.Before(time.Now()) {
 				slog.Info("Deleting item price cache file as it was expired.")
 				// We don't really care if it succeeds or not
-				os.Remove(constants.GetItemPriceCacheFilePath())
+				os.Remove(cache.dataSource.GetFilePath())
 				cache.generateExpiry()
 			}
 		} else {

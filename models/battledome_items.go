@@ -45,11 +45,10 @@ func (normalisedItems NormalisedBattledomeItems) GetMetadata() (BattledomeItemMe
 }
 
 func generateProfitData(items NormalisedBattledomeItems) ([]float64, error) {
-	itemPriceCache, err := caches.GetItemPriceCacheInstance()
+	itemPriceCache, err := caches.GetCurrentItemPriceCacheInstance()
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to get item price cache")
 	}
-	defer itemPriceCache.Close()
 
 	profitData := []float64{}
 	for _, item := range items {
@@ -65,11 +64,10 @@ func generateProfitData(items NormalisedBattledomeItems) ([]float64, error) {
 }
 
 func generateArenaProfitData(items NormalisedBattledomeItems, generatedItems NormalisedBattledomeItems) ([]float64, error) {
-	itemPriceCache, err := caches.GetItemPriceCacheInstance()
+	itemPriceCache, err := caches.GetCurrentItemPriceCacheInstance()
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to get item price cache")
 	}
-	defer itemPriceCache.Close()
 
 	profitData := []float64{}
 	for _, item := range items {
@@ -144,11 +142,10 @@ func (items NormalisedBattledomeItems) GetDropsProfitStdev() (float64, error) {
 }
 
 func (items NormalisedBattledomeItems) GetItemsOrderedByPrice() ([]*BattledomeItem, error) {
-	itemPriceCache, err := caches.GetItemPriceCacheInstance()
+	itemPriceCache, err := caches.GetCurrentItemPriceCacheInstance()
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to get item price cache")
 	}
-	defer itemPriceCache.Close()
 
 	orderedItems := []*BattledomeItem{}
 	for _, v := range items {
@@ -160,11 +157,10 @@ func (items NormalisedBattledomeItems) GetItemsOrderedByPrice() ([]*BattledomeIt
 }
 
 func (items NormalisedBattledomeItems) GetItemsOrderedByProfit() ([]*BattledomeItem, error) {
-	itemPriceCache, err := caches.GetItemPriceCacheInstance()
+	itemPriceCache, err := caches.GetCurrentItemPriceCacheInstance()
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to get item price cache")
 	}
-	defer itemPriceCache.Close()
 
 	orderedItems := []*BattledomeItem{}
 	for _, v := range items {
@@ -179,11 +175,10 @@ func (items NormalisedBattledomeItems) GetItemsOrderedByProfit() ([]*BattledomeI
 func (items NormalisedBattledomeItems) GetTotalProfit() (float64, error) {
 	var defaultValue float64
 
-	itemPriceCache, err := caches.GetItemPriceCacheInstance()
+	itemPriceCache, err := caches.GetCurrentItemPriceCacheInstance()
 	if err != nil {
 		return defaultValue, stacktrace.Propagate(err, "failed to get item price cache")
 	}
-	defer itemPriceCache.Close()
 
 	totalProfit := 0.0
 	for _, item := range items {

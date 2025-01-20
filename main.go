@@ -51,7 +51,16 @@ func callClear() {
 func main() {
 	callClear()
 
-	cache, err := caches.GetItemPriceCacheInstance()
+	var dataSource caches.ItemPriceDataSource
+	switch constants.ITEM_PRICE_DATA_SOURCE {
+	case constants.JellyNeo:
+		dataSource = caches.NewJellyNeoDataSource()
+	case constants.ItemDb:
+		dataSource = caches.NewItemDbDataSource()
+	default:
+		panic(stacktrace.NewError("unrecognised item price data source type: %d", constants.ITEM_PRICE_DATA_SOURCE))
+	}
+	cache, err := caches.GetItemPriceCacheInstance(dataSource)
 	if err != nil {
 		panic(stacktrace.Propagate(err, "failed to get item price cache instance"))
 	}

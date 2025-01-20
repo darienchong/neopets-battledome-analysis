@@ -7,25 +7,26 @@ import (
 	"testing"
 
 	"github.com/darienchong/neopets-battledome-analysis/caches"
-	"github.com/darienchong/neopets-battledome-analysis/constants"
 	"github.com/darienchong/neopets-battledome-analysis/helpers"
 )
 
 func TestSaveToFile(t *testing.T) {
-	target, err := caches.GetItemPriceCacheInstance()
+	dataSource := caches.NewJellyNeoDataSource()
+	target, err := caches.GetCurrentItemPriceCacheInstance()
 	if err != nil {
 		t.Fatalf("%s", err)
 	}
 	target.GetPrice("Green Apple")
 	target.Close()
-	_, err = os.Stat(constants.GetItemPriceCacheFilePath())
+	_, err = os.Stat(dataSource.GetFilePath())
 	if os.IsNotExist(err) {
 		t.Fatalf("Cache file does not exist")
 	}
 }
 
 func TestGetPriceFromItemDb(t *testing.T) {
-	target, err := caches.GetItemPriceCacheInstance()
+	dataSource := caches.NewItemDbDataSource()
+	target, err := caches.GetItemPriceCacheInstance(dataSource)
 	if err != nil {
 		t.Fatalf("%s", err)
 	}
@@ -38,7 +39,8 @@ func TestGetPriceFromItemDb(t *testing.T) {
 }
 
 func testGetPriceFromJellyNeo(itemName string, t *testing.T) {
-	target, err := caches.GetItemPriceCacheInstance()
+	dataSource := caches.NewJellyNeoDataSource()
+	target, err := caches.GetItemPriceCacheInstance(dataSource)
 	if err != nil {
 		t.Fatalf("%s", err)
 	}

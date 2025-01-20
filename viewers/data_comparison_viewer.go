@@ -43,11 +43,10 @@ func (viewer *DataComparisonViewer) generateProfitableItemsTable(data models.Nor
 		dataCopy[k] = v.Copy()
 	}
 
-	itemPriceCache, err := caches.GetItemPriceCacheInstance()
+	itemPriceCache, err := caches.GetCurrentItemPriceCacheInstance()
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to get item price cache instance")
 	}
-	defer itemPriceCache.Close()
 
 	headers := helpers.When(isRealData, []string{
 		"i",
@@ -131,11 +130,10 @@ func (viewer *DataComparisonViewer) generateArenaProfitableItemsTable(data model
 		dataCopy[k] = v.Copy()
 	}
 
-	itemPriceCache, err := caches.GetItemPriceCacheInstance()
+	itemPriceCache, err := caches.GetCurrentItemPriceCacheInstance()
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to get item price cache instance")
 	}
-	defer itemPriceCache.Close()
 
 	headers := helpers.When(isRealData, []string{
 		"i",
@@ -393,12 +391,10 @@ func isArenaSpecificDrop(itemName models.ItemName, items models.NormalisedBattle
 }
 
 func (viewer *DataComparisonViewer) generateArenaSpecificDropsTable(realData models.NormalisedBattledomeItems, generatedData models.NormalisedBattledomeItems) (*helpers.Table, error) {
-	itemPriceCache, err := caches.GetItemPriceCacheInstance()
+	itemPriceCache, err := caches.GetCurrentItemPriceCacheInstance()
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to get item price cache instance")
 	}
-	defer itemPriceCache.Close()
-
 	table := helpers.NewNamedTable("Arena-specific drops", []string{
 		"i",
 		"Item Name",
@@ -472,12 +468,10 @@ func (viewer *DataComparisonViewer) generateArenaSpecificDropsTable(realData mod
 }
 
 func (viewer *DataComparisonViewer) generateChallengerSpecificDropsTable(realData models.NormalisedBattledomeItems, generatedData models.NormalisedBattledomeItems) (*helpers.Table, error) {
-	itemPriceCache, err := caches.GetItemPriceCacheInstance()
+	itemPriceCache, err := caches.GetCurrentItemPriceCacheInstance()
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to get item price cache instance")
 	}
-	defer itemPriceCache.Close()
-
 	table := helpers.NewNamedTable("Challenger-specific drops", []string{
 		"i",
 		"Item Name",
