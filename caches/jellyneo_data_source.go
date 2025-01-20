@@ -2,8 +2,10 @@ package caches
 
 import (
 	"fmt"
+	"io"
 	"log/slog"
 	"net/http"
+	"net/url"
 	"slices"
 	"strconv"
 	"strings"
@@ -22,11 +24,15 @@ func NewJellyNeoDataSource() ItemPriceDataSource {
 }
 
 func (dataSource *JellyNeoDataSource) GetFilePath() string {
-	return constants.JELLYNEO_ITEM_PRICE_CACHE_FILE
+	return constants.CombineRelativeFolderAndFilename(constants.DATA_FOLDER, constants.JELLYNEO_ITEM_PRICE_CACHE_FILE)
+}
+
+func getNormalisedJellyNeoItemName(itemName string) string {
+	return url.QueryEscape(itemName)
 }
 
 func getJellyNeoPriceUrl(itemName string) string {
-	return fmt.Sprintf("https://items.jellyneo.net/search/?name=%s&name_type=3", getNormalisedItemName(itemName))
+	return fmt.Sprintf("https://items.jellyneo.net/search/?name=%s&name_type=3", getNormalisedJellyNeoItemName(itemName))
 }
 
 func (dataSource JellyNeoDataSource) GetPrice(itemName string) float64 {
@@ -34,12 +40,32 @@ func (dataSource JellyNeoDataSource) GetPrice(itemName string) float64 {
 		return 0.0
 	}
 
-	res, err := http.Get(getJellyNeoPriceUrl(itemName))
+	url := getJellyNeoPriceUrl(itemName)
+	slog.Debug(fmt.Sprintf(`Calling "%s" for price`, url))
+
+	client := &http.Client{
+		Transport: &http.Transport{},
+	}
+
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return 0.0
+	}
+	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36")
+
+	res, err := client.Do(req)
 	if err != nil {
 		return 0.0
 	}
 	defer res.Body.Close()
-	doc, err := goquery.NewDocumentFromReader(res.Body)
+
+	bodyCopy, err := io.ReadAll(res.Body)
+	if err != nil {
+		return 0.0
+	}
+
+	reader := strings.NewReader(string(bodyCopy))
+	doc, err := goquery.NewDocumentFromReader(reader)
 	if err != nil {
 		return 0.0
 	}
@@ -52,7 +78,8 @@ func (dataSource JellyNeoDataSource) GetPrice(itemName string) float64 {
 		}
 	})
 	if price == 0.0 {
-		slog.Warn(fmt.Sprintf("Failed to retrieve price for \"%s\" from JellyNeo!", itemName))
+		slog.Debug(fmt.Sprintf(`Response from JellyNeo for %s: %s`, url, string(bodyCopy)))
+		slog.Error(fmt.Sprintf(`Failed to retrieve price for "%s" from JellyNeo!`, itemName))
 	}
 	return price
 }

@@ -73,24 +73,24 @@ var (
 	}
 )
 
-func combineRelativeFolderAndFilename(folder string, fileName string) string {
+func CombineRelativeFolderAndFilename(folder string, fileName string) string {
 	_, b, _, _ := runtime.Caller(0)
 	exPath := filepath.Dir(b)
 	return filepath.Join(exPath, folder, fileName)
 }
 
 func GetDropDataFilePath(fileName string) string {
-	return combineRelativeFolderAndFilename(BATTLEDOME_DROPS_FOLDER, fileName)
+	return CombineRelativeFolderAndFilename(BATTLEDOME_DROPS_FOLDER, fileName)
 }
 
 func GetItemWeightsFilePath() string {
-	return combineRelativeFolderAndFilename(DATA_FOLDER, ITEW_WEIGHTS_FILE)
+	return CombineRelativeFolderAndFilename(DATA_FOLDER, ITEW_WEIGHTS_FILE)
 }
 
 func GetDropRatesFilePath(arena string) string {
-	return combineRelativeFolderAndFilename(DATA_FOLDER, fmt.Sprintf(ITEM_DROP_RATES_FILE_TEMPLATE, strings.ReplaceAll(arena, " ", "_"), NUMBER_OF_ITEMS_TO_GENERATE_FOR_ESTIMATING_DROP_RATES))
+	return CombineRelativeFolderAndFilename(DATA_FOLDER, fmt.Sprintf(ITEM_DROP_RATES_FILE_TEMPLATE, strings.ReplaceAll(arena, " ", "_"), NUMBER_OF_ITEMS_TO_GENERATE_FOR_ESTIMATING_DROP_RATES))
 }
 
 func GetGeneratedDropsFilePath(arena string) string {
-	return combineRelativeFolderAndFilename(DATA_FOLDER, fmt.Sprintf(GENERATED_DROPS_FILE_TEMPLATE, strings.ReplaceAll(arena, " ", "_"), NUMBER_OF_ITEMS_TO_GENERATE_FOR_ESTIMATING_PROFIT_STATISTICS))
+	return CombineRelativeFolderAndFilename(DATA_FOLDER, fmt.Sprintf(GENERATED_DROPS_FILE_TEMPLATE, strings.ReplaceAll(arena, " ", "_"), NUMBER_OF_ITEMS_TO_GENERATE_FOR_ESTIMATING_PROFIT_STATISTICS))
 }

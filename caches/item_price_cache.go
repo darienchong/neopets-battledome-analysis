@@ -90,8 +90,11 @@ func (cache *RealItemPriceCache) GetPrice(itemName string) float64 {
 		return maybeSpecialPrice
 	}
 
-	cache.cachedPrices[itemName] = cache.dataSource.GetPrice(itemName)
-	return cache.cachedPrices[itemName]
+	price := cache.dataSource.GetPrice(itemName)
+	if price > 0 {
+		cache.cachedPrices[itemName] = price
+	}
+	return price
 }
 
 func (cache *RealItemPriceCache) flushToFile() error {

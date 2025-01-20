@@ -20,12 +20,20 @@ func NewItemDbDataSource() ItemPriceDataSource {
 	return &ItemDbDataSource{}
 }
 
+func getNormalisedItemDbItemName(itemName string) string {
+	itemName = strings.ToLower(itemName)
+	itemName = strings.ReplaceAll(itemName, " ", "-")
+	itemName = strings.ReplaceAll(itemName, ":", "")
+	itemName = strings.ReplaceAll(itemName, "!", "")
+	return itemName
+}
+
 func getItemDbPriceUrl(itemName string) string {
-	return fmt.Sprintf("https://itemdb.com.br/item/%s", getNormalisedItemName(itemName))
+	return fmt.Sprintf("https://itemdb.com.br/item/%s", getNormalisedItemDbItemName(itemName))
 }
 
 func (cache *ItemDbDataSource) GetFilePath() string {
-	return constants.ITEMDB_ITEM_PRICE_CACHE_FILE
+	return constants.CombineRelativeFolderAndFilename(constants.DATA_FOLDER, constants.ITEMDB_ITEM_PRICE_CACHE_FILE)
 }
 
 func (cache *ItemDbDataSource) GetPrice(itemName string) float64 {
