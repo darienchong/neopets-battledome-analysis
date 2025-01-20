@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"io"
 	"log/slog"
-	"net/http"
 	"net/url"
 	"slices"
 	"strconv"
@@ -12,6 +11,7 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/darienchong/neopets-battledome-analysis/constants"
+	"github.com/darienchong/neopets-battledome-analysis/helpers"
 )
 
 var _ ItemPriceDataSource = (*JellyNeoDataSource)(nil)
@@ -43,17 +43,7 @@ func (dataSource JellyNeoDataSource) GetPrice(itemName string) float64 {
 	url := getJellyNeoPriceUrl(itemName)
 	slog.Debug(fmt.Sprintf(`Calling "%s" for price`, url))
 
-	client := &http.Client{
-		Transport: &http.Transport{},
-	}
-
-	req, err := http.NewRequest("GET", url, nil)
-	if err != nil {
-		return 0.0
-	}
-	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36")
-
-	res, err := client.Do(req)
+	res, err := helpers.HumanlikeGet(url)
 	if err != nil {
 		return 0.0
 	}
