@@ -59,27 +59,6 @@ func Filter[T any](ts []T, predicate func(T) bool) []T {
 	return filteredTs
 }
 
-func FilterMap[K comparable, V any](m map[K]V, predicate func(V) bool) map[K]V {
-	filteredMap := map[K]V{}
-
-	for k, v := range m {
-		if predicate(v) {
-			filteredMap[k] = v
-		}
-	}
-	return filteredMap
-}
-
-func FilterPointers[T any](ts []*T, predicate func(*T) bool) []*T {
-	filteredTs := []*T{}
-	for _, elt := range ts {
-		if predicate(elt) {
-			filteredTs = append(filteredTs, elt)
-		}
-	}
-	return filteredTs
-}
-
 func Count[T any](ts []T, predicate func(T) bool) int {
 	return len(Filter(ts, predicate))
 }
@@ -112,19 +91,6 @@ func GroupBy[T any, K comparable](ts []T, keyFn func(T) K) map[K][]T {
 		_, ok := groups[key]
 		if !ok {
 			groups[key] = []T{}
-		}
-		groups[key] = append(groups[key], t)
-	}
-	return groups
-}
-
-func GroupPointersBy[T any, K comparable](ts []*T, keyFn func(*T) K) map[K][]*T {
-	groups := map[K][]*T{}
-	for _, t := range ts {
-		key := keyFn(t)
-		_, ok := groups[key]
-		if !ok {
-			groups[key] = []*T{}
 		}
 		groups[key] = append(groups[key], t)
 	}
@@ -172,32 +138,6 @@ func ToMap[K comparable, T, V any](ts []T, keyFn func(T) K, valFn func(T) V) map
 	return mappedVals
 }
 
-func ToPointerMap[K comparable, T, V any](ts []T, keyFn func(T) K, valFn func(T) *V) map[K]*V {
-	mappedVals := map[K]*V{}
-	for _, t := range ts {
-		key := keyFn(t)
-		val := valFn(t)
-		mappedVals[key] = val
-	}
-	return mappedVals
-}
-
-func Keys[K comparable, V any](m map[K]V) []K {
-	keys := []K{}
-	for k, _ := range m {
-		keys = append(keys, k)
-	}
-	return keys
-}
-
-func PointerValues[K comparable, V any](m map[K]*V) []*V {
-	values := []*V{}
-	for _, v := range m {
-		values = append(values, v)
-	}
-	return values
-}
-
 func Values[K comparable, V any](m map[K]V) []V {
 	values := []V{}
 	for _, v := range m {
@@ -227,20 +167,6 @@ func When[T any](pred bool, ifTrue T, ifFalse T) T {
 	return ifFalse
 }
 
-func AsLiteral[T any](ptrs []*T) []T {
-	return Map(ptrs, func(ptr *T) T {
-		return *ptr
-	})
-}
-
-func ReduceMap[K comparable, V any](m map[K][]*V, reducer func(*V, *V) *V) map[K]*V {
-	m2 := map[K]*V{}
-	for k, vs := range m {
-		m2[k] = Reduce(vs, reducer)
-	}
-	return m2
-}
-
 func Max[T comparable](ts []T, less func(T, T) bool) T {
 	best := ts[0]
 	for _, t := range ts {
@@ -253,14 +179,6 @@ func Max[T comparable](ts []T, less func(T, T) bool) T {
 
 func FlatMap[T, V any](ts []T, arrayFn func(T) []V) []V {
 	flattened := []V{}
-	for _, t := range ts {
-		flattened = append(flattened, arrayFn(t)...)
-	}
-	return flattened
-}
-
-func FlatMapPointer[T, V any](ts []T, arrayFn func(T) []*V) []*V {
-	flattened := []*V{}
 	for _, t := range ts {
 		flattened = append(flattened, arrayFn(t)...)
 	}
