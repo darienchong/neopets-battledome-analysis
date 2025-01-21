@@ -1,4 +1,4 @@
-package tests
+package parsers
 
 import (
 	"testing"
@@ -6,11 +6,10 @@ import (
 	"github.com/darienchong/neopets-battledome-analysis/constants"
 	"github.com/darienchong/neopets-battledome-analysis/helpers"
 	"github.com/darienchong/neopets-battledome-analysis/models"
-	"github.com/darienchong/neopets-battledome-analysis/parsers"
 )
 
 func TestBattledomeItemWeightsParser(t *testing.T) {
-	target := parsers.NewBattledomeItemWeightParser()
+	target := NewBattledomeItemWeightParser()
 	itemWeights, err := target.Parse(constants.GetItemWeightsFilePath())
 	if err != nil {
 		t.Fatalf("%s", err)

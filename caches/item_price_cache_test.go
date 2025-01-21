@@ -1,4 +1,4 @@
-package tests
+package caches
 
 import (
 	"fmt"
@@ -6,13 +6,12 @@ import (
 	"os"
 	"testing"
 
-	"github.com/darienchong/neopets-battledome-analysis/caches"
 	"github.com/darienchong/neopets-battledome-analysis/helpers"
 )
 
 func TestSaveToFile(t *testing.T) {
-	dataSource := caches.NewJellyNeoDataSource()
-	target, err := caches.GetItemPriceCacheInstance(dataSource)
+	dataSource := NewJellyNeoDataSource()
+	target, err := GetItemPriceCacheInstance(dataSource)
 	if err != nil {
 		t.Fatalf("%s", err)
 	}
@@ -25,8 +24,8 @@ func TestSaveToFile(t *testing.T) {
 }
 
 func testGetPriceFromItemDb(itemName string, t *testing.T) {
-	dataSource := caches.NewItemDbDataSource()
-	target, err := caches.GetItemPriceCacheInstance(dataSource)
+	dataSource := NewItemDbDataSource()
+	target, err := GetItemPriceCacheInstance(dataSource)
 	if err != nil {
 		t.Fatalf("%s", err)
 	}
@@ -41,8 +40,8 @@ func testGetPriceFromItemDb(itemName string, t *testing.T) {
 }
 
 func testGetPriceFromJellyNeo(itemName string, t *testing.T) {
-	dataSource := caches.NewJellyNeoDataSource()
-	target, err := caches.GetItemPriceCacheInstance(dataSource)
+	dataSource := NewJellyNeoDataSource()
+	target, err := GetItemPriceCacheInstance(dataSource)
 	if err != nil {
 		t.Fatalf("%s", err)
 	}

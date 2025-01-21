@@ -1,15 +1,13 @@
-package tests
+package helpers
 
 import (
 	"fmt"
 	"log/slog"
 	"testing"
-
-	"github.com/darienchong/neopets-battledome-analysis/helpers"
 )
 
-func generateTable(numRows int) *helpers.Table {
-	table := helpers.NewTable([]string{
+func generateTable(numRows int) *Table {
+	table := NewTable([]string{
 		"Col 1",
 		"Col 2",
 		"Col 3",
@@ -25,8 +23,8 @@ func generateTable(numRows int) *helpers.Table {
 	return table
 }
 
-func generateNamedTable(name string, numRows int) *helpers.Table {
-	table := helpers.NewNamedTable(name, []string{
+func generateNamedTable(name string, numRows int) *Table {
+	table := NewNamedTable(name, []string{
 		"Col 1",
 		"Col 2",
 		"Col 3",
