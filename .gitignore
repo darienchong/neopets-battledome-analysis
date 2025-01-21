@@ -22,3 +22,4 @@ data/neopets_battledome_item_drop_rates_Rattling_Cauldron_100000000.txt
 data/neopets_battledome_item_drop_rates_Ugga_Dome_100000000.txt
 data/neopets_itemdb_item_price_cache.txt
 data/neopets_jellyneo_item_price_cache.txt
+coverage.out
