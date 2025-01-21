@@ -45,18 +45,21 @@ func (dataSource JellyNeoDataSource) GetPrice(itemName string) float64 {
 
 	res, err := helpers.HumanlikeGet(url)
 	if err != nil {
+		slog.Error(fmt.Sprintf("%+v", err))
 		return 0.0
 	}
 	defer res.Body.Close()
 
 	bodyCopy, err := io.ReadAll(res.Body)
 	if err != nil {
+		slog.Error(fmt.Sprintf("%+v", err))
 		return 0.0
 	}
 
 	reader := strings.NewReader(string(bodyCopy))
 	doc, err := goquery.NewDocumentFromReader(reader)
 	if err != nil {
+		slog.Error(fmt.Sprintf("%+v", err))
 		return 0.0
 	}
 
