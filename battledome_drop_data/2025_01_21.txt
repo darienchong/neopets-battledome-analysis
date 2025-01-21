@@ -1,0 +1,18 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Darigan Muffin|1
+Vo Codestone|1
+Bite Size Celery|1
+Dried Mango|1
+Strawberry Jam Sandwich Cookie|1
+Croissant|1
+Apple Cinnamon Crepe|1
+French Toast Sticks|1
+Apple and Cheese Sandwich|1
+Main Codestone|1
+Battle Faerie Dagger|1
+Weak Bottled Dark Faerie|1
+Corn Bread|1
+Golden Muffin|1
+Zei Codestone|1
