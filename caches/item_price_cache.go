@@ -68,67 +68,67 @@ func ItemPriceCacheInstance(dataSource ItemPriceDataSource) (ItemPriceCache, err
 	return cacheInstance, nil
 }
 
-func (cache RealItemPriceCache) loadSpecialPrices() error {
+func (c *RealItemPriceCache) loadSpecialPrices() error {
 	return nil
 }
 
-func (cache *RealItemPriceCache) generateExpiry() {
-	cache.expiry = time.Now().AddDate(0, 0, 7)
+func (c *RealItemPriceCache) generateExpiry() {
+	c.expiry = time.Now().AddDate(0, 0, 7)
 }
 
-func (cache *RealItemPriceCache) Price(itemName string) float64 {
+func (c *RealItemPriceCache) Price(itemName string) float64 {
 	if itemName == "nothing" {
 		return 0.0
 	}
 
-	if maybeCachedValue, existsInCache := cache.cachedPrices[itemName]; existsInCache {
+	if maybeCachedValue, existsInCache := c.cachedPrices[itemName]; existsInCache {
 		return maybeCachedValue
 	}
 
-	if maybeSpecialPrice, existsInSpecialPrices := cache.specialPrices[itemName]; existsInSpecialPrices {
+	if maybeSpecialPrice, existsInSpecialPrices := c.specialPrices[itemName]; existsInSpecialPrices {
 		return maybeSpecialPrice
 	}
 
-	price := cache.dataSource.Price(itemName)
+	price := c.dataSource.Price(itemName)
 	if price > 0 {
-		cache.cachedPrices[itemName] = price
+		c.cachedPrices[itemName] = price
 	}
 	return price
 }
 
-func (cache *RealItemPriceCache) flushToFile() error {
-	file, err := os.OpenFile(cache.dataSource.FilePath(), os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0755)
+func (c *RealItemPriceCache) flushToFile() error {
+	file, err := os.OpenFile(c.dataSource.FilePath(), os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0755)
 	if err != nil {
-		return stacktrace.Propagate(err, "failed to open item price cache file (%s) when flushing to disk", cache.dataSource.FilePath())
+		return stacktrace.Propagate(err, "failed to open item price cache file (%s) when flushing to disk", c.dataSource.FilePath())
 	}
 	defer file.Close()
 
-	file.WriteString(fmt.Sprintf("%s\n", cache.expiry.Format(constants.DataExpiryTimeLayout)))
-	for key, value := range cache.cachedPrices {
+	file.WriteString(fmt.Sprintf("%s\n", c.expiry.Format(constants.DataExpiryTimeLayout)))
+	for key, value := range c.cachedPrices {
 		file.WriteString(fmt.Sprintf("%s|%f\n", key, value))
 	}
 
 	return nil
 }
 
-func (cache *RealItemPriceCache) Close() error {
-	return cache.flushToFile()
+func (c *RealItemPriceCache) Close() error {
+	return c.flushToFile()
 }
 
-func (cache *RealItemPriceCache) loadFromFile() error {
-	if cache.cachedPrices == nil {
-		cache.cachedPrices = map[string]float64{}
+func (c *RealItemPriceCache) loadFromFile() error {
+	if c.cachedPrices == nil {
+		c.cachedPrices = map[string]float64{}
 	}
 
-	_, err := os.Stat(cache.dataSource.FilePath())
+	_, err := os.Stat(c.dataSource.FilePath())
 	if os.IsNotExist(err) {
-		cache.generateExpiry()
+		c.generateExpiry()
 		return nil
 	}
 
-	file, err := os.Open(cache.dataSource.FilePath())
+	file, err := os.Open(c.dataSource.FilePath())
 	if err != nil {
-		return stacktrace.Propagate(err, "failed to open the item price cache file path: %s", cache.dataSource.FilePath())
+		return stacktrace.Propagate(err, "failed to open the item price cache file path: %s", c.dataSource.FilePath())
 	}
 	defer file.Close()
 
@@ -141,16 +141,16 @@ func (cache *RealItemPriceCache) loadFromFile() error {
 			parsedExpiry, err := time.Parse(constants.DataExpiryTimeLayout, line)
 			if err != nil {
 				slog.Warn(fmt.Sprintf("Failed to parse expiry for item price cache file; the line was \"%s\": %s", line, err))
-				cache.generateExpiry()
+				c.generateExpiry()
 			} else {
-				cache.expiry = parsedExpiry
+				c.expiry = parsedExpiry
 			}
 
 			if parsedExpiry.Before(time.Now()) {
 				slog.Info("Deleting item price cache file as it was expired.")
 				// We don't really care if it succeeds or not
-				os.Remove(cache.dataSource.FilePath())
-				cache.generateExpiry()
+				os.Remove(c.dataSource.FilePath())
+				c.generateExpiry()
 			}
 		} else {
 			data := strings.Split(line, "|")
@@ -159,7 +159,7 @@ func (cache *RealItemPriceCache) loadFromFile() error {
 			if err != nil {
 				continue
 			}
-			cache.cachedPrices[itemName] = itemPrice
+			c.cachedPrices[itemName] = itemPrice
 		}
 	}
 

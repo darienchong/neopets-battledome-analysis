@@ -29,7 +29,7 @@ var (
 	}
 )
 
-func (parser *BattledomeItemDropDataParser) Parse(filePath string) (*models.BattledomeItemsDto, error) {
+func (p *BattledomeItemDropDataParser) Parse(filePath string) (*models.BattledomeItemsDto, error) {
 	if !helpers.IsFileExists(filePath) {
 		return nil, fmt.Errorf("file at \"%s\" does not exist", filePath)
 	}
@@ -82,11 +82,11 @@ const (
 
 type MetadataParser struct{}
 
-func (parser *MetadataParser) IsApplicable(line string) bool {
+func (p *MetadataParser) IsApplicable(line string) bool {
 	return strings.HasPrefix(line, "$")
 }
 
-func (parser *MetadataParser) Parse(line string, dto *models.BattledomeItemsDto) error {
+func (p *MetadataParser) Parse(line string, dto *models.BattledomeItemsDto) error {
 	tokens := strings.Split(line, ":")
 	metadata := dto.Metadata.Copy()
 	metadataKey := strings.ToLower(strings.TrimSpace(tokens[0]))
@@ -112,21 +112,21 @@ func (parser *MetadataParser) Parse(line string, dto *models.BattledomeItemsDto)
 
 type CommentParser struct{}
 
-func (parser *CommentParser) IsApplicable(line string) bool {
+func (p *CommentParser) IsApplicable(line string) bool {
 	return strings.HasPrefix(line, "#")
 }
 
-func (parser *CommentParser) Parse(line string, dto *models.BattledomeItemsDto) error {
+func (p *CommentParser) Parse(line string, dto *models.BattledomeItemsDto) error {
 	return nil
 }
 
 type ItemDataParser struct{}
 
-func (parser *ItemDataParser) IsApplicable(line string) bool {
+func (p *ItemDataParser) IsApplicable(line string) bool {
 	return true
 }
 
-func (parser *ItemDataParser) Parse(line string, dto *models.BattledomeItemsDto) error {
+func (p *ItemDataParser) Parse(line string, dto *models.BattledomeItemsDto) error {
 	tokens := strings.Split(line, "|")
 	itemName := models.ItemName(strings.TrimSpace(tokens[0]))
 	itemQuantity, err := strconv.ParseInt(strings.TrimSpace(tokens[1]), 0, 32)

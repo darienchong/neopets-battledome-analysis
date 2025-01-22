@@ -37,7 +37,7 @@ func isCodestone(itemName models.ItemName) bool {
 	return slices.Contains(constants.BrownCodestones, string(itemName)) || slices.Contains(constants.RedCodestones, string(itemName))
 }
 
-func (viewer *DataComparisonViewer) generateProfitableItemsTable(data models.NormalisedBattledomeItems, isRealData bool) (*helpers.Table, error) {
+func (v *DataComparisonViewer) generateProfitableItemsTable(data models.NormalisedBattledomeItems, isRealData bool) (*helpers.Table, error) {
 	dataCopy := models.NormalisedBattledomeItems{}
 	for k, v := range data {
 		dataCopy[k] = v.Copy()
@@ -92,7 +92,7 @@ func (viewer *DataComparisonViewer) generateProfitableItemsTable(data models.Nor
 
 		itemDropRate := item.DropRate(data)
 		expectedItemProfit := itemDropRate * itemPriceCache.Price(string(item.Name)) * constants.BattledomeDropsPerDay
-		itemDropRateLeftBound, itemDropRateRightBound, err := viewer.StatisticsService.ClopperPearsonInterval(int(item.Quantity), data.TotalItemQuantity(), constants.SignificanceLevel)
+		itemDropRateLeftBound, itemDropRateRightBound, err := v.StatisticsService.ClopperPearsonInterval(int(item.Quantity), data.TotalItemQuantity(), constants.SignificanceLevel)
 		if err != nil {
 			return nil, stacktrace.Propagate(err, "failed to generate drop rate confidence interval")
 		}
@@ -124,7 +124,7 @@ func (viewer *DataComparisonViewer) generateProfitableItemsTable(data models.Nor
 	return table, nil
 }
 
-func (viewer *DataComparisonViewer) generateArenaProfitableItemsTable(data models.NormalisedBattledomeItems, generatedItems models.NormalisedBattledomeItems, isRealData bool) (*helpers.Table, error) {
+func (v *DataComparisonViewer) generateArenaProfitableItemsTable(data models.NormalisedBattledomeItems, generatedItems models.NormalisedBattledomeItems, isRealData bool) (*helpers.Table, error) {
 	dataCopy := models.NormalisedBattledomeItems{}
 	for k, v := range data {
 		dataCopy[k] = v.Copy()
@@ -183,7 +183,7 @@ func (viewer *DataComparisonViewer) generateArenaProfitableItemsTable(data model
 
 		itemDropRate := item.DropRate(data)
 		expectedItemProfit := itemDropRate * itemPriceCache.Price(string(item.Name)) * constants.BattledomeDropsPerDay
-		itemDropRateLeftBound, itemDropRateRightBound, err := viewer.StatisticsService.ClopperPearsonInterval(int(item.Quantity), data.TotalItemQuantity(), constants.SignificanceLevel)
+		itemDropRateLeftBound, itemDropRateRightBound, err := v.StatisticsService.ClopperPearsonInterval(int(item.Quantity), data.TotalItemQuantity(), constants.SignificanceLevel)
 		if err != nil {
 			return nil, stacktrace.Propagate(err, "failed to generate drop rate confidence interval")
 		}
@@ -215,7 +215,7 @@ func (viewer *DataComparisonViewer) generateArenaProfitableItemsTable(data model
 	return table, nil
 }
 
-func (viewer *DataComparisonViewer) generateCodestoneDropRatesTable(realData models.NormalisedBattledomeItems, generatedData models.NormalisedBattledomeItems, codestoneList []string /* Keep as string to prevent circular dependency*/) (*helpers.Table, error) {
+func (v *DataComparisonViewer) generateCodestoneDropRatesTable(realData models.NormalisedBattledomeItems, generatedData models.NormalisedBattledomeItems, codestoneList []string /* Keep as string to prevent circular dependency*/) (*helpers.Table, error) {
 	var tableName string
 	if slices.Contains(codestoneList, constants.BrownCodestones[0]) {
 		tableName = "Brown Codestone Drop Rates"
@@ -271,7 +271,7 @@ func (viewer *DataComparisonViewer) generateCodestoneDropRatesTable(realData mod
 
 		if existsInReal {
 			realDropRate = realCodestones.DropRate(realData)
-			realMinDropRate, realMaxDropRate, err = viewer.StatisticsService.ClopperPearsonInterval(int(realCodestones.Quantity), realData.TotalItemQuantity(), constants.SignificanceLevel)
+			realMinDropRate, realMaxDropRate, err = v.StatisticsService.ClopperPearsonInterval(int(realCodestones.Quantity), realData.TotalItemQuantity(), constants.SignificanceLevel)
 			if err != nil {
 				return nil, stacktrace.Propagate(err, "failed to generate drop rate confidence interval")
 			}
@@ -284,7 +284,7 @@ func (viewer *DataComparisonViewer) generateCodestoneDropRatesTable(realData mod
 		})
 	}
 
-	realTotalMinDropRate, realTotalMaxDropRate, err := viewer.StatisticsService.ClopperPearsonInterval(int(realTotalCodestoneCount), realData.TotalItemQuantity(), constants.SignificanceLevel)
+	realTotalMinDropRate, realTotalMaxDropRate, err := v.StatisticsService.ClopperPearsonInterval(int(realTotalCodestoneCount), realData.TotalItemQuantity(), constants.SignificanceLevel)
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to generate drop rate confidence interval")
 	}
@@ -298,7 +298,7 @@ func (viewer *DataComparisonViewer) generateCodestoneDropRatesTable(realData mod
 	return table, nil
 }
 
-func (viewer *DataComparisonViewer) ViewChallengerComparison(realData models.NormalisedBattledomeItems, generatedData models.NormalisedBattledomeItems) ([]string, error) {
+func (v *DataComparisonViewer) ViewChallengerComparison(realData models.NormalisedBattledomeItems, generatedData models.NormalisedBattledomeItems) ([]string, error) {
 	metadata, err := realData.Metadata()
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to get metadata")
@@ -341,31 +341,31 @@ func (viewer *DataComparisonViewer) ViewChallengerComparison(realData models.Nor
 		fmt.Sprintf("%s NP", helpers.FormatFloat(realMeanProfit-generatedMeanProfit)),
 	})
 
-	realProfitableItemsTable, err := viewer.generateProfitableItemsTable(realData, true)
+	realProfitableItemsTable, err := v.generateProfitableItemsTable(realData, true)
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to generate profitable items table for real data")
 	}
-	generatedProfitableItemsTable, err := viewer.generateProfitableItemsTable(generatedData, false)
+	generatedProfitableItemsTable, err := v.generateProfitableItemsTable(generatedData, false)
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to generate profitable items table for generated data")
 	}
 
-	brownCodestoneDropRatesTable, err := viewer.generateCodestoneDropRatesTable(realData, generatedData, constants.BrownCodestones)
+	brownCodestoneDropRatesTable, err := v.generateCodestoneDropRatesTable(realData, generatedData, constants.BrownCodestones)
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to generate brown codestones drop rate table for real and generated data")
 	}
 
-	redCodestoneDropRatesTable, err := viewer.generateCodestoneDropRatesTable(realData, generatedData, constants.RedCodestones)
+	redCodestoneDropRatesTable, err := v.generateCodestoneDropRatesTable(realData, generatedData, constants.RedCodestones)
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to generate red codestones drop rate table for real and generated data")
 	}
 
-	arenaSpecificDropsTable, err := viewer.generateArenaSpecificDropsTable(realData, generatedData)
+	arenaSpecificDropsTable, err := v.generateArenaSpecificDropsTable(realData, generatedData)
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to generate arena-specific drop rate table for real and generated data")
 	}
 
-	challengerSpecificDropsTable, err := viewer.generateChallengerSpecificDropsTable(realData, generatedData)
+	challengerSpecificDropsTable, err := v.generateChallengerSpecificDropsTable(realData, generatedData)
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed ot generate challenger-specific drop rate table for real and generated data")
 	}
@@ -390,7 +390,7 @@ func isArenaSpecificDrop(itemName models.ItemName, items models.NormalisedBattle
 	return exists
 }
 
-func (viewer *DataComparisonViewer) generateArenaSpecificDropsTable(realData models.NormalisedBattledomeItems, generatedData models.NormalisedBattledomeItems) (*helpers.Table, error) {
+func (v *DataComparisonViewer) generateArenaSpecificDropsTable(realData models.NormalisedBattledomeItems, generatedData models.NormalisedBattledomeItems) (*helpers.Table, error) {
 	itemPriceCache, err := caches.CurrentItemPriceCacheInstance()
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to get item price cache instance")
@@ -425,7 +425,7 @@ func (viewer *DataComparisonViewer) generateArenaSpecificDropsTable(realData mod
 
 		return int(item.Quantity)
 	}))
-	totalDropRateLeftBound, totalDropRateRightBound, err := viewer.StatisticsService.ClopperPearsonInterval(totalArenaItemCount, realData.TotalItemQuantity(), constants.SignificanceLevel)
+	totalDropRateLeftBound, totalDropRateRightBound, err := v.StatisticsService.ClopperPearsonInterval(totalArenaItemCount, realData.TotalItemQuantity(), constants.SignificanceLevel)
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to generate total drop rate bounds")
 	}
@@ -435,7 +435,7 @@ func (viewer *DataComparisonViewer) generateArenaSpecificDropsTable(realData mod
 			break
 		}
 
-		itemDropRateLeftBound, itemDropRateRightBound, err := viewer.StatisticsService.ClopperPearsonInterval(int(item.Quantity), realData.TotalItemQuantity(), constants.SignificanceLevel)
+		itemDropRateLeftBound, itemDropRateRightBound, err := v.StatisticsService.ClopperPearsonInterval(int(item.Quantity), realData.TotalItemQuantity(), constants.SignificanceLevel)
 		if err != nil {
 			return nil, stacktrace.Propagate(err, "failed to generate item drop bounds")
 		}
@@ -467,7 +467,7 @@ func (viewer *DataComparisonViewer) generateArenaSpecificDropsTable(realData mod
 	return table, nil
 }
 
-func (viewer *DataComparisonViewer) generateChallengerSpecificDropsTable(realData models.NormalisedBattledomeItems, generatedData models.NormalisedBattledomeItems) (*helpers.Table, error) {
+func (v *DataComparisonViewer) generateChallengerSpecificDropsTable(realData models.NormalisedBattledomeItems, generatedData models.NormalisedBattledomeItems) (*helpers.Table, error) {
 	itemPriceCache, err := caches.CurrentItemPriceCacheInstance()
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to get item price cache instance")
@@ -502,7 +502,7 @@ func (viewer *DataComparisonViewer) generateChallengerSpecificDropsTable(realDat
 
 		return int(item.Quantity)
 	}))
-	totalDropRateLeftBound, totalDropRateRightBound, err := viewer.StatisticsService.ClopperPearsonInterval(totalChallengerItemCount, realData.TotalItemQuantity(), constants.SignificanceLevel)
+	totalDropRateLeftBound, totalDropRateRightBound, err := v.StatisticsService.ClopperPearsonInterval(totalChallengerItemCount, realData.TotalItemQuantity(), constants.SignificanceLevel)
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to generate total drop rate bounds")
 	}
@@ -512,7 +512,7 @@ func (viewer *DataComparisonViewer) generateChallengerSpecificDropsTable(realDat
 			break
 		}
 
-		itemDropRateLeftBound, itemDropRateRightBound, err := viewer.StatisticsService.ClopperPearsonInterval(int(item.Quantity), realData.TotalItemQuantity(), constants.SignificanceLevel)
+		itemDropRateLeftBound, itemDropRateRightBound, err := v.StatisticsService.ClopperPearsonInterval(int(item.Quantity), realData.TotalItemQuantity(), constants.SignificanceLevel)
 		if err != nil {
 			return nil, stacktrace.Propagate(err, "failed to generate item drop bounds")
 		}
@@ -544,7 +544,7 @@ func (viewer *DataComparisonViewer) generateChallengerSpecificDropsTable(realDat
 	return table, nil
 }
 
-func (viewer *DataComparisonViewer) ViewChallengerComparisons(challengerItems []models.NormalisedBattledomeItems) ([]string, error) {
+func (v *DataComparisonViewer) ViewChallengerComparisons(challengerItems []models.NormalisedBattledomeItems) ([]string, error) {
 	challengerItems = helpers.OrderByDescending(challengerItems, func(items models.NormalisedBattledomeItems) float64 {
 		meanDropsProfit, err := items.MeanDropsProfit()
 		if err != nil {
@@ -587,7 +587,7 @@ func (viewer *DataComparisonViewer) ViewChallengerComparisons(challengerItems []
 			return nil, helpers.PropagateWithSerialisedValue(err, "failed to get profit confidence interval from %s", "failed to get profit confidence interval from items; additionally encountered an error when trying to serialise the items for logging: %s", items)
 		}
 
-		generatedItems, err := viewer.BattledomeItemsService.GeneratedDropsByArena(metadata.Arena)
+		generatedItems, err := v.BattledomeItemsService.GeneratedDropsByArena(metadata.Arena)
 		if err != nil {
 			return nil, stacktrace.Propagate(err, "failed to generate drops by arena for \"%s\"", metadata.Arena)
 		}

@@ -32,11 +32,11 @@ func itemDBPriceUrl(itemName string) string {
 	return fmt.Sprintf("https://itemdb.com.br/item/%s", normalisedItemDBItemName(itemName))
 }
 
-func (cache *ItemDBDataSource) FilePath() string {
+func (ds *ItemDBDataSource) FilePath() string {
 	return constants.CombineRelativeFolderAndFilename(constants.DataFolder, constants.ItemDBItemPriceCacheFile)
 }
 
-func (cache *ItemDBDataSource) Price(itemName string) float64 {
+func (ds *ItemDBDataSource) Price(itemName string) float64 {
 	if slices.Contains(bannedItems, itemName) {
 		return 0.0
 	}

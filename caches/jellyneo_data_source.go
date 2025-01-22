@@ -23,7 +23,7 @@ func NewJellyNeoDataSource() ItemPriceDataSource {
 	return &JellyNeoDataSource{}
 }
 
-func (dataSource *JellyNeoDataSource) FilePath() string {
+func (ds *JellyNeoDataSource) FilePath() string {
 	return constants.CombineRelativeFolderAndFilename(constants.DataFolder, constants.JellyNeoItemPriceCacheFile)
 }
 
@@ -35,7 +35,7 @@ func jellyNeoPriceUrl(itemName string) string {
 	return fmt.Sprintf("https://items.jellyneo.net/search/?name=%s&name_type=3", normalisedJellyNeoItemName(itemName))
 }
 
-func (dataSource JellyNeoDataSource) Price(itemName string) float64 {
+func (ds *JellyNeoDataSource) Price(itemName string) float64 {
 	if slices.Contains(bannedItems, itemName) {
 		return 0.0
 	}

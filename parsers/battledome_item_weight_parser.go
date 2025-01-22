@@ -18,7 +18,7 @@ func NewBattledomeItemWeightParser() *BattledomeItemWeightParser {
 	return &BattledomeItemWeightParser{}
 }
 
-func (parser *BattledomeItemWeightParser) Parse(filePath string) ([]models.BattledomeItemWeight, error) {
+func (p *BattledomeItemWeightParser) Parse(filePath string) ([]models.BattledomeItemWeight, error) {
 	if !helpers.IsFileExists(filePath) {
 		return nil, fmt.Errorf("item weights file does not exist: %s", filePath)
 	}

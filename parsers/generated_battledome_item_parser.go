@@ -18,7 +18,7 @@ func NewGeneratedBattledomeItemParser() *GeneratedBattledomeItemParser {
 	return &GeneratedBattledomeItemParser{}
 }
 
-func (parser *GeneratedBattledomeItemParser) Save(items models.NormalisedBattledomeItems, filePath string) error {
+func (p *GeneratedBattledomeItemParser) Save(items models.NormalisedBattledomeItems, filePath string) error {
 	file, err := os.OpenFile(filePath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0755)
 	if err != nil {
 		return stacktrace.Propagate(err, "failed to open file: \"%s\"", filePath)
@@ -30,7 +30,7 @@ func (parser *GeneratedBattledomeItemParser) Save(items models.NormalisedBattled
 	return nil
 }
 
-func (parser *GeneratedBattledomeItemParser) Parse(filePath string) (models.NormalisedBattledomeItems, error) {
+func (p *GeneratedBattledomeItemParser) Parse(filePath string) (models.NormalisedBattledomeItems, error) {
 	if !helpers.IsFileExists(filePath) {
 		return nil, fmt.Errorf("generated drop file does not exist! supplied file path was \"%s\"", filePath)
 	}
