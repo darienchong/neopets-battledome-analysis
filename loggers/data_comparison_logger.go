@@ -13,7 +13,7 @@ import (
 	"github.com/palantir/stacktrace"
 )
 
-func getPrefix(indentLevel int) string {
+func prefix(indentLevel int) string {
 	return strings.Repeat("  ", indentLevel)
 }
 
@@ -33,7 +33,7 @@ func (logger *DataComparisonLogger) BriefCompareAllArenas() error {
 	realData := map[models.Arena]models.NormalisedBattledomeItems{}
 	generatedData := map[models.Arena]models.NormalisedBattledomeItems{}
 
-	for _, arenaString := range constants.ARENAS {
+	for _, arenaString := range constants.Arenas {
 		arena := models.Arena(arenaString)
 		realArenaData, generatedArenaData, err := logger.DataComparisonService.CompareArena(arena)
 		if err != nil {
@@ -58,7 +58,7 @@ func (logger *DataComparisonLogger) BriefCompareAllArenas() error {
 func (logger *DataComparisonLogger) CompareAllArenas() error {
 	comparisonData := helpers.OrderByDescending(
 		helpers.Map(
-			constants.ARENAS,
+			constants.Arenas,
 			func(arena string) *helpers.Tuple {
 				realData, generatedData, err := logger.DataComparisonService.CompareArena(models.Arena(arena))
 				if err != nil {
@@ -72,10 +72,10 @@ func (logger *DataComparisonLogger) CompareAllArenas() error {
 			generatedData := tuple.Elements[2].(models.NormalisedBattledomeItems)
 			var profit float64 = 0.0
 			var err error
-			if constants.SHOULD_IGNORE_CHALLENGER_DROPS_IN_ARENA_COMPARISON {
-				profit, err = realData.GetArenaMeanDropsProfit(generatedData)
+			if constants.ShouldIgnoreChallengerDropsInArenaComparison {
+				profit, err = realData.ArenaMeanDropsProfit(generatedData)
 			} else {
-				profit, err = realData.GetMeanDropsProfit()
+				profit, err = realData.MeanDropsProfit()
 			}
 			if err != nil {
 				return 0
@@ -93,9 +93,9 @@ func (logger *DataComparisonLogger) CompareAllArenas() error {
 			return stacktrace.Propagate(err, "failed to get arena comparison for \"%s\"", arena)
 		}
 
-		slog.Info(fmt.Sprintf("%d. %s (%d samples)", i+1, arena, realData.GetTotalItemQuantity()))
+		slog.Info(fmt.Sprintf("%d. %s (%d samples)", i+1, arena, realData.TotalItemQuantity()))
 		for _, line := range lines {
-			slog.Info(getPrefix(1) + line)
+			slog.Info(prefix(1) + line)
 		}
 		slog.Info("\n\n")
 	}

@@ -8,15 +8,15 @@ import (
 )
 
 func FormatInt(n int) string {
-	return humanize.FormatInteger(constants.FLOAT_FORMAT_LAYOUT, n)
+	return humanize.FormatInteger(constants.FloatFormatLayout, n)
 }
 
 func FormatFloat(n float64) string {
-	return humanize.FormatFloat(constants.FLOAT_FORMAT_LAYOUT, n)
+	return humanize.FormatFloat(constants.FloatFormatLayout, n)
 }
 
 func FormatPercentage(n float64) string {
-	return humanize.FormatFloat(constants.PERCENTAGE_FORMAT_LAYOUT, n*100)
+	return humanize.FormatFloat(constants.PercentageFormatLayout, n*100)
 }
 
 func FormatFloatRange(template string, leftBound float64, rightBound float64) string {

@@ -23,24 +23,24 @@ func NewJellyNeoDataSource() ItemPriceDataSource {
 	return &JellyNeoDataSource{}
 }
 
-func (dataSource *JellyNeoDataSource) GetFilePath() string {
-	return constants.CombineRelativeFolderAndFilename(constants.DATA_FOLDER, constants.JELLYNEO_ITEM_PRICE_CACHE_FILE)
+func (dataSource *JellyNeoDataSource) FilePath() string {
+	return constants.CombineRelativeFolderAndFilename(constants.DataFolder, constants.JellyNeoItemPriceCacheFile)
 }
 
-func getNormalisedJellyNeoItemName(itemName string) string {
+func normalisedJellyNeoItemName(itemName string) string {
 	return url.QueryEscape(itemName)
 }
 
-func getJellyNeoPriceUrl(itemName string) string {
-	return fmt.Sprintf("https://items.jellyneo.net/search/?name=%s&name_type=3", getNormalisedJellyNeoItemName(itemName))
+func jellyNeoPriceUrl(itemName string) string {
+	return fmt.Sprintf("https://items.jellyneo.net/search/?name=%s&name_type=3", normalisedJellyNeoItemName(itemName))
 }
 
-func (dataSource JellyNeoDataSource) GetPrice(itemName string) float64 {
+func (dataSource JellyNeoDataSource) Price(itemName string) float64 {
 	if slices.Contains(bannedItems, itemName) {
 		return 0.0
 	}
 
-	url := getJellyNeoPriceUrl(itemName)
+	url := jellyNeoPriceUrl(itemName)
 	slog.Debug(fmt.Sprintf(`Calling "%s" for price`, url))
 
 	res, err := helpers.HumanlikeGet(url)

@@ -36,7 +36,7 @@ func (items BattledomeItems) Normalise() (NormalisedBattledomeItems, error) {
 
 type NormalisedBattledomeItems map[ItemName]*BattledomeItem
 
-func (normalisedItems NormalisedBattledomeItems) GetMetadata() (BattledomeItemMetadata, error) {
+func (normalisedItems NormalisedBattledomeItems) Metadata() (BattledomeItemMetadata, error) {
 	for _, v := range normalisedItems {
 		return v.Metadata, nil
 	}
@@ -45,7 +45,7 @@ func (normalisedItems NormalisedBattledomeItems) GetMetadata() (BattledomeItemMe
 }
 
 func generateProfitData(items NormalisedBattledomeItems) ([]float64, error) {
-	itemPriceCache, err := caches.GetCurrentItemPriceCacheInstance()
+	itemPriceCache, err := caches.CurrentItemPriceCacheInstance()
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to get item price cache")
 	}
@@ -56,7 +56,7 @@ func generateProfitData(items NormalisedBattledomeItems) ([]float64, error) {
 			continue
 		}
 		for j := 0; j < int(item.Quantity); j++ {
-			profitData = append(profitData, itemPriceCache.GetPrice(string(item.Name)))
+			profitData = append(profitData, itemPriceCache.Price(string(item.Name)))
 		}
 	}
 
@@ -64,7 +64,7 @@ func generateProfitData(items NormalisedBattledomeItems) ([]float64, error) {
 }
 
 func generateArenaProfitData(items NormalisedBattledomeItems, generatedItems NormalisedBattledomeItems) ([]float64, error) {
-	itemPriceCache, err := caches.GetCurrentItemPriceCacheInstance()
+	itemPriceCache, err := caches.CurrentItemPriceCacheInstance()
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to get item price cache")
 	}
@@ -74,7 +74,7 @@ func generateArenaProfitData(items NormalisedBattledomeItems, generatedItems Nor
 		if item.Name == "nothing" {
 			continue
 		}
-		itemPrice := itemPriceCache.GetPrice(string(item.Name))
+		itemPrice := itemPriceCache.Price(string(item.Name))
 		_, exists := generatedItems[item.Name]
 		if !exists {
 			// Remove profit contribution from challenger-specific drops if flag is set
@@ -88,7 +88,7 @@ func generateArenaProfitData(items NormalisedBattledomeItems, generatedItems Nor
 	return profitData, nil
 }
 
-func (items NormalisedBattledomeItems) GetMeanDropsProfit() (float64, error) {
+func (items NormalisedBattledomeItems) MeanDropsProfit() (float64, error) {
 	profitData, err := generateProfitData(items)
 	if len(profitData) == 0 {
 		return 0.0, nil
@@ -103,10 +103,10 @@ func (items NormalisedBattledomeItems) GetMeanDropsProfit() (float64, error) {
 		return 0.0, stacktrace.Propagate(err, "failed to get mean of profit data")
 	}
 
-	return mean * constants.BATTLEDOME_DROPS_PER_DAY, nil
+	return mean * constants.BattledomeDropsPerDay, nil
 }
 
-func (items NormalisedBattledomeItems) GetArenaMeanDropsProfit(generatedItems NormalisedBattledomeItems) (float64, error) {
+func (items NormalisedBattledomeItems) ArenaMeanDropsProfit(generatedItems NormalisedBattledomeItems) (float64, error) {
 	profitData, err := generateArenaProfitData(items, generatedItems)
 	if len(profitData) == 0 {
 		return 0.0, nil
@@ -121,10 +121,10 @@ func (items NormalisedBattledomeItems) GetArenaMeanDropsProfit(generatedItems No
 		return 0.0, stacktrace.Propagate(err, "failed to get mean of profit data")
 	}
 
-	return mean * constants.BATTLEDOME_DROPS_PER_DAY, nil
+	return mean * constants.BattledomeDropsPerDay, nil
 }
 
-func (items NormalisedBattledomeItems) GetDropsProfitStdev() (float64, error) {
+func (items NormalisedBattledomeItems) DropsProfitStdev() (float64, error) {
 	profitData, err := generateProfitData(items)
 	if len(profitData) == 0 {
 		return 0.0, nil
@@ -138,11 +138,11 @@ func (items NormalisedBattledomeItems) GetDropsProfitStdev() (float64, error) {
 	if err != nil {
 		return 0.0, stacktrace.Propagate(err, "failed to get sample standard deviation")
 	}
-	return stdev * math.Sqrt(constants.BATTLEDOME_DROPS_PER_DAY), nil
+	return stdev * math.Sqrt(constants.BattledomeDropsPerDay), nil
 }
 
-func (items NormalisedBattledomeItems) GetItemsOrderedByPrice() ([]*BattledomeItem, error) {
-	itemPriceCache, err := caches.GetCurrentItemPriceCacheInstance()
+func (items NormalisedBattledomeItems) ItemsOrderedByPrice() ([]*BattledomeItem, error) {
+	itemPriceCache, err := caches.CurrentItemPriceCacheInstance()
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to get item price cache")
 	}
@@ -152,12 +152,12 @@ func (items NormalisedBattledomeItems) GetItemsOrderedByPrice() ([]*BattledomeIt
 		orderedItems = append(orderedItems, v)
 	}
 	return helpers.OrderByDescending(orderedItems, func(item *BattledomeItem) float64 {
-		return itemPriceCache.GetPrice(string(item.Name))
+		return itemPriceCache.Price(string(item.Name))
 	}), nil
 }
 
-func (items NormalisedBattledomeItems) GetItemsOrderedByProfit() ([]*BattledomeItem, error) {
-	itemPriceCache, err := caches.GetCurrentItemPriceCacheInstance()
+func (items NormalisedBattledomeItems) ItemsOrderedByProfit() ([]*BattledomeItem, error) {
+	itemPriceCache, err := caches.CurrentItemPriceCacheInstance()
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to get item price cache")
 	}
@@ -168,30 +168,30 @@ func (items NormalisedBattledomeItems) GetItemsOrderedByProfit() ([]*BattledomeI
 	}
 
 	return helpers.OrderByDescending(orderedItems, func(item *BattledomeItem) float64 {
-		return item.GetProfit(itemPriceCache)
+		return item.Profit(itemPriceCache)
 	}), nil
 }
 
-func (items NormalisedBattledomeItems) GetTotalProfit() (float64, error) {
+func (items NormalisedBattledomeItems) TotalProfit() (float64, error) {
 	var defaultValue float64
 
-	itemPriceCache, err := caches.GetCurrentItemPriceCacheInstance()
+	itemPriceCache, err := caches.CurrentItemPriceCacheInstance()
 	if err != nil {
 		return defaultValue, stacktrace.Propagate(err, "failed to get item price cache")
 	}
 
 	totalProfit := 0.0
 	for _, item := range items {
-		if item.Name == "nothing" || itemPriceCache.GetPrice(string(item.Name)) <= 0 {
+		if item.Name == "nothing" || itemPriceCache.Price(string(item.Name)) <= 0 {
 			continue
 		} else {
-			totalProfit += item.GetProfit(itemPriceCache)
+			totalProfit += item.Profit(itemPriceCache)
 		}
 	}
 	return totalProfit, nil
 }
 
-func (items NormalisedBattledomeItems) GetTotalItemQuantity() int {
+func (items NormalisedBattledomeItems) TotalItemQuantity() int {
 	quantities := helpers.Map(helpers.Values(items), func(item *BattledomeItem) int {
 		return helpers.When(string(item.Name) == "nothing", 0, int(item.Quantity))
 	})
@@ -239,7 +239,7 @@ func percentile(values []float64, p float64) float64 {
 	return values[lower]*(1-weight) + values[upper]*weight
 }
 
-func (items NormalisedBattledomeItems) GetProfitConfidenceInterval() (float64, float64, error) {
+func (items NormalisedBattledomeItems) ProfitConfidenceInterval() (float64, float64, error) {
 	profitData, err := generateProfitData(items)
 	if err != nil {
 		return 0.0, 0.0, stacktrace.Propagate(err, "failed to generate profit data")
@@ -250,10 +250,10 @@ func (items NormalisedBattledomeItems) GetProfitConfidenceInterval() (float64, f
 	}
 
 	bootstrap_sums := []float64{}
-	for _ = range constants.NUMBER_OF_BOOTSTRAP_SAMPLES_FOR_ESTIMATING_CONFIDENCE_INTERVAL {
+	for _ = range constants.NumberOfBootstrapSamples {
 		bootstrap_sum := 0.0
 
-		for _ = range constants.BATTLEDOME_DROPS_PER_DAY {
+		for _ = range constants.BattledomeDropsPerDay {
 			bootstrap_sum += profitData[rand.IntN(len(profitData))]
 		}
 
@@ -261,10 +261,10 @@ func (items NormalisedBattledomeItems) GetProfitConfidenceInterval() (float64, f
 	}
 
 	slices.Sort(bootstrap_sums)
-	return percentile(bootstrap_sums, constants.SIGNIFICANCE_LEVEL/2), percentile(bootstrap_sums, 1-constants.SIGNIFICANCE_LEVEL/2), nil
+	return percentile(bootstrap_sums, constants.SignificanceLevel/2), percentile(bootstrap_sums, 1-constants.SignificanceLevel/2), nil
 }
 
-func (items NormalisedBattledomeItems) GetArenaProfitConfidenceInterval(generatedItems NormalisedBattledomeItems) (float64, float64, error) {
+func (items NormalisedBattledomeItems) ArenaProfitConfidenceInterval(generatedItems NormalisedBattledomeItems) (float64, float64, error) {
 	profitData, err := generateArenaProfitData(items, generatedItems)
 	if err != nil {
 		return 0.0, 0.0, stacktrace.Propagate(err, "failed to generate profit data")
@@ -275,10 +275,10 @@ func (items NormalisedBattledomeItems) GetArenaProfitConfidenceInterval(generate
 	}
 
 	bootstrap_sums := []float64{}
-	for _ = range constants.NUMBER_OF_BOOTSTRAP_SAMPLES_FOR_ESTIMATING_CONFIDENCE_INTERVAL {
+	for _ = range constants.NumberOfBootstrapSamples {
 		bootstrap_sum := 0.0
 
-		for _ = range constants.BATTLEDOME_DROPS_PER_DAY {
+		for _ = range constants.BattledomeDropsPerDay {
 			bootstrap_sum += profitData[rand.IntN(len(profitData))]
 		}
 
@@ -286,5 +286,5 @@ func (items NormalisedBattledomeItems) GetArenaProfitConfidenceInterval(generate
 	}
 
 	slices.Sort(bootstrap_sums)
-	return percentile(bootstrap_sums, constants.SIGNIFICANCE_LEVEL/2), percentile(bootstrap_sums, 1-constants.SIGNIFICANCE_LEVEL/2), nil
+	return percentile(bootstrap_sums, constants.SignificanceLevel/2), percentile(bootstrap_sums, 1-constants.SignificanceLevel/2), nil
 }

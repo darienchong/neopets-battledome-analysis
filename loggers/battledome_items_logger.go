@@ -29,19 +29,19 @@ func NewArenaDropsLogger() *BattledomeItemsLogger {
 
 func (dropsLogger *BattledomeItemsLogger) Log(dataFolderPath string, numDropsToPrint int) error {
 	if numDropsToPrint <= 0 {
-		numDropsToPrint = constants.NUMBER_OF_DROPS_TO_PRINT
+		numDropsToPrint = constants.NumberOfDropsToPrint
 	}
 
-	if constants.FILTER_ARENA != "" {
-		slog.Info(fmt.Sprintf("Only displaying data related to \"%s\"", constants.FILTER_ARENA))
+	if constants.FilterArena != "" {
+		slog.Info(fmt.Sprintf("Only displaying data related to \"%s\"", constants.FilterArena))
 	}
 
-	itemPriceCache, err := caches.GetCurrentItemPriceCacheInstance()
+	itemPriceCache, err := caches.CurrentItemPriceCacheInstance()
 	if err != nil {
 		return stacktrace.Propagate(err, "failed to get item price cache instance")
 	}
 
-	files, err := helpers.GetFilesInFolder(dataFolderPath)
+	files, err := helpers.FilesInFolder(dataFolderPath)
 	if err != nil {
 		return stacktrace.Propagate(err, "failed to get files in %s", dataFolderPath)
 	}
@@ -52,7 +52,7 @@ func (dropsLogger *BattledomeItemsLogger) Log(dataFolderPath string, numDropsToP
 
 	samplesByArena := map[models.Arena]models.BattledomeItems{}
 	for _, file := range files {
-		items, err := dropsLogger.BattledomeItemDropDataParser.Parse(constants.GetDropDataFilePath(file))
+		items, err := dropsLogger.BattledomeItemDropDataParser.Parse(constants.DropDataFilePath(file))
 		if err != nil {
 			return stacktrace.Propagate(err, "failed to parse drop data file: %s", file)
 		}
@@ -63,7 +63,7 @@ func (dropsLogger *BattledomeItemsLogger) Log(dataFolderPath string, numDropsToP
 		}
 		samplesByArena[items.Metadata.Arena] = append(samplesByArena[items.Metadata.Arena], items.Items...)
 
-		if constants.FILTER_ARENA != "" && constants.FILTER_ARENA != items.Metadata.Arena {
+		if constants.FilterArena != "" && constants.FilterArena != items.Metadata.Arena {
 			continue
 		}
 
@@ -83,15 +83,15 @@ func (dropsLogger *BattledomeItemsLogger) Log(dataFolderPath string, numDropsToP
 			return helpers.PropagateWithSerialisedValue(err, "failed to normalise items: %s", "failed to normalise items; another error occurred while trying to serialise the input: %s", items)
 		}
 
-		orderedNormalisedItems, err := normalisedItems.GetItemsOrderedByProfit()
+		orderedNormalisedItems, err := normalisedItems.ItemsOrderedByProfit()
 		if err != nil {
 			return helpers.PropagateWithSerialisedValue(err, "failed to get items ordered by profit: %s", "failed to get items ordered by profit; another error occurred while trying to serialise the input: %s", normalisedItems)
 		}
 
 		for i, item := range orderedNormalisedItems {
 			itemCount += int(item.Quantity)
-			itemProfit := item.GetProfit(itemPriceCache)
-			itemPercentageProfit, err := item.GetPercentageProfit(itemPriceCache, normalisedItems)
+			itemProfit := item.Profit(itemPriceCache)
+			itemPercentageProfit, err := item.PercentageProfit(itemPriceCache, normalisedItems)
 			if err != nil {
 				return helpers.PropagateWithSerialisedValue(err, "failed to get percentage profit: %s", "failed to get percentage profit; another error occurred while trying to serialise the input: %s", items)
 			}
@@ -102,13 +102,13 @@ func (dropsLogger *BattledomeItemsLogger) Log(dataFolderPath string, numDropsToP
 				strconv.Itoa(i + 1),
 				string(item.Name),
 				strconv.Itoa(int(item.Quantity)),
-				helpers.FormatFloat(itemPriceCache.GetPrice(string(item.Name))) + " NP",
+				helpers.FormatFloat(itemPriceCache.Price(string(item.Name))) + " NP",
 				helpers.FormatFloat(itemProfit) + " NP",
 				helpers.FormatPercentage(itemPercentageProfit) + "%",
 			})
 		}
 
-		totalProfit, err := normalisedItems.GetTotalProfit()
+		totalProfit, err := normalisedItems.TotalProfit()
 		if err != nil {
 			return helpers.PropagateWithSerialisedValue(err, "failed to get total profit: %s", "failed to get total profit; an error occurred while trying to serialise the input to log: %s", normalisedItems)
 		}
@@ -123,7 +123,7 @@ func (dropsLogger *BattledomeItemsLogger) Log(dataFolderPath string, numDropsToP
 		})
 
 		slog.Info(items.Metadata.String())
-		for _, line := range profitBreakdownTable.GetLines() {
+		for _, line := range profitBreakdownTable.Lines() {
 			slog.Info("\t" + line)
 		}
 		slog.Info("")

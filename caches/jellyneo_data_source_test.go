@@ -12,10 +12,10 @@ func TestMain(m *testing.M) {
 	os.Exit(code)
 }
 
-func TestGetJellyNeoPrice(t *testing.T) {
+func TestJellyNeoPrice(t *testing.T) {
 	itemName := "Green Apple"
 	target := NewJellyNeoDataSource()
-	price := target.GetPrice(itemName)
+	price := target.Price(itemName)
 
 	if price <= 0 {
 		t.Fatalf("failed to retrieve price for \"%s\" from JellyNeo! The retrieved price was %f", itemName, price)

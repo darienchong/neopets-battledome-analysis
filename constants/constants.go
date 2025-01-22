@@ -16,32 +16,31 @@ const (
 )
 
 const (
-	ITEM_PRICE_DATA_SOURCE                                         = JellyNeo
-	DATA_FOLDER                                                    = "./../data/"
-	ITEMDB_ITEM_PRICE_CACHE_FILE                                   = "neopets_itemdb_item_price_cache.txt"
-	JELLYNEO_ITEM_PRICE_CACHE_FILE                                 = "neopets_jellyneo_item_price_cache.txt"
-	ITEW_WEIGHTS_FILE                                              = "neopets_battledome_item_weights.txt"
-	ITEM_DROP_RATES_FILE_TEMPLATE                                  = "neopets_battledome_item_drop_rates_%s_%d.txt"
-	GENERATED_DROPS_FILE_TEMPLATE                                  = "neopets_battledome_generated_items_%s_%d.txt"
-	DATA_EXPIRY_TIME_LAYOUT                                        = "2006-01-02 15:04:05.000000"
-	TIME_LAYOUT                                                    = "2006/01/02 15:04:05"
-	BATTLEDOME_DROPS_FOLDER                                        = "./../battledome_drop_data/"
-	FLOAT_FORMAT_LAYOUT                                            = "#,###."
-	PERCENTAGE_FORMAT_LAYOUT                                       = "#,###.##"
-	NUMBER_OF_ITEMS_TO_PRINT                                       = 15
-	BATTLEDOME_DROPS_PER_DAY                                       = 15
-	NUMBER_OF_ITEMS_TO_GENERATE_FOR_ESTIMATING_DROP_RATES          = 100_000_000
-	NUMBER_OF_ITEMS_TO_GENERATE_FOR_ESTIMATING_PROFIT_STATISTICS   = 100_000_000
-	SIGNIFICANCE_LEVEL                                             = 0.05
-	NUMBER_OF_BOOTSTRAP_SAMPLES_FOR_ESTIMATING_CONFIDENCE_INTERVAL = 100_000
+	ItemPriceDataSource            = JellyNeo
+	DataFolder                     = "./../data/"
+	ItemDBItemPriceCacheFile       = "neopets_itemdb_item_price_cache.txt"
+	JellyNeoItemPriceCacheFile     = "neopets_jellyneo_item_price_cache.txt"
+	ItemWeightsFileName            = "neopets_battledome_item_weights.txt"
+	ItemDropRatesFileNameTemplate  = "neopets_battledome_item_drop_rates_%s_%d.txt"
+	GeneratedDropsFileNameTemplate = "neopets_battledome_generated_items_%s_%d.txt"
+	DataExpiryTimeLayout           = "2006-01-02 15:04:05.000000"
+	TimeLayout                     = "2006/01/02 15:04:05"
+	BattledomeDropsFolder          = "./../battledome_drop_data/"
+	FloatFormatLayout              = "#,###."
+	PercentageFormatLayout         = "#,###.##"
+	NumberOfItemsToPrint           = 15
+	BattledomeDropsPerDay          = 15
+	NumberOfItemsToGenerate        = 100_000_000
+	SignificanceLevel              = 0.05
+	NumberOfBootstrapSamples       = 100_000
 
-	FILTER_ARENA                                       = ""
-	NUMBER_OF_DROPS_TO_PRINT                           = 3
-	SHOULD_IGNORE_CHALLENGER_DROPS_IN_ARENA_COMPARISON = true
+	FilterArena                                  = ""
+	NumberOfDropsToPrint                         = 3
+	ShouldIgnoreChallengerDropsInArenaComparison = true
 )
 
 var (
-	BROWN_CODESTONES = []string{
+	BrownCodestones = []string{
 		"Bri Codestone",
 		"Eo Codestone",
 		"Har Codestone",
@@ -53,7 +52,7 @@ var (
 		"Vo Codestone",
 		"Zei Codestone",
 	}
-	RED_CODESTONES = []string{
+	RedCodestones = []string{
 		"Cui Codestone",
 		"Kew Codestone",
 		"Mag Codestone",
@@ -61,7 +60,7 @@ var (
 		"Vux Codestone",
 		"Zed Codestone",
 	}
-	ARENAS = []string{
+	Arenas = []string{
 		"Cosmic Dome",
 		"Neocola Centre",
 		"Central Arena",
@@ -79,18 +78,18 @@ func CombineRelativeFolderAndFilename(folder string, fileName string) string {
 	return filepath.Join(exPath, folder, fileName)
 }
 
-func GetDropDataFilePath(fileName string) string {
-	return CombineRelativeFolderAndFilename(BATTLEDOME_DROPS_FOLDER, fileName)
+func DropDataFilePath(fileName string) string {
+	return CombineRelativeFolderAndFilename(BattledomeDropsFolder, fileName)
 }
 
-func GetItemWeightsFilePath() string {
-	return CombineRelativeFolderAndFilename(DATA_FOLDER, ITEW_WEIGHTS_FILE)
+func ItemWeightsFilePath() string {
+	return CombineRelativeFolderAndFilename(DataFolder, ItemWeightsFileName)
 }
 
-func GetDropRatesFilePath(arena string) string {
-	return CombineRelativeFolderAndFilename(DATA_FOLDER, fmt.Sprintf(ITEM_DROP_RATES_FILE_TEMPLATE, strings.ReplaceAll(arena, " ", "_"), NUMBER_OF_ITEMS_TO_GENERATE_FOR_ESTIMATING_DROP_RATES))
+func DropRatesFilePath(arena string) string {
+	return CombineRelativeFolderAndFilename(DataFolder, fmt.Sprintf(ItemDropRatesFileNameTemplate, strings.ReplaceAll(arena, " ", "_"), NumberOfItemsToGenerate))
 }
 
-func GetGeneratedDropsFilePath(arena string) string {
-	return CombineRelativeFolderAndFilename(DATA_FOLDER, fmt.Sprintf(GENERATED_DROPS_FILE_TEMPLATE, strings.ReplaceAll(arena, " ", "_"), NUMBER_OF_ITEMS_TO_GENERATE_FOR_ESTIMATING_PROFIT_STATISTICS))
+func GeneratedDropsFilePath(arena string) string {
+	return CombineRelativeFolderAndFilename(DataFolder, fmt.Sprintf(GeneratedDropsFileNameTemplate, strings.ReplaceAll(arena, " ", "_"), NumberOfItemsToGenerate))
 }

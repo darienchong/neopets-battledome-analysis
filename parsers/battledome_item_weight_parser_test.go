@@ -10,7 +10,7 @@ import (
 
 func TestBattledomeItemWeightsParser(t *testing.T) {
 	target := NewBattledomeItemWeightParser()
-	itemWeights, err := target.Parse(constants.GetItemWeightsFilePath())
+	itemWeights, err := target.Parse(constants.ItemWeightsFilePath())
 	if err != nil {
 		t.Fatalf("%s", err)
 	}

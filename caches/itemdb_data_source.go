@@ -12,15 +12,15 @@ import (
 	"github.com/darienchong/neopets-battledome-analysis/constants"
 )
 
-var _ ItemPriceDataSource = (*ItemDbDataSource)(nil)
+var _ ItemPriceDataSource = (*ItemDBDataSource)(nil)
 
-type ItemDbDataSource struct{}
+type ItemDBDataSource struct{}
 
-func NewItemDbDataSource() ItemPriceDataSource {
-	return &ItemDbDataSource{}
+func NewItemDBDataSource() ItemPriceDataSource {
+	return &ItemDBDataSource{}
 }
 
-func getNormalisedItemDbItemName(itemName string) string {
+func normalisedItemDBItemName(itemName string) string {
 	itemName = strings.ToLower(itemName)
 	itemName = strings.ReplaceAll(itemName, " ", "-")
 	itemName = strings.ReplaceAll(itemName, ":", "")
@@ -28,20 +28,20 @@ func getNormalisedItemDbItemName(itemName string) string {
 	return itemName
 }
 
-func getItemDbPriceUrl(itemName string) string {
-	return fmt.Sprintf("https://itemdb.com.br/item/%s", getNormalisedItemDbItemName(itemName))
+func itemDBPriceUrl(itemName string) string {
+	return fmt.Sprintf("https://itemdb.com.br/item/%s", normalisedItemDBItemName(itemName))
 }
 
-func (cache *ItemDbDataSource) GetFilePath() string {
-	return constants.CombineRelativeFolderAndFilename(constants.DATA_FOLDER, constants.ITEMDB_ITEM_PRICE_CACHE_FILE)
+func (cache *ItemDBDataSource) FilePath() string {
+	return constants.CombineRelativeFolderAndFilename(constants.DataFolder, constants.ItemDBItemPriceCacheFile)
 }
 
-func (cache *ItemDbDataSource) GetPrice(itemName string) float64 {
+func (cache *ItemDBDataSource) Price(itemName string) float64 {
 	if slices.Contains(bannedItems, itemName) {
 		return 0.0
 	}
 
-	res, err := http.Get(getItemDbPriceUrl(itemName))
+	res, err := http.Get(itemDBPriceUrl(itemName))
 	if err != nil {
 		return 0.0
 	}

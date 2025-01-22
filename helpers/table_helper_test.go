@@ -42,7 +42,7 @@ func generateNamedTable(name string, numRows int) *Table {
 func TestTable(t *testing.T) {
 	table := generateTable(5)
 
-	for _, line := range table.GetLines() {
+	for _, line := range table.Lines() {
 		slog.Info(line)
 	}
 }
@@ -51,7 +51,7 @@ func TestTableWithDistinctLastRow(t *testing.T) {
 	table := generateTable(6)
 	table.IsLastRowDistinct = true
 
-	for _, line := range table.GetLines() {
+	for _, line := range table.Lines() {
 		slog.Info(line)
 	}
 }
@@ -59,7 +59,7 @@ func TestTableWithDistinctLastRow(t *testing.T) {
 func TestNamedTable(t *testing.T) {
 	table := generateNamedTable("Name", 5)
 
-	for _, line := range table.GetLines() {
+	for _, line := range table.Lines() {
 		slog.Info(line)
 	}
 }
@@ -69,7 +69,7 @@ func TestMultipleTables(t *testing.T) {
 	secondTable := generateNamedTable("Second", 5)
 	thirdTable := generateNamedTable("Third", 5)
 
-	for _, line := range firstTable.GetLinesWith(" ", secondTable, thirdTable) {
+	for _, line := range firstTable.LinesWith(" ", secondTable, thirdTable) {
 		slog.Info(line)
 	}
 }
@@ -79,7 +79,7 @@ func TestMultipleTablesWithDifferentLineCounts(t *testing.T) {
 	secondTable := generateNamedTable("Second", 6)
 	thirdTable := generateNamedTable("Third", 7)
 
-	for _, line := range firstTable.GetLinesWith(" ", secondTable, thirdTable) {
+	for _, line := range firstTable.LinesWith(" ", secondTable, thirdTable) {
 		slog.Info(line)
 	}
 }
@@ -89,7 +89,7 @@ func TestMixedNamedAndUnnamedTablesWithDifferentLineCounts(t *testing.T) {
 	secondTable := generateNamedTable("Second", 6)
 	thirdTable := generateNamedTable("Third", 7)
 
-	for _, line := range firstTable.GetLinesWith(" ", secondTable, thirdTable) {
+	for _, line := range firstTable.LinesWith(" ", secondTable, thirdTable) {
 		slog.Info(line)
 	}
 }

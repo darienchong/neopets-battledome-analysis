@@ -11,17 +11,17 @@ import (
 	"github.com/schollz/progressbar/v3"
 )
 
-type ItemGenerationService struct {
+type BattledomeItemGenerationService struct {
 	ItemWeightService *BattledomeItemWeightService
 }
 
-func NewItemGenerationService() *ItemGenerationService {
-	return &ItemGenerationService{
+func NewItemGenerationService() *BattledomeItemGenerationService {
+	return &BattledomeItemGenerationService{
 		ItemWeightService: NewBattledomeItemWeightService(),
 	}
 }
 
-func (service *ItemGenerationService) generateItem(weights []models.BattledomeItemWeight) string {
+func (service *BattledomeItemGenerationService) generateItem(weights []models.BattledomeItemWeight) string {
 	rand.Shuffle(len(weights), func(i int, j int) {
 		weights[i], weights[j] = weights[j], weights[i]
 	})
@@ -43,7 +43,7 @@ func (service *ItemGenerationService) generateItem(weights []models.BattledomeIt
 	panic(fmt.Errorf("failed to generate an item - this should not happen; total was %f, sample was %f", total, sample))
 }
 
-func (service *ItemGenerationService) GenerateItems(arena models.Arena, count int) (models.NormalisedBattledomeItems, error) {
+func (service *BattledomeItemGenerationService) GenerateItems(arena models.Arena, count int) (models.NormalisedBattledomeItems, error) {
 	weights, err := service.ItemWeightService.GetItemWeights(string(arena))
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to get item weights for \"%s\"", arena)

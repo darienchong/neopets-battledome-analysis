@@ -32,22 +32,22 @@ func (first *BattledomeItem) Union(second *BattledomeItem) (*BattledomeItem, err
 	return combined, nil
 }
 
-func (item *BattledomeItem) GetProfit(itemPriceCache caches.ItemPriceCache) float64 {
-	return float64(item.Quantity) * itemPriceCache.GetPrice(string(item.Name))
+func (item *BattledomeItem) Profit(itemPriceCache caches.ItemPriceCache) float64 {
+	return float64(item.Quantity) * itemPriceCache.Price(string(item.Name))
 }
 
-func (item *BattledomeItem) GetPercentageProfit(itemPriceCache caches.ItemPriceCache, items NormalisedBattledomeItems) (float64, error) {
+func (item *BattledomeItem) PercentageProfit(itemPriceCache caches.ItemPriceCache, items NormalisedBattledomeItems) (float64, error) {
 	var defaultValue float64
 
-	totalProfit, err := items.GetTotalProfit()
+	totalProfit, err := items.TotalProfit()
 	if err != nil {
 		return defaultValue, helpers.PropagateWithSerialisedValue(err, "failed to get total profit for \"%s\"", "failed to get total profit for a battledome item; additionally encountered an error while trying to serialise the value to log: %s", item)
 	}
-	return item.GetProfit(itemPriceCache) / totalProfit, nil
+	return item.Profit(itemPriceCache) / totalProfit, nil
 }
 
-func (item *BattledomeItem) GetDropRate(items NormalisedBattledomeItems) float64 {
-	return float64(item.Quantity) / float64(items.GetTotalItemQuantity())
+func (item *BattledomeItem) DropRate(items NormalisedBattledomeItems) float64 {
+	return float64(item.Quantity) / float64(items.TotalItemQuantity())
 }
 
 func (item *BattledomeItem) String() string {

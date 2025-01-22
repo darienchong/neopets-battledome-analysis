@@ -16,7 +16,7 @@ type Table struct {
 	IsLastRowDistinct bool
 }
 
-func (table *Table) getColMaxSize(colIndex int) int {
+func (table *Table) colMaxSize(colIndex int) int {
 	currMaxSize := len(table.headers[colIndex].(string))
 	for _, row := range table.rows {
 		currMaxSize = int(math.Max(float64(currMaxSize), float64(len(row[colIndex].(string)))))
@@ -24,11 +24,11 @@ func (table *Table) getColMaxSize(colIndex int) int {
 	return currMaxSize
 }
 
-func (table *Table) getLoggingTemplate() string {
+func (table *Table) loggingTemplate() string {
 	template := ""
 	colMaxSizes := make([]int, len(table.headers))
 	for i, _ := range table.headers {
-		colMaxSizes[i] = table.getColMaxSize(i)
+		colMaxSizes[i] = table.colMaxSize(i)
 	}
 
 	for i := 0; i < len(table.headers); i++ {
@@ -80,7 +80,7 @@ func (table *Table) generateTableLineWithoutColumnSeparators() string {
 		} else {
 			separator += "="
 		}
-		separator += strings.Repeat("=", table.getColMaxSize(i)+2)
+		separator += strings.Repeat("=", table.colMaxSize(i)+2)
 		if i == len(table.headers)-1 {
 			separator += "|"
 		}
@@ -92,7 +92,7 @@ func (table *Table) generateTableLine() string {
 	separator := ""
 	for i := range table.headers {
 		separator += "|"
-		separator += strings.Repeat("=", table.getColMaxSize(i)+2)
+		separator += strings.Repeat("=", table.colMaxSize(i)+2)
 		if i == len(table.headers)-1 {
 			separator += "|"
 		}
@@ -100,10 +100,10 @@ func (table *Table) generateTableLine() string {
 	return separator
 }
 
-func (table *Table) GetLines() []string {
+func (table *Table) Lines() []string {
 	lines := []string{}
 
-	template := table.getLoggingTemplate()
+	template := table.loggingTemplate()
 
 	if table.Name != "" {
 		rowSeparator := table.generateTableLineWithoutColumnSeparators()
@@ -135,16 +135,16 @@ func (table *Table) GetLines() []string {
 	return lines
 }
 
-func getEmptyLine(length int) string {
+func emptyLine(length int) string {
 	return strings.Repeat(" ", length)
 }
 
-func (table *Table) GetLinesWith(tableSeparator string, tables ...*Table) []string {
+func (table *Table) LinesWith(tableSeparator string, tables ...*Table) []string {
 	tables = append([]*Table{table}, tables...)
 	lines := []string{}
 
 	tableLines := Map(tables, func(table *Table) []string {
-		return table.GetLines()
+		return table.Lines()
 	})
 
 	isNamedTableExists := false
@@ -173,7 +173,7 @@ func (table *Table) GetLinesWith(tableSeparator string, tables ...*Table) []stri
 			currTable := tables[j]
 			currTableLines := tableLines[j]
 			if i < 2 && isNamedTableExists && currTable.Name == "" {
-				lineParts = append(lineParts, getEmptyLine(len(currTableLines[0])))
+				lineParts = append(lineParts, emptyLine(len(currTableLines[0])))
 				continue
 			}
 
@@ -181,13 +181,13 @@ func (table *Table) GetLinesWith(tableSeparator string, tables ...*Table) []stri
 				if 0 <= i-2 && i-2 < len(currTableLines) {
 					lineParts = append(lineParts, currTableLines[i-2])
 				} else {
-					lineParts = append(lineParts, getEmptyLine(len(currTableLines[0])))
+					lineParts = append(lineParts, emptyLine(len(currTableLines[0])))
 				}
 			} else {
 				if i < len(currTableLines) {
 					lineParts = append(lineParts, currTableLines[i])
 				} else {
-					lineParts = append(lineParts, getEmptyLine(len(currTableLines[0])))
+					lineParts = append(lineParts, emptyLine(len(currTableLines[0])))
 				}
 			}
 		}

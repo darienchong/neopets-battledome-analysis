@@ -21,13 +21,13 @@ func shouldHaveItemAndQuantity(normalisedItems models.NormalisedBattledomeItems,
 
 func TestDropDataParser(t *testing.T) {
 	target := NewBattledomeItemDropDataParser()
-	dto, err := target.Parse(constants.GetDropDataFilePath("2024_12_20.txt"))
+	dto, err := target.Parse(constants.DropDataFilePath("2024_12_20.txt"))
 	if err != nil {
 		t.Fatalf("Failed to parse file: %s", err)
 	}
 
 	expectedMetadata := new(models.DropsMetadataWithSource)
-	expectedMetadata.Source = filepath.Base(constants.GetDropDataFilePath("2024_12_20.txt"))
+	expectedMetadata.Source = filepath.Base(constants.DropDataFilePath("2024_12_20.txt"))
 	expectedMetadata.Arena = models.Arena("Central Arena")
 	expectedMetadata.Challenger = models.Challenger("Flaming Meerca")
 	expectedMetadata.Difficulty = models.Difficulty("Mighty")

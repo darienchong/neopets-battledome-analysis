@@ -52,15 +52,15 @@ func main() {
 	callClear()
 
 	var dataSource caches.ItemPriceDataSource
-	switch constants.ITEM_PRICE_DATA_SOURCE {
+	switch constants.ItemPriceDataSource {
 	case constants.JellyNeo:
 		dataSource = caches.NewJellyNeoDataSource()
 	case constants.ItemDb:
-		dataSource = caches.NewItemDbDataSource()
+		dataSource = caches.NewItemDBDataSource()
 	default:
-		panic(stacktrace.NewError("unrecognised item price data source type: %d", constants.ITEM_PRICE_DATA_SOURCE))
+		panic(stacktrace.NewError("unrecognised item price data source type: %d", constants.ItemPriceDataSource))
 	}
-	cache, err := caches.GetItemPriceCacheInstance(dataSource)
+	cache, err := caches.ItemPriceCacheInstance(dataSource)
 	if err != nil {
 		panic(stacktrace.Propagate(err, "failed to get item price cache instance"))
 	}
@@ -70,12 +70,12 @@ func main() {
 	if len(args) == 0 {
 		panic(fmt.Errorf("please provide an argument (one of %s)", strings.Join(possibleArgs, ", ")))
 	}
-	dataFolderPath := strings.Replace(constants.BATTLEDOME_DROPS_FOLDER, "../", "", 1)
+	dataFolderPath := strings.Replace(constants.BattledomeDropsFolder, "../", "", 1)
 	switch args[0] {
 	case possibleArgs[0]:
 		var numDropsToLog int64
 		var err error
-		numDropsToLog = constants.NUMBER_OF_DROPS_TO_PRINT
+		numDropsToLog = constants.NumberOfDropsToPrint
 		if len(args) > 1 {
 			numDropsToLog, err = strconv.ParseInt(args[1], 0, 64)
 			if err != nil {

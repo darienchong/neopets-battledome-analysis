@@ -17,12 +17,12 @@ func NewDataComparisonService() *DataComparisonService {
 }
 
 func (service *DataComparisonService) CompareByMetadata(metadata models.BattledomeItemMetadata) (realData models.NormalisedBattledomeItems, generatedData models.NormalisedBattledomeItems, err error) {
-	realData, err = service.BattledomeItemsService.GetDropsByMetadata(metadata)
+	realData, err = service.BattledomeItemsService.DropsByMetadata(metadata)
 	if err != nil {
 		return nil, nil, stacktrace.Propagate(err, "failed to get drops by metadata for \"%s\"", metadata.String())
 	}
 
-	generatedData, err = service.BattledomeItemsService.GenerateDropsByArena(metadata.Arena)
+	generatedData, err = service.BattledomeItemsService.GeneratedDropsByArena(metadata.Arena)
 	if err != nil {
 		return nil, nil, stacktrace.Propagate(err, "failed to generate drops by arena for \"%s\"", metadata.Arena)
 	}
@@ -31,12 +31,12 @@ func (service *DataComparisonService) CompareByMetadata(metadata models.Battledo
 }
 
 func (service *DataComparisonService) CompareArena(arena models.Arena) (realData models.NormalisedBattledomeItems, generatedData models.NormalisedBattledomeItems, err error) {
-	realData, err = service.BattledomeItemsService.GetDropsByArena(arena)
+	realData, err = service.BattledomeItemsService.DropsByArena(arena)
 	if err != nil {
 		return nil, nil, stacktrace.Propagate(err, "failed to get drops by arena for \"%s\"", arena)
 	}
 
-	generatedData, err = service.BattledomeItemsService.GenerateDropsByArena(arena)
+	generatedData, err = service.BattledomeItemsService.GeneratedDropsByArena(arena)
 	if err != nil {
 		return nil, nil, stacktrace.Propagate(err, "failed to generate drops by arena for \"%s\"", arena)
 	}
@@ -45,13 +45,13 @@ func (service *DataComparisonService) CompareArena(arena models.Arena) (realData
 }
 
 func (service *DataComparisonService) CompareAllChallengers() (challengerData []models.NormalisedBattledomeItems, err error) {
-	data, err := service.BattledomeItemsService.GetDropsGroupedByMetadata()
+	data, err := service.BattledomeItemsService.DropsGroupedByMetadata()
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to get drops grouped by metadata")
 	}
 
 	challengerData = helpers.OrderByDescending(helpers.Values(data), func(normalisedItems models.NormalisedBattledomeItems) float64 {
-		meanDropsProfit, err := normalisedItems.GetMeanDropsProfit()
+		meanDropsProfit, err := normalisedItems.MeanDropsProfit()
 		if err != nil {
 			return 0.0
 		}

@@ -112,7 +112,7 @@ var (
 	}
 )
 
-func getUserAgent() string {
+func userAgent() string {
 	return strings.Split(USER_AGENTS[rand.IntN(len(USER_AGENTS))], "|")[1]
 }
 
@@ -126,6 +126,6 @@ func HumanlikeGet(url string) (*http.Response, error) {
 		return nil, err
 	}
 
-	req.Header.Set("User-Agent", getUserAgent())
+	req.Header.Set("User-Agent", userAgent())
 	return client.Do(req)
 }

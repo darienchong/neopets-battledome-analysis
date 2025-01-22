@@ -8,7 +8,7 @@ import (
 	"github.com/palantir/stacktrace"
 )
 
-func GetFilesInFolder(folderPath string) ([]string, error) {
+func FilesInFolder(folderPath string) ([]string, error) {
 	if strings.HasPrefix(folderPath, ".") {
 		absoluteFolderPath, err := filepath.Abs(folderPath)
 		if err != nil {

@@ -63,8 +63,8 @@ func (parser *BattledomeItemDropDataParser) Parse(filePath string) (*models.Batt
 	for _, item := range dto.Items {
 		itemCount += int(item.Quantity)
 	}
-	if itemCount != constants.BATTLEDOME_DROPS_PER_DAY {
-		slog.Error(fmt.Sprintf("WARNING! The drop data in \"%s\" does not contain %d drops; %d drops were detected.", dto.Metadata.Source, constants.BATTLEDOME_DROPS_PER_DAY, itemCount))
+	if itemCount != constants.BattledomeDropsPerDay {
+		slog.Error(fmt.Sprintf("WARNING! The drop data in \"%s\" does not contain %d drops; %d drops were detected.", dto.Metadata.Source, constants.BattledomeDropsPerDay, itemCount))
 	}
 	return dto, nil
 }
