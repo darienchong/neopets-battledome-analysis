@@ -12,7 +12,7 @@ type ItemPriceDataSourceType int
 const (
 	Unknown ItemPriceDataSourceType = iota
 	JellyNeo
-	ItemDb
+	ItemDB
 )
 
 const (

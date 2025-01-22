@@ -7,7 +7,6 @@ import (
 	"os"
 	"strconv"
 	"strings"
-	"sync"
 	"time"
 
 	"github.com/darienchong/neopets-battledome-analysis/constants"
@@ -27,45 +26,29 @@ type RealItemPriceCache struct {
 }
 
 var (
-	_             ItemPriceCache = (*RealItemPriceCache)(nil)
-	cacheInstance ItemPriceCache
-	bannedItems   = []string{
+	_           ItemPriceCache = (*RealItemPriceCache)(nil)
+	bannedItems                = []string{
 		"nothing",
 	}
 )
 
-func CurrentItemPriceCacheInstance() (ItemPriceCache, error) {
-	if cacheInstance == nil {
-		return nil, stacktrace.NewError("tried to get current item price cache instance when it was not yet initialised")
-	}
-	return cacheInstance, nil
-}
-
-// Note: the first invocation of this method will determine what the data source is
 func ItemPriceCacheInstance(dataSource ItemPriceDataSource) (ItemPriceCache, error) {
-	var once sync.Once
 	var err error
-	once.Do(func() {
-		realCacheInstance := &RealItemPriceCache{
-			dataSource:    dataSource,
-			cachedPrices:  map[string]float64{},
-			specialPrices: map[string]float64{},
-		}
-		realCacheInstance.generateExpiry()
-		if err = realCacheInstance.loadFromFile(); err != nil {
-			err = stacktrace.Propagate(err, "failed to load cache data from file")
-			return
-		}
-		if err = realCacheInstance.loadSpecialPrices(); err != nil {
-			err = stacktrace.Propagate(err, "failed to load special prices")
-			return
-		}
-		cacheInstance = realCacheInstance
-	})
-	if err != nil {
+	realCacheInstance := &RealItemPriceCache{
+		dataSource:    dataSource,
+		cachedPrices:  map[string]float64{},
+		specialPrices: map[string]float64{},
+	}
+	realCacheInstance.generateExpiry()
+	if err = realCacheInstance.loadFromFile(); err != nil {
+		err = stacktrace.Propagate(err, "failed to load cache data from file")
 		return nil, err
 	}
-	return cacheInstance, nil
+	if err = realCacheInstance.loadSpecialPrices(); err != nil {
+		err = stacktrace.Propagate(err, "failed to load special prices")
+		return nil, err
+	}
+	return ItemPriceCache(realCacheInstance), nil
 }
 
 func (c *RealItemPriceCache) loadSpecialPrices() error {

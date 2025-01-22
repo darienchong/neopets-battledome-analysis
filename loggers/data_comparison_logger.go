@@ -5,6 +5,7 @@ import (
 	"log/slog"
 	"strings"
 
+	"github.com/darienchong/neopets-battledome-analysis/caches"
 	"github.com/darienchong/neopets-battledome-analysis/constants"
 	"github.com/darienchong/neopets-battledome-analysis/helpers"
 	"github.com/darienchong/neopets-battledome-analysis/models"
@@ -22,14 +23,14 @@ type DataComparisonLogger struct {
 	DataComparisonViewer  *viewers.DataComparisonViewer
 }
 
-func NewDataComparisonLogger() *DataComparisonLogger {
+func NewDataComparisonLogger(dataComparisonService *services.DataComparisonService, dataComparisonViewer *viewers.DataComparisonViewer) *DataComparisonLogger {
 	return &DataComparisonLogger{
-		DataComparisonService: services.NewDataComparisonService(),
-		DataComparisonViewer:  viewers.NewDataComparisonViewer(),
+		DataComparisonService: dataComparisonService,
+		DataComparisonViewer:  dataComparisonViewer,
 	}
 }
 
-func (l *DataComparisonLogger) BriefCompareAllArenas() error {
+func (l *DataComparisonLogger) BriefCompareAllArenas(itemPriceCache caches.ItemPriceCache) error {
 	realData := map[models.Arena]models.NormalisedBattledomeItems{}
 	generatedData := map[models.Arena]models.NormalisedBattledomeItems{}
 
@@ -43,7 +44,7 @@ func (l *DataComparisonLogger) BriefCompareAllArenas() error {
 		generatedData[arena] = generatedArenaData
 	}
 
-	lines, err := l.DataComparisonViewer.ViewBriefArenaComparisons(realData, generatedData)
+	lines, err := l.DataComparisonViewer.ViewBriefArenaComparisons(itemPriceCache, realData, generatedData)
 	if err != nil {
 		return stacktrace.Propagate(err, "failed to generate brief arena comparisons")
 	}
@@ -55,7 +56,7 @@ func (l *DataComparisonLogger) BriefCompareAllArenas() error {
 	return nil
 }
 
-func (l *DataComparisonLogger) CompareAllArenas() error {
+func (l *DataComparisonLogger) CompareAllArenas(itemPriceCache caches.ItemPriceCache) error {
 	comparisonData := helpers.OrderByDescending(
 		helpers.Map(
 			constants.Arenas,
@@ -73,9 +74,9 @@ func (l *DataComparisonLogger) CompareAllArenas() error {
 			var profit float64 = 0.0
 			var err error
 			if constants.ShouldIgnoreChallengerDropsInArenaComparison {
-				profit, err = realData.ArenaMeanDropsProfit(generatedData)
+				profit, err = realData.ArenaMeanDropsProfit(itemPriceCache, generatedData)
 			} else {
-				profit, err = realData.MeanDropsProfit()
+				profit, err = realData.MeanDropsProfit(itemPriceCache)
 			}
 			if err != nil {
 				return 0
@@ -88,7 +89,7 @@ func (l *DataComparisonLogger) CompareAllArenas() error {
 		arena := comparisonDatum.Elements[0].(models.Arena)
 		realData := comparisonDatum.Elements[1].(models.NormalisedBattledomeItems)
 		generatedData := comparisonDatum.Elements[2].(models.NormalisedBattledomeItems)
-		lines, err := l.DataComparisonViewer.ViewArenaComparison(realData, generatedData)
+		lines, err := l.DataComparisonViewer.ViewArenaComparison(itemPriceCache, realData, generatedData)
 		if err != nil {
 			return stacktrace.Propagate(err, "failed to get arena comparison for \"%s\"", arena)
 		}
@@ -103,12 +104,12 @@ func (l *DataComparisonLogger) CompareAllArenas() error {
 	return nil
 }
 
-func (l *DataComparisonLogger) CompareChallenger(metadata models.BattledomeItemMetadata) error {
+func (l *DataComparisonLogger) CompareChallenger(itemPriceCache caches.ItemPriceCache, metadata models.BattledomeItemMetadata) error {
 	realData, generatedData, err := l.DataComparisonService.CompareByMetadata(metadata)
 	if err != nil {
 		return stacktrace.Propagate(err, "failed to generate metadata comparison for \"%s\"", metadata)
 	}
-	lines, err := l.DataComparisonViewer.ViewChallengerComparison(realData, generatedData)
+	lines, err := l.DataComparisonViewer.ViewChallengerComparison(itemPriceCache, realData, generatedData)
 	if err != nil {
 		return stacktrace.Propagate(err, "failed to generate challenger comparison for \"%s\"", metadata)
 	}
@@ -119,13 +120,13 @@ func (l *DataComparisonLogger) CompareChallenger(metadata models.BattledomeItemM
 	return nil
 }
 
-func (l *DataComparisonLogger) CompareAllChallengers() error {
-	data, err := l.DataComparisonService.CompareAllChallengers()
+func (l *DataComparisonLogger) CompareAllChallengers(itemPriceCache caches.ItemPriceCache) error {
+	data, err := l.DataComparisonService.CompareAllChallengers(itemPriceCache)
 	if err != nil {
 		return stacktrace.Propagate(err, "failed to compare all challengers")
 	}
 
-	lines, err := l.DataComparisonViewer.ViewChallengerComparisons(data)
+	lines, err := l.DataComparisonViewer.ViewChallengerComparisons(itemPriceCache, data)
 	if err != nil {
 		return stacktrace.Propagate(err, "failed to generate challenger comparison view")
 	}

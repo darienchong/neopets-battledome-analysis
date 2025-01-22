@@ -39,7 +39,7 @@ func (i *BattledomeItem) Profit(itemPriceCache caches.ItemPriceCache) float64 {
 func (i *BattledomeItem) PercentageProfit(itemPriceCache caches.ItemPriceCache, items NormalisedBattledomeItems) (float64, error) {
 	var defaultValue float64
 
-	totalProfit, err := items.TotalProfit()
+	totalProfit, err := items.TotalProfit(itemPriceCache)
 	if err != nil {
 		return defaultValue, helpers.PropagateWithSerialisedValue(err, "failed to get total profit for \"%s\"", "failed to get total profit for a battledome item; additionally encountered an error while trying to serialise the value to log: %s", i)
 	}

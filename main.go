@@ -8,11 +8,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/darienchong/neopets-battledome-analysis/caches"
 	"github.com/darienchong/neopets-battledome-analysis/constants"
-	"github.com/darienchong/neopets-battledome-analysis/loggers"
+	"github.com/darienchong/neopets-battledome-analysis/infra"
 	"github.com/darienchong/neopets-battledome-analysis/models"
-	"github.com/palantir/stacktrace"
 )
 
 var (
@@ -51,20 +49,9 @@ func callClear() {
 func main() {
 	callClear()
 
-	var dataSource caches.ItemPriceDataSource
-	switch constants.ItemPriceDataSource {
-	case constants.JellyNeo:
-		dataSource = caches.NewJellyNeoDataSource()
-	case constants.ItemDb:
-		dataSource = caches.NewItemDBDataSource()
-	default:
-		panic(stacktrace.NewError("unrecognised item price data source type: %d", constants.ItemPriceDataSource))
-	}
-	cache, err := caches.ItemPriceCacheInstance(dataSource)
-	if err != nil {
-		panic(stacktrace.Propagate(err, "failed to get item price cache instance"))
-	}
-	defer cache.Close()
+	serviceContainer := infra.ServiceContainerInstance()
+	itemPriceCache := serviceContainer.GetItemPriceCache()
+	defer itemPriceCache.Close()
 
 	args := os.Args[1:]
 	if len(args) == 0 {
@@ -82,21 +69,22 @@ func main() {
 				panic(err)
 			}
 		}
-		loggers.NewArenaDropsLogger().Log(dataFolderPath, int(numDropsToLog))
+
+		serviceContainer.GetBattledomeItemsLogger().Log(itemPriceCache, dataFolderPath, int(numDropsToLog))
 	case possibleArgs[1]:
 		if len(args) > 1 && args[1] == "brief" {
-			err := loggers.NewDataComparisonLogger().BriefCompareAllArenas()
+			err := serviceContainer.GetDataComparisonLogger().BriefCompareAllArenas(itemPriceCache)
 			if err != nil {
 				panic(err)
 			}
 		} else {
-			err := loggers.NewDataComparisonLogger().CompareAllArenas()
+			err := serviceContainer.GetDataComparisonLogger().CompareAllArenas(itemPriceCache)
 			if err != nil {
 				panic(err)
 			}
 		}
 	case possibleArgs[2]:
-		err := loggers.NewDataComparisonLogger().CompareAllChallengers()
+		err := serviceContainer.GetDataComparisonLogger().CompareAllChallengers(itemPriceCache)
 		if err != nil {
 			panic(err)
 		}
@@ -111,7 +99,7 @@ func main() {
 			panic(fmt.Errorf("please provide a difficulty"))
 		}
 
-		err := loggers.NewDataComparisonLogger().CompareChallenger(models.BattledomeItemMetadata{
+		err := serviceContainer.GetDataComparisonLogger().CompareChallenger(itemPriceCache, models.BattledomeItemMetadata{
 			Arena:      models.Arena(strings.ReplaceAll(args[1], "_", " ")),
 			Challenger: models.Challenger(strings.ReplaceAll(args[2], "_", " ")),
 			Difficulty: models.Difficulty(strings.ReplaceAll(args[3], "_", " ")),

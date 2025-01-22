@@ -12,9 +12,9 @@ type BattledomeItemWeightService struct {
 	ItemWeightParser *parsers.BattledomeItemWeightParser
 }
 
-func NewBattledomeItemWeightService() *BattledomeItemWeightService {
+func NewBattledomeItemWeightService(itemWeightParser *parsers.BattledomeItemWeightParser) *BattledomeItemWeightService {
 	return &BattledomeItemWeightService{
-		ItemWeightParser: parsers.NewBattledomeItemWeightParser(),
+		ItemWeightParser: itemWeightParser,
 	}
 }
 

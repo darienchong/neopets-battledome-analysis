@@ -1,6 +1,7 @@
 package services
 
 import (
+	"github.com/darienchong/neopets-battledome-analysis/caches"
 	"github.com/darienchong/neopets-battledome-analysis/helpers"
 	"github.com/darienchong/neopets-battledome-analysis/models"
 	"github.com/palantir/stacktrace"
@@ -10,9 +11,9 @@ type DataComparisonService struct {
 	BattledomeItemsService *BattledomeItemsService
 }
 
-func NewDataComparisonService() *DataComparisonService {
+func NewDataComparisonService(battledomeItemsService *BattledomeItemsService) *DataComparisonService {
 	return &DataComparisonService{
-		BattledomeItemsService: NewBattledomeItemsService(),
+		BattledomeItemsService: battledomeItemsService,
 	}
 }
 
@@ -44,14 +45,14 @@ func (s *DataComparisonService) CompareArena(arena models.Arena) (realData model
 	return
 }
 
-func (s *DataComparisonService) CompareAllChallengers() (challengerData []models.NormalisedBattledomeItems, err error) {
+func (s *DataComparisonService) CompareAllChallengers(itemPriceCache caches.ItemPriceCache) (challengerData []models.NormalisedBattledomeItems, err error) {
 	data, err := s.BattledomeItemsService.DropsGroupedByMetadata()
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to get drops grouped by metadata")
 	}
 
 	challengerData = helpers.OrderByDescending(helpers.Values(data), func(normalisedItems models.NormalisedBattledomeItems) float64 {
-		meanDropsProfit, err := normalisedItems.MeanDropsProfit()
+		meanDropsProfit, err := normalisedItems.MeanDropsProfit(itemPriceCache)
 		if err != nil {
 			return 0.0
 		}

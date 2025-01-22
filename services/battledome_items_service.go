@@ -16,11 +16,15 @@ type BattledomeItemsService struct {
 	BattledomeItemDropDataParser  *parsers.BattledomeItemDropDataParser
 }
 
-func NewBattledomeItemsService() *BattledomeItemsService {
+func NewBattledomeItemsService(
+	itemGenerationService *BattledomeItemGenerationService,
+	generatedBattledomeItemParser *parsers.GeneratedBattledomeItemParser,
+	battledomeItemDropDataParser *parsers.BattledomeItemDropDataParser,
+) *BattledomeItemsService {
 	return &BattledomeItemsService{
-		ItemGenerationService:         NewItemGenerationService(),
-		GeneratedBattledomeItemParser: parsers.NewGeneratedBattledomeItemParser(),
-		BattledomeItemDropDataParser:  parsers.NewBattledomeItemDropDataParser(),
+		ItemGenerationService:         itemGenerationService,
+		GeneratedBattledomeItemParser: generatedBattledomeItemParser,
+		BattledomeItemDropDataParser:  battledomeItemDropDataParser,
 	}
 }
 

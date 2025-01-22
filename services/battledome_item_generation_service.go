@@ -15,9 +15,9 @@ type BattledomeItemGenerationService struct {
 	ItemWeightService *BattledomeItemWeightService
 }
 
-func NewItemGenerationService() *BattledomeItemGenerationService {
+func NewBattledomeItemGenerationService(itemWeightService *BattledomeItemWeightService) *BattledomeItemGenerationService {
 	return &BattledomeItemGenerationService{
-		ItemWeightService: NewBattledomeItemWeightService(),
+		ItemWeightService: itemWeightService,
 	}
 }
 

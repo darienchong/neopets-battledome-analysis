@@ -21,11 +21,11 @@ type DataComparisonViewer struct {
 	StatisticsService      *services.StatisticsService
 }
 
-func NewDataComparisonViewer() *DataComparisonViewer {
+func NewDataComparisonViewer(battledomeItemsService *services.BattledomeItemsService, dataComparisonService *services.DataComparisonService, statisticsService *services.StatisticsService) *DataComparisonViewer {
 	return &DataComparisonViewer{
-		BattledomeItemsService: services.NewBattledomeItemsService(),
-		DataComparisonService:  services.NewDataComparisonService(),
-		StatisticsService:      services.NewStatisticsService(),
+		BattledomeItemsService: battledomeItemsService,
+		DataComparisonService:  dataComparisonService,
+		StatisticsService:      statisticsService,
 	}
 }
 
@@ -33,19 +33,10 @@ func dryChance(dropRate float64, trials int) float64 {
 	return math.Pow(1-dropRate, float64(trials))
 }
 
-func isCodestone(itemName models.ItemName) bool {
-	return slices.Contains(constants.BrownCodestones, string(itemName)) || slices.Contains(constants.RedCodestones, string(itemName))
-}
-
-func (v *DataComparisonViewer) generateProfitableItemsTable(data models.NormalisedBattledomeItems, isRealData bool) (*helpers.Table, error) {
+func (v *DataComparisonViewer) generateProfitableItemsTable(itemPriceCache caches.ItemPriceCache, data models.NormalisedBattledomeItems, isRealData bool) (*helpers.Table, error) {
 	dataCopy := models.NormalisedBattledomeItems{}
 	for k, v := range data {
 		dataCopy[k] = v.Copy()
-	}
-
-	itemPriceCache, err := caches.CurrentItemPriceCacheInstance()
-	if err != nil {
-		return nil, stacktrace.Propagate(err, "failed to get item price cache instance")
 	}
 
 	headers := helpers.When(isRealData, []string{
@@ -67,7 +58,7 @@ func (v *DataComparisonViewer) generateProfitableItemsTable(data models.Normalis
 	})
 	table := helpers.NewNamedTable(helpers.When(isRealData, "Actual", "Predicted"), headers)
 
-	_, err = data.Metadata()
+	_, err := data.Metadata()
 	if err != nil {
 		// Means there isn't any data to render
 		return table, nil
@@ -124,15 +115,10 @@ func (v *DataComparisonViewer) generateProfitableItemsTable(data models.Normalis
 	return table, nil
 }
 
-func (v *DataComparisonViewer) generateArenaProfitableItemsTable(data models.NormalisedBattledomeItems, generatedItems models.NormalisedBattledomeItems, isRealData bool) (*helpers.Table, error) {
+func (v *DataComparisonViewer) generateArenaProfitableItemsTable(itemPriceCache caches.ItemPriceCache, data models.NormalisedBattledomeItems, generatedItems models.NormalisedBattledomeItems, isRealData bool) (*helpers.Table, error) {
 	dataCopy := models.NormalisedBattledomeItems{}
 	for k, v := range data {
 		dataCopy[k] = v.Copy()
-	}
-
-	itemPriceCache, err := caches.CurrentItemPriceCacheInstance()
-	if err != nil {
-		return nil, stacktrace.Propagate(err, "failed to get item price cache instance")
 	}
 
 	headers := helpers.When(isRealData, []string{
@@ -154,7 +140,7 @@ func (v *DataComparisonViewer) generateArenaProfitableItemsTable(data models.Nor
 	})
 	table := helpers.NewNamedTable(helpers.When(isRealData, "Actual", "Predicted"), headers)
 
-	_, err = data.Metadata()
+	_, err := data.Metadata()
 	if err != nil {
 		// Means there isn't any data to render
 		return table, nil
@@ -298,7 +284,7 @@ func (v *DataComparisonViewer) generateCodestoneDropRatesTable(realData models.N
 	return table, nil
 }
 
-func (v *DataComparisonViewer) ViewChallengerComparison(realData models.NormalisedBattledomeItems, generatedData models.NormalisedBattledomeItems) ([]string, error) {
+func (v *DataComparisonViewer) ViewChallengerComparison(itemPriceCache caches.ItemPriceCache, realData models.NormalisedBattledomeItems, generatedData models.NormalisedBattledomeItems) ([]string, error) {
 	metadata, err := realData.Metadata()
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to get metadata")
@@ -310,20 +296,20 @@ func (v *DataComparisonViewer) ViewChallengerComparison(realData models.Normalis
 	})
 	profitComparisonTable.IsLastRowDistinct = true
 
-	generatedMeanProfit, err := generatedData.MeanDropsProfit()
+	generatedMeanProfit, err := generatedData.MeanDropsProfit(itemPriceCache)
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to get generated mean drops profit")
 	}
-	generatedProfitStdev, err := generatedData.DropsProfitStdev()
+	generatedProfitStdev, err := generatedData.DropsProfitStdev(itemPriceCache)
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to get generated drop profit stdev")
 	}
 
-	realMeanProfit, err := realData.MeanDropsProfit()
+	realMeanProfit, err := realData.MeanDropsProfit(itemPriceCache)
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to get real mean drops profit")
 	}
-	realProfitStdev, err := realData.DropsProfitStdev()
+	realProfitStdev, err := realData.DropsProfitStdev(itemPriceCache)
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to get real drop profit stdev")
 	}
@@ -341,11 +327,11 @@ func (v *DataComparisonViewer) ViewChallengerComparison(realData models.Normalis
 		fmt.Sprintf("%s NP", helpers.FormatFloat(realMeanProfit-generatedMeanProfit)),
 	})
 
-	realProfitableItemsTable, err := v.generateProfitableItemsTable(realData, true)
+	realProfitableItemsTable, err := v.generateProfitableItemsTable(itemPriceCache, realData, true)
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to generate profitable items table for real data")
 	}
-	generatedProfitableItemsTable, err := v.generateProfitableItemsTable(generatedData, false)
+	generatedProfitableItemsTable, err := v.generateProfitableItemsTable(itemPriceCache, generatedData, false)
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to generate profitable items table for generated data")
 	}
@@ -360,12 +346,12 @@ func (v *DataComparisonViewer) ViewChallengerComparison(realData models.Normalis
 		return nil, stacktrace.Propagate(err, "failed to generate red codestones drop rate table for real and generated data")
 	}
 
-	arenaSpecificDropsTable, err := v.generateArenaSpecificDropsTable(realData, generatedData)
+	arenaSpecificDropsTable, err := v.generateArenaSpecificDropsTable(itemPriceCache, realData, generatedData)
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to generate arena-specific drop rate table for real and generated data")
 	}
 
-	challengerSpecificDropsTable, err := v.generateChallengerSpecificDropsTable(realData, generatedData)
+	challengerSpecificDropsTable, err := v.generateChallengerSpecificDropsTable(itemPriceCache, realData, generatedData)
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed ot generate challenger-specific drop rate table for real and generated data")
 	}
@@ -390,11 +376,7 @@ func isArenaSpecificDrop(itemName models.ItemName, items models.NormalisedBattle
 	return exists
 }
 
-func (v *DataComparisonViewer) generateArenaSpecificDropsTable(realData models.NormalisedBattledomeItems, generatedData models.NormalisedBattledomeItems) (*helpers.Table, error) {
-	itemPriceCache, err := caches.CurrentItemPriceCacheInstance()
-	if err != nil {
-		return nil, stacktrace.Propagate(err, "failed to get item price cache instance")
-	}
+func (v *DataComparisonViewer) generateArenaSpecificDropsTable(itemPriceCache caches.ItemPriceCache, realData models.NormalisedBattledomeItems, generatedData models.NormalisedBattledomeItems) (*helpers.Table, error) {
 	table := helpers.NewNamedTable("Arena-specific drops", []string{
 		"i",
 		"Item Name",
@@ -467,11 +449,7 @@ func (v *DataComparisonViewer) generateArenaSpecificDropsTable(realData models.N
 	return table, nil
 }
 
-func (v *DataComparisonViewer) generateChallengerSpecificDropsTable(realData models.NormalisedBattledomeItems, generatedData models.NormalisedBattledomeItems) (*helpers.Table, error) {
-	itemPriceCache, err := caches.CurrentItemPriceCacheInstance()
-	if err != nil {
-		return nil, stacktrace.Propagate(err, "failed to get item price cache instance")
-	}
+func (v *DataComparisonViewer) generateChallengerSpecificDropsTable(itemPriceCache caches.ItemPriceCache, realData models.NormalisedBattledomeItems, generatedData models.NormalisedBattledomeItems) (*helpers.Table, error) {
 	table := helpers.NewNamedTable("Challenger-specific drops", []string{
 		"i",
 		"Item Name",
@@ -544,9 +522,9 @@ func (v *DataComparisonViewer) generateChallengerSpecificDropsTable(realData mod
 	return table, nil
 }
 
-func (v *DataComparisonViewer) ViewChallengerComparisons(challengerItems []models.NormalisedBattledomeItems) ([]string, error) {
+func (v *DataComparisonViewer) ViewChallengerComparisons(itemPriceCache caches.ItemPriceCache, challengerItems []models.NormalisedBattledomeItems) ([]string, error) {
 	challengerItems = helpers.OrderByDescending(challengerItems, func(items models.NormalisedBattledomeItems) float64 {
-		meanDropsProfit, err := items.MeanDropsProfit()
+		meanDropsProfit, err := items.MeanDropsProfit(itemPriceCache)
 		if err != nil {
 			return 0.0
 		}
@@ -578,11 +556,11 @@ func (v *DataComparisonViewer) ViewChallengerComparisons(challengerItems []model
 			return nil, helpers.PropagateWithSerialisedValue(err, "failed to get metadata from %s", "failed to get metadata from items; additionally encountered an error when trying to serialise the items for logging: %s", items)
 		}
 
-		actualProfit, err := items.MeanDropsProfit()
+		actualProfit, err := items.MeanDropsProfit(itemPriceCache)
 		if err != nil {
 			return nil, helpers.PropagateWithSerialisedValue(err, "failed to get mean drops profit from %s", "failed to get mean drops profit from items; additionally encountered an error when trying to serialise the items for logging: %s", items)
 		}
-		actualProfitLeftBound, actualProfitRightBound, err := items.ProfitConfidenceInterval()
+		actualProfitLeftBound, actualProfitRightBound, err := items.ProfitConfidenceInterval(itemPriceCache)
 		if err != nil {
 			return nil, helpers.PropagateWithSerialisedValue(err, "failed to get profit confidence interval from %s", "failed to get profit confidence interval from items; additionally encountered an error when trying to serialise the items for logging: %s", items)
 		}
@@ -591,11 +569,11 @@ func (v *DataComparisonViewer) ViewChallengerComparisons(challengerItems []model
 		if err != nil {
 			return nil, stacktrace.Propagate(err, "failed to generate drops by arena for \"%s\"", metadata.Arena)
 		}
-		generatedProfit, err := generatedItems.MeanDropsProfit()
+		generatedProfit, err := generatedItems.MeanDropsProfit(itemPriceCache)
 		if err != nil {
 			return nil, stacktrace.Propagate(err, "failed to get mean drops profit for generated items")
 		}
-		generatedProfitLeftBound, generatedProfitRightBound, err := generatedItems.ProfitConfidenceInterval()
+		generatedProfitLeftBound, generatedProfitRightBound, err := generatedItems.ProfitConfidenceInterval(itemPriceCache)
 		if err != nil {
 			return nil, helpers.PropagateWithSerialisedValue(err, "failed to get profit confidence interval from %s", "failed to get profit confidence interval from items; additionally encountered an error when trying to serialise the items for logging: %s", items)
 		}
@@ -658,7 +636,7 @@ func (v *DataComparisonViewer) ViewChallengerComparisons(challengerItems []model
 	return lines, nil
 }
 
-func (viewer *DataComparisonViewer) ViewArenaComparison(realData models.NormalisedBattledomeItems, generatedData models.NormalisedBattledomeItems) ([]string, error) {
+func (viewer *DataComparisonViewer) ViewArenaComparison(itemPriceCache caches.ItemPriceCache, realData models.NormalisedBattledomeItems, generatedData models.NormalisedBattledomeItems) ([]string, error) {
 	metadata, err := generatedData.Metadata()
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to get metadata")
@@ -677,20 +655,20 @@ func (viewer *DataComparisonViewer) ViewArenaComparison(realData models.Normalis
 	})
 	profitComparisonTable.IsLastRowDistinct = true
 
-	generatedMeanProfit, err := generatedData.MeanDropsProfit()
+	generatedMeanProfit, err := generatedData.MeanDropsProfit(itemPriceCache)
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to get mean drops profit")
 	}
-	generatedProfitLeftBound, generatedProfitRightBound, err := generatedData.ProfitConfidenceInterval()
+	generatedProfitLeftBound, generatedProfitRightBound, err := generatedData.ProfitConfidenceInterval(itemPriceCache)
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to get profit confidence interval")
 	}
 
 	var realMeanProfit float64 = 0.0
 	if constants.ShouldIgnoreChallengerDropsInArenaComparison {
-		realMeanProfit, err = realData.ArenaMeanDropsProfit(generatedData)
+		realMeanProfit, err = realData.ArenaMeanDropsProfit(itemPriceCache, generatedData)
 	} else {
-		realMeanProfit, err = realData.MeanDropsProfit()
+		realMeanProfit, err = realData.MeanDropsProfit(itemPriceCache)
 	}
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to get mean drops profit")
@@ -699,9 +677,9 @@ func (viewer *DataComparisonViewer) ViewArenaComparison(realData models.Normalis
 	var realProfitLeftBound float64 = 0.0
 	var realProfitRightBound float64 = 0.0
 	if constants.ShouldIgnoreChallengerDropsInArenaComparison {
-		realProfitLeftBound, realProfitRightBound, err = realData.ArenaProfitConfidenceInterval(generatedData)
+		realProfitLeftBound, realProfitRightBound, err = realData.ArenaProfitConfidenceInterval(itemPriceCache, generatedData)
 	} else {
-		realProfitLeftBound, realProfitRightBound, err = realData.ProfitConfidenceInterval()
+		realProfitLeftBound, realProfitRightBound, err = realData.ProfitConfidenceInterval(itemPriceCache)
 	}
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to get profit confidence interval")
@@ -722,9 +700,9 @@ func (viewer *DataComparisonViewer) ViewArenaComparison(realData models.Normalis
 
 	var realProfitableItemsTable *helpers.Table
 	if constants.ShouldIgnoreChallengerDropsInArenaComparison {
-		realProfitableItemsTable, err = viewer.generateArenaProfitableItemsTable(realData, generatedData, true)
+		realProfitableItemsTable, err = viewer.generateArenaProfitableItemsTable(itemPriceCache, realData, generatedData, true)
 	} else {
-		realProfitableItemsTable, err = viewer.generateProfitableItemsTable(realData, true)
+		realProfitableItemsTable, err = viewer.generateProfitableItemsTable(itemPriceCache, realData, true)
 	}
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to generate profitable items table")
@@ -732,9 +710,9 @@ func (viewer *DataComparisonViewer) ViewArenaComparison(realData models.Normalis
 
 	var generatedProfitableItemsTable *helpers.Table
 	if constants.ShouldIgnoreChallengerDropsInArenaComparison {
-		generatedProfitableItemsTable, err = viewer.generateArenaProfitableItemsTable(generatedData, generatedData, false)
+		generatedProfitableItemsTable, err = viewer.generateArenaProfitableItemsTable(itemPriceCache, generatedData, generatedData, false)
 	} else {
-		generatedProfitableItemsTable, err = viewer.generateProfitableItemsTable(generatedData, false)
+		generatedProfitableItemsTable, err = viewer.generateProfitableItemsTable(itemPriceCache, generatedData, false)
 	}
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to generate profitable items table")
@@ -765,7 +743,7 @@ func (viewer *DataComparisonViewer) ViewArenaComparison(realData models.Normalis
 	return lines, nil
 }
 
-func (viewer *DataComparisonViewer) ViewBriefArenaComparisons(realData map[models.Arena]models.NormalisedBattledomeItems, generatedData map[models.Arena]models.NormalisedBattledomeItems) ([]string, error) {
+func (viewer *DataComparisonViewer) ViewBriefArenaComparisons(itemPriceCache caches.ItemPriceCache, realData map[models.Arena]models.NormalisedBattledomeItems, generatedData map[models.Arena]models.NormalisedBattledomeItems) ([]string, error) {
 	orderedArenas := helpers.OrderByDescending(constants.Arenas, func(arena string) float64 {
 		normalisedItems, exists := realData[models.Arena(arena)]
 		if !exists || normalisedItems.TotalItemQuantity() == 0 {
@@ -775,9 +753,9 @@ func (viewer *DataComparisonViewer) ViewBriefArenaComparisons(realData map[model
 		var profit float64 = 0.0
 		var err error
 		if constants.ShouldIgnoreChallengerDropsInArenaComparison {
-			profit, err = normalisedItems.ArenaMeanDropsProfit(generatedData[models.Arena(arena)])
+			profit, err = normalisedItems.ArenaMeanDropsProfit(itemPriceCache, generatedData[models.Arena(arena)])
 		} else {
-			profit, err = normalisedItems.MeanDropsProfit()
+			profit, err = normalisedItems.MeanDropsProfit(itemPriceCache)
 		}
 		if err != nil {
 			return 0.0
@@ -809,18 +787,18 @@ func (viewer *DataComparisonViewer) ViewBriefArenaComparisons(realData map[model
 		realArenaData, exists := realData[models.Arena(arena)]
 		if exists {
 			if constants.ShouldIgnoreChallengerDropsInArenaComparison {
-				realProfitLeftBound, realProfitRightBound, err = realArenaData.ArenaProfitConfidenceInterval(generatedData[models.Arena(arena)])
+				realProfitLeftBound, realProfitRightBound, err = realArenaData.ArenaProfitConfidenceInterval(itemPriceCache, generatedData[models.Arena(arena)])
 			} else {
-				realProfitLeftBound, realProfitRightBound, err = realArenaData.ProfitConfidenceInterval()
+				realProfitLeftBound, realProfitRightBound, err = realArenaData.ProfitConfidenceInterval(itemPriceCache)
 			}
 			if err != nil {
 				return nil, stacktrace.Propagate(err, "failed to get real profit confidence interval")
 			}
 
 			if constants.ShouldIgnoreChallengerDropsInArenaComparison {
-				realMeanProfit, err = realArenaData.ArenaMeanDropsProfit(generatedData[models.Arena(arena)])
+				realMeanProfit, err = realArenaData.ArenaMeanDropsProfit(itemPriceCache, generatedData[models.Arena(arena)])
 			} else {
-				realMeanProfit, err = realArenaData.MeanDropsProfit()
+				realMeanProfit, err = realArenaData.MeanDropsProfit(itemPriceCache)
 			}
 			if err != nil {
 				return nil, stacktrace.Propagate(err, "failed to get real mean profit")
@@ -833,11 +811,11 @@ func (viewer *DataComparisonViewer) ViewBriefArenaComparisons(realData map[model
 
 		generatedArenaData, exists := generatedData[models.Arena(arena)]
 		if exists {
-			generatedProfitLeftBound, generatedProfitRightBound, err = generatedArenaData.ProfitConfidenceInterval()
+			generatedProfitLeftBound, generatedProfitRightBound, err = generatedArenaData.ProfitConfidenceInterval(itemPriceCache)
 			if err != nil {
 				return nil, stacktrace.Propagate(err, "failed to get generated profit confidence interval")
 			}
-			generatedMeanProfit, err = generatedArenaData.MeanDropsProfit()
+			generatedMeanProfit, err = generatedArenaData.MeanDropsProfit(itemPriceCache)
 			if err != nil {
 				return nil, stacktrace.Propagate(err, "failed to get generated mean profit")
 			}

@@ -20,25 +20,20 @@ type BattledomeItemsLogger struct {
 	BattledomeItemDropDataParser *parsers.BattledomeItemDropDataParser
 }
 
-func NewArenaDropsLogger() *BattledomeItemsLogger {
+func NewBattledomeItemsLogger(battledomeItemsService *services.BattledomeItemsService, battledomeItemDropDataParser *parsers.BattledomeItemDropDataParser) *BattledomeItemsLogger {
 	return &BattledomeItemsLogger{
-		BattledomeItemsService:       services.NewBattledomeItemsService(),
-		BattledomeItemDropDataParser: parsers.NewBattledomeItemDropDataParser(),
+		BattledomeItemsService:       battledomeItemsService,
+		BattledomeItemDropDataParser: battledomeItemDropDataParser,
 	}
 }
 
-func (l *BattledomeItemsLogger) Log(dataFolderPath string, numDropsToPrint int) error {
+func (l *BattledomeItemsLogger) Log(itemPriceCache caches.ItemPriceCache, dataFolderPath string, numDropsToPrint int) error {
 	if numDropsToPrint <= 0 {
 		numDropsToPrint = constants.NumberOfDropsToPrint
 	}
 
 	if constants.FilterArena != "" {
 		slog.Info(fmt.Sprintf("Only displaying data related to \"%s\"", constants.FilterArena))
-	}
-
-	itemPriceCache, err := caches.CurrentItemPriceCacheInstance()
-	if err != nil {
-		return stacktrace.Propagate(err, "failed to get item price cache instance")
 	}
 
 	files, err := helpers.FilesInFolder(dataFolderPath)
@@ -83,7 +78,7 @@ func (l *BattledomeItemsLogger) Log(dataFolderPath string, numDropsToPrint int) 
 			return helpers.PropagateWithSerialisedValue(err, "failed to normalise items: %s", "failed to normalise items; another error occurred while trying to serialise the input: %s", items)
 		}
 
-		orderedNormalisedItems, err := normalisedItems.ItemsOrderedByProfit()
+		orderedNormalisedItems, err := normalisedItems.ItemsOrderedByProfit(itemPriceCache)
 		if err != nil {
 			return helpers.PropagateWithSerialisedValue(err, "failed to get items ordered by profit: %s", "failed to get items ordered by profit; another error occurred while trying to serialise the input: %s", normalisedItems)
 		}
@@ -108,7 +103,7 @@ func (l *BattledomeItemsLogger) Log(dataFolderPath string, numDropsToPrint int) 
 			})
 		}
 
-		totalProfit, err := normalisedItems.TotalProfit()
+		totalProfit, err := normalisedItems.TotalProfit(itemPriceCache)
 		if err != nil {
 			return helpers.PropagateWithSerialisedValue(err, "failed to get total profit: %s", "failed to get total profit; an error occurred while trying to serialise the input to log: %s", normalisedItems)
 		}
