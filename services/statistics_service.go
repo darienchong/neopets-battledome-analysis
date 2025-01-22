@@ -14,7 +14,7 @@ func NewStatisticsService() *StatisticsService {
 
 // Calculates a confidence interval with significance level {alpha}
 // Useful for when \cap{p} ~= 0
-func (service *StatisticsService) ClopperPearsonInterval(x int, n int, alpha float64) (float64, float64, error) {
+func (s *StatisticsService) ClopperPearsonInterval(x int, n int, alpha float64) (float64, float64, error) {
 	if n == 0 {
 		return 0, 0, nil
 	}

@@ -21,7 +21,7 @@ func NewItemGenerationService() *BattledomeItemGenerationService {
 	}
 }
 
-func (service *BattledomeItemGenerationService) generateItem(weights []models.BattledomeItemWeight) string {
+func (s *BattledomeItemGenerationService) generateItem(weights []models.BattledomeItemWeight) string {
 	rand.Shuffle(len(weights), func(i int, j int) {
 		weights[i], weights[j] = weights[j], weights[i]
 	})
@@ -43,8 +43,8 @@ func (service *BattledomeItemGenerationService) generateItem(weights []models.Ba
 	panic(fmt.Errorf("failed to generate an item - this should not happen; total was %f, sample was %f", total, sample))
 }
 
-func (service *BattledomeItemGenerationService) GenerateItems(arena models.Arena, count int) (models.NormalisedBattledomeItems, error) {
-	weights, err := service.ItemWeightService.GetItemWeights(string(arena))
+func (s *BattledomeItemGenerationService) GenerateItems(arena models.Arena, count int) (models.NormalisedBattledomeItems, error) {
+	weights, err := s.ItemWeightService.GetItemWeights(string(arena))
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to get item weights for \"%s\"", arena)
 	}
@@ -59,7 +59,7 @@ func (service *BattledomeItemGenerationService) GenerateItems(arena models.Arena
 		go func(p *progressbar.ProgressBar) {
 			defer wg.Done()
 
-			item := service.generateItem(append([]models.BattledomeItemWeight(nil), weights...))
+			item := s.generateItem(append([]models.BattledomeItemWeight(nil), weights...))
 			itemChannel <- item
 			progressBarMutex.Lock()
 			defer progressBarMutex.Unlock()

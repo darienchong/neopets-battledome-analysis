@@ -27,7 +27,7 @@ func NewArenaDropsLogger() *BattledomeItemsLogger {
 	}
 }
 
-func (dropsLogger *BattledomeItemsLogger) Log(dataFolderPath string, numDropsToPrint int) error {
+func (l *BattledomeItemsLogger) Log(dataFolderPath string, numDropsToPrint int) error {
 	if numDropsToPrint <= 0 {
 		numDropsToPrint = constants.NumberOfDropsToPrint
 	}
@@ -52,7 +52,7 @@ func (dropsLogger *BattledomeItemsLogger) Log(dataFolderPath string, numDropsToP
 
 	samplesByArena := map[models.Arena]models.BattledomeItems{}
 	for _, file := range files {
-		items, err := dropsLogger.BattledomeItemDropDataParser.Parse(constants.DropDataFilePath(file))
+		items, err := l.BattledomeItemDropDataParser.Parse(constants.DropDataFilePath(file))
 		if err != nil {
 			return stacktrace.Propagate(err, "failed to parse drop data file: %s", file)
 		}

@@ -18,8 +18,8 @@ func NewBattledomeItemWeightService() *BattledomeItemWeightService {
 	}
 }
 
-func (service *BattledomeItemWeightService) GetItemWeights(arena string) ([]models.BattledomeItemWeight, error) {
-	weights, err := service.ItemWeightParser.Parse(constants.ItemWeightsFilePath())
+func (s *BattledomeItemWeightService) GetItemWeights(arena string) ([]models.BattledomeItemWeight, error) {
+	weights, err := s.ItemWeightParser.Parse(constants.ItemWeightsFilePath())
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to parse \"%s\" as item weights", constants.ItemWeightsFilePath())
 	}

@@ -42,10 +42,10 @@ type DropsMetadataWithSource struct {
 	BattledomeItemMetadata
 }
 
-func (metadata *DropsMetadataWithSource) Copy() *DropsMetadataWithSource {
+func (md *DropsMetadataWithSource) Copy() *DropsMetadataWithSource {
 	copy := new(DropsMetadataWithSource)
-	copy.Source = metadata.Source
-	copy.BattledomeItemMetadata = metadata.BattledomeItemMetadata
+	copy.Source = md.Source
+	copy.BattledomeItemMetadata = md.BattledomeItemMetadata
 	return copy
 }
 
@@ -59,12 +59,12 @@ func (first *DropsMetadataWithSource) Combine(second *DropsMetadataWithSource) (
 	return copy, nil
 }
 
-func (metadata *DropsMetadataWithSource) String() string {
-	return fmt.Sprintf("%s - %s - %s - %s", metadata.Source, metadata.Arena, metadata.Challenger, metadata.Difficulty)
+func (md *DropsMetadataWithSource) String() string {
+	return fmt.Sprintf("%s - %s - %s - %s", md.Source, md.Arena, md.Challenger, md.Difficulty)
 }
 
-func (metadata *BattledomeItemMetadata) String() string {
-	return fmt.Sprintf("%s - %s - %s", metadata.Arena, metadata.Challenger, metadata.Difficulty)
+func (md *BattledomeItemMetadata) String() string {
+	return fmt.Sprintf("%s - %s - %s", md.Arena, md.Challenger, md.Difficulty)
 }
 
 func GeneratedMetadata(arena Arena) *DropsMetadataWithSource {

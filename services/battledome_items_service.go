@@ -24,7 +24,7 @@ func NewBattledomeItemsService() *BattledomeItemsService {
 	}
 }
 
-func (service *BattledomeItemsService) AllDrops() (map[models.Arena]models.BattledomeItems, error) {
+func (s *BattledomeItemsService) AllDrops() (map[models.Arena]models.BattledomeItems, error) {
 	files, err := helpers.FilesInFolder(constants.BattledomeDropsFolder)
 	if err != nil {
 		// Could be due to inconsistent caller, try going down one level
@@ -37,7 +37,7 @@ func (service *BattledomeItemsService) AllDrops() (map[models.Arena]models.Battl
 
 	itemsByArena := map[models.Arena]models.BattledomeItems{}
 	for _, file := range files {
-		dto, err := service.BattledomeItemDropDataParser.Parse(constants.DropDataFilePath(file))
+		dto, err := s.BattledomeItemDropDataParser.Parse(constants.DropDataFilePath(file))
 		if err != nil {
 			return nil, stacktrace.Propagate(err, "failed to parse \"%s\" as battledome drop data", file)
 		}
@@ -52,8 +52,8 @@ func (service *BattledomeItemsService) AllDrops() (map[models.Arena]models.Battl
 	return itemsByArena, nil
 }
 
-func (service *BattledomeItemsService) DropsByMetadata(metadata models.BattledomeItemMetadata) (models.NormalisedBattledomeItems, error) {
-	allDrops, err := service.AllDrops()
+func (s *BattledomeItemsService) DropsByMetadata(metadata models.BattledomeItemMetadata) (models.NormalisedBattledomeItems, error) {
+	allDrops, err := s.AllDrops()
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to get all drops")
 	}
@@ -66,8 +66,8 @@ func (service *BattledomeItemsService) DropsByMetadata(metadata models.Battledom
 	return models.BattledomeItems(matchingArenaDrops).Normalise()
 }
 
-func (service *BattledomeItemsService) DropsGroupedByMetadata() (map[models.BattledomeItemMetadata]models.NormalisedBattledomeItems, error) {
-	itemsByArena, err := service.AllDrops()
+func (s *BattledomeItemsService) DropsGroupedByMetadata() (map[models.BattledomeItemMetadata]models.NormalisedBattledomeItems, error) {
+	itemsByArena, err := s.AllDrops()
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to get all drops")
 	}
@@ -88,8 +88,8 @@ func (service *BattledomeItemsService) DropsGroupedByMetadata() (map[models.Batt
 	return normalisedItemsGroupedByMetadata, nil
 }
 
-func (service *BattledomeItemsService) DropsByArena(arena models.Arena) (models.NormalisedBattledomeItems, error) {
-	allDrops, err := service.AllDrops()
+func (s *BattledomeItemsService) DropsByArena(arena models.Arena) (models.NormalisedBattledomeItems, error) {
+	allDrops, err := s.AllDrops()
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to get all drops")
 	}
@@ -100,21 +100,21 @@ func (service *BattledomeItemsService) DropsByArena(arena models.Arena) (models.
 	return normalisedDrops, nil
 }
 
-func (service *BattledomeItemsService) GeneratedDropsByArena(arena models.Arena) (models.NormalisedBattledomeItems, error) {
+func (s *BattledomeItemsService) GeneratedDropsByArena(arena models.Arena) (models.NormalisedBattledomeItems, error) {
 	if helpers.IsFileExists(constants.GeneratedDropsFilePath(string(arena))) {
-		parsedDrops, err := service.GeneratedBattledomeItemParser.Parse(constants.GeneratedDropsFilePath(string(arena)))
+		parsedDrops, err := s.GeneratedBattledomeItemParser.Parse(constants.GeneratedDropsFilePath(string(arena)))
 		if err != nil {
 			return nil, stacktrace.Propagate(err, "failed to parse \"%s\" as battledome drops", arena)
 		}
 
 		return parsedDrops, nil
 	} else {
-		items, err := service.ItemGenerationService.GenerateItems(arena, constants.NumberOfItemsToGenerate)
+		items, err := s.ItemGenerationService.GenerateItems(arena, constants.NumberOfItemsToGenerate)
 		if err != nil {
 			return nil, stacktrace.Propagate(err, "failed to generate items for \"%s\"", arena)
 		}
 
-		err = service.GeneratedBattledomeItemParser.Save(items, constants.GeneratedDropsFilePath(string(arena)))
+		err = s.GeneratedBattledomeItemParser.Save(items, constants.GeneratedDropsFilePath(string(arena)))
 		if err != nil {
 			return nil, stacktrace.Propagate(err, "falled to save generated drops to \"%s\"", constants.GeneratedDropsFilePath(string(arena)))
 		}

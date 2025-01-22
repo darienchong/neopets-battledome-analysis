@@ -32,32 +32,32 @@ func (first *BattledomeItem) Union(second *BattledomeItem) (*BattledomeItem, err
 	return combined, nil
 }
 
-func (item *BattledomeItem) Profit(itemPriceCache caches.ItemPriceCache) float64 {
-	return float64(item.Quantity) * itemPriceCache.Price(string(item.Name))
+func (i *BattledomeItem) Profit(itemPriceCache caches.ItemPriceCache) float64 {
+	return float64(i.Quantity) * itemPriceCache.Price(string(i.Name))
 }
 
-func (item *BattledomeItem) PercentageProfit(itemPriceCache caches.ItemPriceCache, items NormalisedBattledomeItems) (float64, error) {
+func (i *BattledomeItem) PercentageProfit(itemPriceCache caches.ItemPriceCache, items NormalisedBattledomeItems) (float64, error) {
 	var defaultValue float64
 
 	totalProfit, err := items.TotalProfit()
 	if err != nil {
-		return defaultValue, helpers.PropagateWithSerialisedValue(err, "failed to get total profit for \"%s\"", "failed to get total profit for a battledome item; additionally encountered an error while trying to serialise the value to log: %s", item)
+		return defaultValue, helpers.PropagateWithSerialisedValue(err, "failed to get total profit for \"%s\"", "failed to get total profit for a battledome item; additionally encountered an error while trying to serialise the value to log: %s", i)
 	}
-	return item.Profit(itemPriceCache) / totalProfit, nil
+	return i.Profit(itemPriceCache) / totalProfit, nil
 }
 
-func (item *BattledomeItem) DropRate(items NormalisedBattledomeItems) float64 {
-	return float64(item.Quantity) / float64(items.TotalItemQuantity())
+func (i *BattledomeItem) DropRate(items NormalisedBattledomeItems) float64 {
+	return float64(i.Quantity) / float64(items.TotalItemQuantity())
 }
 
-func (item *BattledomeItem) String() string {
-	return fmt.Sprintf("[%s] %s × %d", item.Metadata.String(), item.Name, item.Quantity)
+func (i *BattledomeItem) String() string {
+	return fmt.Sprintf("[%s] %s × %d", i.Metadata.String(), i.Name, i.Quantity)
 }
 
-func (item *BattledomeItem) Copy() *BattledomeItem {
+func (i *BattledomeItem) Copy() *BattledomeItem {
 	return &BattledomeItem{
-		Metadata: item.Metadata,
-		Name:     item.Name,
-		Quantity: item.Quantity,
+		Metadata: i.Metadata,
+		Name:     i.Name,
+		Quantity: i.Quantity,
 	}
 }
