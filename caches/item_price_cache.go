@@ -29,7 +29,6 @@ type RealItemPriceCache struct {
 var (
 	_             ItemPriceCache = (*RealItemPriceCache)(nil)
 	cacheInstance ItemPriceCache
-	lock          = &sync.Mutex{}
 	bannedItems   = []string{
 		"nothing",
 	}
@@ -44,27 +43,27 @@ func GetCurrentItemPriceCacheInstance() (ItemPriceCache, error) {
 
 // Note: the first invocation of this method will determine what the data source is
 func GetItemPriceCacheInstance(dataSource ItemPriceDataSource) (ItemPriceCache, error) {
-	if cacheInstance == nil {
-		lock.Lock()
-		defer lock.Unlock()
-		if cacheInstance == nil {
-			realCacheInstance := &RealItemPriceCache{
-				dataSource:    dataSource,
-				cachedPrices:  map[string]float64{},
-				specialPrices: map[string]float64{},
-			}
-			realCacheInstance.generateExpiry()
-			err := realCacheInstance.loadFromFile()
-			if err != nil {
-				return nil, stacktrace.Propagate(err, "failed to load cache data from file")
-			}
-			err = realCacheInstance.loadSpecialPrices()
-			if err != nil {
-				return nil, stacktrace.Propagate(err, "failed to load special prices")
-			}
-
-			cacheInstance = realCacheInstance
+	var once sync.Once
+	var err error
+	once.Do(func() {
+		realCacheInstance := &RealItemPriceCache{
+			dataSource:    dataSource,
+			cachedPrices:  map[string]float64{},
+			specialPrices: map[string]float64{},
 		}
+		realCacheInstance.generateExpiry()
+		if err = realCacheInstance.loadFromFile(); err != nil {
+			err = stacktrace.Propagate(err, "failed to load cache data from file")
+			return
+		}
+		if err = realCacheInstance.loadSpecialPrices(); err != nil {
+			err = stacktrace.Propagate(err, "failed to load special prices")
+			return
+		}
+		cacheInstance = realCacheInstance
+	})
+	if err != nil {
+		return nil, err
 	}
 	return cacheInstance, nil
 }
