@@ -18,4 +18,5 @@ A project written in Go that does analysis of datamined and empirical Neopets Ba
 - [x] [Add single challenger profit breakdown](https://github.com/darienchong/neopets-battledome-analysis/commit/4f1a7b98236b3455ebb901e1655ca3f99ba24cb4)
 - [x] [Add stack traces in error propagation](https://github.com/darienchong/neopets-battledome-analysis/commit/0ebf6b0b4d195a46be78b7052e8e28619268d295)
 - [x] [Filter out challenger-specific drops in arena comparison](https://github.com/darienchong/neopets-battledome-analysis/commit/4931277352ca8c0ca04d50dbd0a94037144bdc72)
+- [ ] Change command line parsing logic to use `flags` package
 - [ ] What's next?
