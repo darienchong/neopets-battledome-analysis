@@ -1,0 +1,14 @@
+$ARENA:Ugga Dome
+$CHALLENGER:Cybunny Scout
+$DIFFICULTY:Average
+Tyragh the Tyrannian Buzz|3
+Tai-Kai Codestone|2
+General Crustygums|2
+Vux Codestone|1
+Tyrannian Acara Plushie|1
+Trrygdorr|1
+Mau Codestone|1
+Blue Furry Negg|1
+Eo Codestone|1
+Speak Tyrannian|1
+Har Codestone|1

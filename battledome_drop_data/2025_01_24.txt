@@ -1,0 +1,16 @@
+$ARENA:Ugga Dome
+$CHALLENGER:Cybunny Scout
+$DIFFICULTY:Average
+Stone Muffin|2
+Speak Tyrannian|1
+Trrygdorr|1
+Weak Bottled Dark Faerie|1
+Sho Codestone|2
+Vo Codestone|1
+Mag Codestone|1
+Mau Codestone|1
+Blue Furry Negg|1
+General Crustygums|1
+Zei Codestone|1
+Tyrannian Skeith Plushie|1
+Cui Codestone|1
