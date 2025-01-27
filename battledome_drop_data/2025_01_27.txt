@@ -1,0 +1,14 @@
+$ARENA:Ugga Dome
+$CHALLENGER:Cybunny Scout
+$DIFFICULTY:Average
+Tyrannian Usuki|4
+Weak Bottled Light Faerie|1
+Tyrannian Skeith Plushie|1
+Cybunny Carrot Stew|2
+Mazzew|1
+Weak Bottled Dark Faerie|1
+Kew Codestone|1
+Vo Codestone|1
+Blue Furry Negg|1
+Stone Muffin|1
+Main Codestone|1
