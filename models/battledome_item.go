@@ -24,7 +24,7 @@ func (first *BattledomeItem) Union(second *BattledomeItem) (*BattledomeItem, err
 	combined := &BattledomeItem{}
 	combinedMetadata, err := first.Metadata.Combine(second.Metadata)
 	if err != nil {
-		return nil, stacktrace.Propagate(err, "failed to combine metadata \"%s\" and \"%s\"", first.Metadata, second.Metadata)
+		return nil, stacktrace.Propagate(err, "failed to combine metadata %q and %q", first.Metadata, second.Metadata)
 	}
 	combined.Metadata = combinedMetadata
 	combined.Name = first.Name
@@ -41,7 +41,7 @@ func (i *BattledomeItem) PercentageProfit(itemPriceCache caches.ItemPriceCache, 
 
 	totalProfit, err := items.TotalProfit(itemPriceCache)
 	if err != nil {
-		return defaultValue, helpers.PropagateWithSerialisedValue(err, "failed to get total profit for \"%s\"", "failed to get total profit for a battledome item; additionally encountered an error while trying to serialise the value to log: %s", i)
+		return defaultValue, helpers.PropagateWithSerialisedValue(err, "failed to get total profit for %q", "failed to get total profit for a battledome item; additionally encountered an error while trying to serialise the value to log: %s", i)
 	}
 	return i.Profit(itemPriceCache) / totalProfit, nil
 }

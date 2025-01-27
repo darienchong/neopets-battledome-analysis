@@ -18,6 +18,6 @@ func TestJellyNeoPrice(t *testing.T) {
 	price := target.Price(itemName)
 
 	if price <= 0 {
-		t.Fatalf("failed to retrieve price for \"%s\" from JellyNeo! The retrieved price was %f", itemName, price)
+		t.Fatalf("failed to retrieve price for %q from JellyNeo! The retrieved price was %f", itemName, price)
 	}
 }

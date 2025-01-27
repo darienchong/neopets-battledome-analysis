@@ -33,7 +33,7 @@ func (l *BattledomeItemsLogger) Log(itemPriceCache caches.ItemPriceCache, dataFo
 	}
 
 	if constants.FilterArena != "" {
-		slog.Info(fmt.Sprintf("Only displaying data related to \"%s\"", constants.FilterArena))
+		slog.Info(fmt.Sprintf("Only displaying data related to %q", constants.FilterArena))
 	}
 
 	files, err := helpers.FilesInFolder(dataFolderPath)

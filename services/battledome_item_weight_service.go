@@ -21,7 +21,7 @@ func NewBattledomeItemWeightService(itemWeightParser *parsers.BattledomeItemWeig
 func (s *BattledomeItemWeightService) GetItemWeights(arena string) ([]models.BattledomeItemWeight, error) {
 	weights, err := s.ItemWeightParser.Parse(constants.ItemWeightsFilePath())
 	if err != nil {
-		return nil, stacktrace.Propagate(err, "failed to parse \"%s\" as item weights", constants.ItemWeightsFilePath())
+		return nil, stacktrace.Propagate(err, "failed to parse %q as item weights", constants.ItemWeightsFilePath())
 	}
 	return helpers.Filter(weights, func(weight models.BattledomeItemWeight) bool {
 		return weight.Arena == arena

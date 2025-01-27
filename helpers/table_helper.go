@@ -116,7 +116,7 @@ func (t *Table) Lines() []string {
 		leftPadding := int(math.Ceil(float64(numSpaces) / 2.0))
 		rightPadding := int(math.Floor(float64(numSpaces) / 2.0))
 		if leftPadding < 0 || rightPadding < 0 {
-			errorMsg := fmt.Sprintf("generated a negative left/right padding value (left: %d, right: %d) for the table name! the table name was \"%s\" (%d chars), and the table width was %d chars", leftPadding, rightPadding, t.Name, len(t.Name), len(rowSeparator))
+			errorMsg := fmt.Sprintf("generated a negative left/right padding value (left: %d, right: %d) for the table name! the table name was %q (%d chars), and the table width was %d chars", leftPadding, rightPadding, t.Name, len(t.Name), len(rowSeparator))
 			panic(stacktrace.NewError(errorMsg))
 		}
 		lines = append(lines, "|"+strings.Repeat(" ", leftPadding)+t.Name+strings.Repeat(" ", rightPadding)+"|")

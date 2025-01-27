@@ -58,7 +58,7 @@ func (ds *ItemDBDataSource) Price(itemName string) float64 {
 		}
 	})
 	if price == 0.0 {
-		slog.Warn(fmt.Sprintf("Failed to retrieve price for \"%s\" from ItemDb!", itemName))
+		slog.Warn(fmt.Sprintf("Failed to retrieve price for %q from ItemDb!", itemName))
 	}
 	return price
 }

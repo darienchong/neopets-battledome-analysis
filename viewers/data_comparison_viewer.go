@@ -547,6 +547,8 @@ func (v *DataComparisonViewer) ViewChallengerComparisons(itemPriceCache caches.I
 		"Challenger",
 		"Difficulty",
 		"Arena Drop Rate",
+		"Brown Codestone Drop Rate",
+		"Red Codestone Drop Rate",
 		"Challenger Drop Rate",
 	})
 
@@ -560,19 +562,56 @@ func (v *DataComparisonViewer) ViewChallengerComparisons(itemPriceCache caches.I
 		if err != nil {
 			return nil, helpers.PropagateWithSerialisedValue(err, "failed to get mean drops profit from %s", "failed to get mean drops profit from items; additionally encountered an error when trying to serialise the items for logging: %s", items)
 		}
+
 		actualProfitLeftBound, actualProfitRightBound, err := items.ProfitConfidenceInterval(itemPriceCache)
 		if err != nil {
 			return nil, helpers.PropagateWithSerialisedValue(err, "failed to get profit confidence interval from %s", "failed to get profit confidence interval from items; additionally encountered an error when trying to serialise the items for logging: %s", items)
 		}
 
+		totalRealBrownCodestoneQuantity := helpers.Sum(
+			helpers.Map(
+				helpers.Filter(
+					helpers.Values(items),
+					func(item *models.BattledomeItem) bool {
+						return slices.Contains(constants.BrownCodestones, string(item.Name))
+					}),
+				func(item *models.BattledomeItem) int {
+					return int(item.Quantity)
+				},
+			),
+		)
+		totalRealRedCodestoneQuantity := helpers.Sum(
+			helpers.Map(
+				helpers.Filter(
+					helpers.Values(items),
+					func(item *models.BattledomeItem) bool {
+						return slices.Contains(constants.RedCodestones, string(item.Name))
+					}),
+				func(item *models.BattledomeItem) int {
+					return int(item.Quantity)
+				},
+			),
+		)
+		totalRealItemQuantity := items.TotalItemQuantity()
+		brownCodestoneDropRateLeftBound, brownCodestoneDropRateRightBound, err := v.StatisticsService.ClopperPearsonInterval(totalRealBrownCodestoneQuantity, totalRealItemQuantity, constants.SignificanceLevel)
+		if err != nil {
+			return nil, stacktrace.Propagate(err, "faiiled to generate confidence interval for brown codestone drop rates for %q", metadata.Arena)
+		}
+		redCodestoneDropRateLeftBound, redCodestoneDropRateRightBound, err := v.StatisticsService.ClopperPearsonInterval(totalRealRedCodestoneQuantity, totalRealItemQuantity, constants.SignificanceLevel)
+		if err != nil {
+			return nil, stacktrace.Propagate(err, "faiiled to generate confidence interval for red codestone drop rates for %q", metadata.Arena)
+		}
+
 		generatedItems, err := v.BattledomeItemsService.GeneratedDropsByArena(metadata.Arena)
 		if err != nil {
-			return nil, stacktrace.Propagate(err, "failed to generate drops by arena for \"%s\"", metadata.Arena)
+			return nil, stacktrace.Propagate(err, "failed to generate drops by arena for %q", metadata.Arena)
 		}
+
 		generatedProfit, err := generatedItems.MeanDropsProfit(itemPriceCache)
 		if err != nil {
 			return nil, stacktrace.Propagate(err, "failed to get mean drops profit for generated items")
 		}
+
 		generatedProfitLeftBound, generatedProfitRightBound, err := generatedItems.ProfitConfidenceInterval(itemPriceCache)
 		if err != nil {
 			return nil, helpers.PropagateWithSerialisedValue(err, "failed to get profit confidence interval from %s", "failed to get profit confidence interval from items; additionally encountered an error when trying to serialise the items for logging: %s", items)
@@ -626,6 +665,8 @@ func (v *DataComparisonViewer) ViewChallengerComparisons(itemPriceCache caches.I
 			string(metadata.Challenger),
 			string(metadata.Difficulty),
 			helpers.FormatPercentage(float64(arenaDropsCount)/float64(arenaDropsCount+challengerDropsCount)) + "%",
+			fmt.Sprintf("%s ∈ [%s, %s]%%", helpers.FormatPercentage(float64(totalRealBrownCodestoneQuantity)/float64(totalRealItemQuantity)), helpers.FormatPercentage(float64(brownCodestoneDropRateLeftBound)), helpers.FormatPercentage(float64(brownCodestoneDropRateRightBound))),
+			fmt.Sprintf("%s ∈ [%s, %s]%%", helpers.FormatPercentage(float64(totalRealRedCodestoneQuantity)/float64(totalRealItemQuantity)), helpers.FormatPercentage(float64(redCodestoneDropRateLeftBound)), helpers.FormatPercentage(float64(redCodestoneDropRateRightBound))),
 			helpers.FormatPercentage(float64(challengerDropsCount)/float64(arenaDropsCount+challengerDropsCount)) + "%",
 		})
 	}

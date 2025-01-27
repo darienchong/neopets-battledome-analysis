@@ -27,7 +27,7 @@ func (p *BattledomeItemWeightParser) Parse(filePath string) ([]models.Battledome
 	weights := []models.BattledomeItemWeight{}
 	file, err := os.OpenFile(filePath, os.O_RDONLY, 0755)
 	if err != nil {
-		return nil, stacktrace.Propagate(err, "failed to open file: \"%s\"", filePath)
+		return nil, stacktrace.Propagate(err, "failed to open file: %q", filePath)
 	}
 	defer file.Close()
 	scanner := bufio.NewScanner(file)
@@ -38,14 +38,14 @@ func (p *BattledomeItemWeightParser) Parse(filePath string) ([]models.Battledome
 		} else if strings.Contains(line, "-") {
 			// It's an item weight
 			if currentArena == "" {
-				return nil, fmt.Errorf("read an item weight before an arena was read! The offending line was \"%s\"", line)
+				return nil, fmt.Errorf("read an item weight before an arena was read! The offending line was %q", line)
 			}
 			tokens := strings.Split(line, " - ")
 			itemName := strings.TrimSpace(tokens[0])
 			itemWeightString := strings.TrimSpace(strings.ReplaceAll(tokens[1], "%", ""))
 			parsedItemWeight, err := strconv.ParseFloat(itemWeightString, 64)
 			if err != nil {
-				return nil, stacktrace.Propagate(err, "failed to parse \"%s\" as float64", itemWeightString)
+				return nil, stacktrace.Propagate(err, "failed to parse %q as float64", itemWeightString)
 			}
 			itemWeight := parsedItemWeight / 100
 			weights = append(weights, models.BattledomeItemWeight{

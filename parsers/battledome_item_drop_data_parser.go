@@ -31,7 +31,7 @@ var (
 
 func (p *BattledomeItemDropDataParser) Parse(filePath string) (*models.BattledomeItemsDto, error) {
 	if !helpers.IsFileExists(filePath) {
-		return nil, fmt.Errorf("file at \"%s\" does not exist", filePath)
+		return nil, fmt.Errorf("file at %q does not exist", filePath)
 	}
 
 	file, err := os.OpenFile(filePath, os.O_RDONLY, 0755)
@@ -64,7 +64,7 @@ func (p *BattledomeItemDropDataParser) Parse(filePath string) (*models.Battledom
 		itemCount += int(item.Quantity)
 	}
 	if itemCount != constants.BattledomeDropsPerDay {
-		slog.Error(fmt.Sprintf("WARNING! The drop data in \"%s\" does not contain %d drops; %d drops were detected.", dto.Metadata.Source, constants.BattledomeDropsPerDay, itemCount))
+		slog.Error(fmt.Sprintf("WARNING! The drop data in %q does not contain %d drops; %d drops were detected.", dto.Metadata.Source, constants.BattledomeDropsPerDay, itemCount))
 	}
 	return dto, nil
 }
@@ -94,16 +94,16 @@ func (p *MetadataParser) Parse(line string, dto *models.BattledomeItemsDto) erro
 
 	switch key := metadataKey; key {
 	case ARENA_KEY:
-		slog.Debug(fmt.Sprintf("Set Arena to \"%s\"", metadataValue))
+		slog.Debug(fmt.Sprintf("Set Arena to %q", metadataValue))
 		metadata.Arena = models.Arena(metadataValue)
 	case CHALLENGER_KEY:
-		slog.Debug(fmt.Sprintf("Set Challenger to \"%s\"", metadataValue))
+		slog.Debug(fmt.Sprintf("Set Challenger to %q", metadataValue))
 		metadata.Challenger = models.Challenger(metadataValue)
 	case DIFFICULTY_KEY:
-		slog.Debug(fmt.Sprintf("Set Difficulty to \"%s\"", metadataValue))
+		slog.Debug(fmt.Sprintf("Set Difficulty to %q", metadataValue))
 		metadata.Difficulty = models.Difficulty(metadataValue)
 	default:
-		slog.Warn(fmt.Sprintf("Encountered an unrecognised metadata key while parsing drop data; the unrecognised key was \"%s\"", metadataKey))
+		slog.Warn(fmt.Sprintf("Encountered an unrecognised metadata key while parsing drop data; the unrecognised key was %q", metadataKey))
 	}
 
 	dto.Metadata = *metadata
@@ -131,7 +131,7 @@ func (p *ItemDataParser) Parse(line string, dto *models.BattledomeItemsDto) erro
 	itemName := models.ItemName(strings.TrimSpace(tokens[0]))
 	itemQuantity, err := strconv.ParseInt(strings.TrimSpace(tokens[1]), 0, 32)
 	if err != nil {
-		return stacktrace.Propagate(err, "failed to parse \"%s\" as integer", strings.TrimSpace(tokens[1]))
+		return stacktrace.Propagate(err, "failed to parse %q as integer", strings.TrimSpace(tokens[1]))
 	}
 
 	dto.Items = append(dto.Items, &models.BattledomeItem{

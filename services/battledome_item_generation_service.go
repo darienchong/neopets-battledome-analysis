@@ -46,7 +46,7 @@ func (s *BattledomeItemGenerationService) generateItem(weights []models.Battledo
 func (s *BattledomeItemGenerationService) GenerateItems(arena models.Arena, count int) (models.NormalisedBattledomeItems, error) {
 	weights, err := s.ItemWeightService.GetItemWeights(string(arena))
 	if err != nil {
-		return nil, stacktrace.Propagate(err, "failed to get item weights for \"%s\"", arena)
+		return nil, stacktrace.Propagate(err, "failed to get item weights for %q", arena)
 	}
 
 	progressBarMutex := &sync.Mutex{}

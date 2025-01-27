@@ -123,7 +123,7 @@ func (c *RealItemPriceCache) loadFromFile() error {
 			// It's the expiry date
 			parsedExpiry, err := time.Parse(constants.DataExpiryTimeLayout, line)
 			if err != nil {
-				slog.Warn(fmt.Sprintf("Failed to parse expiry for item price cache file; the line was \"%s\": %s", line, err))
+				slog.Warn(fmt.Sprintf("Failed to parse expiry for item price cache file; the line was %q: %s", line, err))
 				c.generateExpiry()
 			} else {
 				c.expiry = parsedExpiry

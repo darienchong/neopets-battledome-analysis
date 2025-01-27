@@ -11,11 +11,11 @@ import (
 func shouldHaveItemAndQuantity(normalisedItems models.NormalisedBattledomeItems, t *testing.T, itemName string, itemQuantity int32) {
 	battledomeItem, isInItems := normalisedItems[models.ItemName(itemName)]
 	if !isInItems {
-		t.Fatalf("Expected \"%s\" to be in items, but it was not.", itemName)
+		t.Fatalf("Expected %q to be in items, but it was not.", itemName)
 	}
 
 	if battledomeItem.Quantity != itemQuantity {
-		t.Fatalf("Expected \"%s\" to have quantity \"%d\", but it was \"%d\".", itemName, itemQuantity, battledomeItem.Quantity)
+		t.Fatalf("Expected %q to have quantity \"%d\", but it was \"%d\".", itemName, itemQuantity, battledomeItem.Quantity)
 	}
 }
 
@@ -32,7 +32,7 @@ func TestDropDataParser(t *testing.T) {
 	expectedMetadata.Challenger = models.Challenger("Flaming Meerca")
 	expectedMetadata.Difficulty = models.Difficulty("Mighty")
 	if dto.Metadata != *expectedMetadata {
-		t.Fatalf("Expected metadata and actual metadata did not match:\n\tExpected: \"%s\"\n\tReceived: \"%s\"", expectedMetadata, dto.Metadata)
+		t.Fatalf("Expected metadata and actual metadata did not match:\n\tExpected: %q\n\tReceived: %q", expectedMetadata, dto.Metadata)
 	}
 
 	normalisedItems, err := dto.Items.Normalise()

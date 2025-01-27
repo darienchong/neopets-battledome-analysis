@@ -38,7 +38,7 @@ func (l *DataComparisonLogger) BriefCompareAllArenas(itemPriceCache caches.ItemP
 		arena := models.Arena(arenaString)
 		realArenaData, generatedArenaData, err := l.DataComparisonService.CompareArena(arena)
 		if err != nil {
-			return stacktrace.Propagate(err, "failed to compare arena \"%s\"", arenaString)
+			return stacktrace.Propagate(err, "failed to compare arena %q", arenaString)
 		}
 		realData[arena] = realArenaData
 		generatedData[arena] = generatedArenaData
@@ -91,7 +91,7 @@ func (l *DataComparisonLogger) CompareAllArenas(itemPriceCache caches.ItemPriceC
 		generatedData := comparisonDatum.Elements[2].(models.NormalisedBattledomeItems)
 		lines, err := l.DataComparisonViewer.ViewArenaComparison(itemPriceCache, realData, generatedData)
 		if err != nil {
-			return stacktrace.Propagate(err, "failed to get arena comparison for \"%s\"", arena)
+			return stacktrace.Propagate(err, "failed to get arena comparison for %q", arena)
 		}
 
 		slog.Info(fmt.Sprintf("%d. %s (%d samples)", i+1, arena, realData.TotalItemQuantity()))
@@ -107,11 +107,11 @@ func (l *DataComparisonLogger) CompareAllArenas(itemPriceCache caches.ItemPriceC
 func (l *DataComparisonLogger) CompareChallenger(itemPriceCache caches.ItemPriceCache, metadata models.BattledomeItemMetadata) error {
 	realData, generatedData, err := l.DataComparisonService.CompareByMetadata(metadata)
 	if err != nil {
-		return stacktrace.Propagate(err, "failed to generate metadata comparison for \"%s\"", metadata)
+		return stacktrace.Propagate(err, "failed to generate metadata comparison for %q", metadata)
 	}
 	lines, err := l.DataComparisonViewer.ViewChallengerComparison(itemPriceCache, realData, generatedData)
 	if err != nil {
-		return stacktrace.Propagate(err, "failed to generate challenger comparison for \"%s\"", metadata)
+		return stacktrace.Propagate(err, "failed to generate challenger comparison for %q", metadata)
 	}
 
 	for _, line := range lines {

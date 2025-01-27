@@ -35,7 +35,7 @@ func (s *BattledomeItemsService) AllDrops() (map[models.Arena]models.BattledomeI
 		newPath := strings.Replace(constants.BattledomeDropsFolder, "../", "", 1)
 		files, err = helpers.FilesInFolder(newPath)
 		if err != nil {
-			return nil, stacktrace.Propagate(err, "failed to get files in \"%s\"", newPath)
+			return nil, stacktrace.Propagate(err, "failed to get files in %q", newPath)
 		}
 	}
 
@@ -43,7 +43,7 @@ func (s *BattledomeItemsService) AllDrops() (map[models.Arena]models.BattledomeI
 	for _, file := range files {
 		dto, err := s.BattledomeItemDropDataParser.Parse(constants.DropDataFilePath(file))
 		if err != nil {
-			return nil, stacktrace.Propagate(err, "failed to parse \"%s\" as battledome drop data", file)
+			return nil, stacktrace.Propagate(err, "failed to parse %q as battledome drop data", file)
 		}
 		_, exists := itemsByArena[models.Arena(dto.Metadata.Arena)]
 		if !exists {
@@ -108,19 +108,19 @@ func (s *BattledomeItemsService) GeneratedDropsByArena(arena models.Arena) (mode
 	if helpers.IsFileExists(constants.GeneratedDropsFilePath(string(arena))) {
 		parsedDrops, err := s.GeneratedBattledomeItemParser.Parse(constants.GeneratedDropsFilePath(string(arena)))
 		if err != nil {
-			return nil, stacktrace.Propagate(err, "failed to parse \"%s\" as battledome drops", arena)
+			return nil, stacktrace.Propagate(err, "failed to parse %q as battledome drops", arena)
 		}
 
 		return parsedDrops, nil
 	} else {
 		items, err := s.ItemGenerationService.GenerateItems(arena, constants.NumberOfItemsToGenerate)
 		if err != nil {
-			return nil, stacktrace.Propagate(err, "failed to generate items for \"%s\"", arena)
+			return nil, stacktrace.Propagate(err, "failed to generate items for %q", arena)
 		}
 
 		err = s.GeneratedBattledomeItemParser.Save(items, constants.GeneratedDropsFilePath(string(arena)))
 		if err != nil {
-			return nil, stacktrace.Propagate(err, "falled to save generated drops to \"%s\"", constants.GeneratedDropsFilePath(string(arena)))
+			return nil, stacktrace.Propagate(err, "falled to save generated drops to %q", constants.GeneratedDropsFilePath(string(arena)))
 		}
 
 		return items, nil

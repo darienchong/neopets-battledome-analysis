@@ -10,6 +10,6 @@ func TestItemDBPrice(t *testing.T) {
 	price := target.Price(itemName)
 
 	if price <= 0 {
-		t.Fatalf("failed to retrieve price for \"%s\" from ItemDb! The retrieved price was %f", itemName, price)
+		t.Fatalf("failed to retrieve price for %q from ItemDb! The retrieved price was %f", itemName, price)
 	}
 }

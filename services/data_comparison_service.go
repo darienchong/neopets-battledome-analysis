@@ -20,12 +20,12 @@ func NewDataComparisonService(battledomeItemsService *BattledomeItemsService) *D
 func (s *DataComparisonService) CompareByMetadata(metadata models.BattledomeItemMetadata) (realData models.NormalisedBattledomeItems, generatedData models.NormalisedBattledomeItems, err error) {
 	realData, err = s.BattledomeItemsService.DropsByMetadata(metadata)
 	if err != nil {
-		return nil, nil, stacktrace.Propagate(err, "failed to get drops by metadata for \"%s\"", metadata.String())
+		return nil, nil, stacktrace.Propagate(err, "failed to get drops by metadata for %q", metadata.String())
 	}
 
 	generatedData, err = s.BattledomeItemsService.GeneratedDropsByArena(metadata.Arena)
 	if err != nil {
-		return nil, nil, stacktrace.Propagate(err, "failed to generate drops by arena for \"%s\"", metadata.Arena)
+		return nil, nil, stacktrace.Propagate(err, "failed to generate drops by arena for %q", metadata.Arena)
 	}
 
 	return realData, generatedData, nil
@@ -34,12 +34,12 @@ func (s *DataComparisonService) CompareByMetadata(metadata models.BattledomeItem
 func (s *DataComparisonService) CompareArena(arena models.Arena) (realData models.NormalisedBattledomeItems, generatedData models.NormalisedBattledomeItems, err error) {
 	realData, err = s.BattledomeItemsService.DropsByArena(arena)
 	if err != nil {
-		return nil, nil, stacktrace.Propagate(err, "failed to get drops by arena for \"%s\"", arena)
+		return nil, nil, stacktrace.Propagate(err, "failed to get drops by arena for %q", arena)
 	}
 
 	generatedData, err = s.BattledomeItemsService.GeneratedDropsByArena(arena)
 	if err != nil {
-		return nil, nil, stacktrace.Propagate(err, "failed to generate drops by arena for \"%s\"", arena)
+		return nil, nil, stacktrace.Propagate(err, "failed to generate drops by arena for %q", arena)
 	}
 
 	return
