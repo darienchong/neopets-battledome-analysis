@@ -2,7 +2,6 @@ package caches
 
 import (
 	"fmt"
-	"log/slog"
 	"net/http"
 	"slices"
 	"strconv"
@@ -10,6 +9,7 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/darienchong/neopets-battledome-analysis/constants"
+	"github.com/palantir/stacktrace"
 )
 
 var _ ItemPriceDataSource = (*ItemDBDataSource)(nil)
@@ -36,19 +36,19 @@ func (ds *ItemDBDataSource) FilePath() string {
 	return constants.CombineRelativeFolderAndFilename(constants.DataFolder, constants.ItemDBItemPriceCacheFile)
 }
 
-func (ds *ItemDBDataSource) Price(itemName string) float64 {
+func (ds *ItemDBDataSource) Price(itemName string) (float64, error) {
 	if slices.Contains(bannedItems, itemName) {
-		return 0.0
+		return 0.0, stacktrace.NewError(fmt.Sprintf("item %q was banned from search", itemName))
 	}
 
 	res, err := http.Get(itemDBPriceUrl(itemName))
 	if err != nil {
-		return 0.0
+		return 0.0, stacktrace.Propagate(err, "failed to reach ItemDB")
 	}
 	defer res.Body.Close()
 	doc, err := goquery.NewDocumentFromReader(res.Body)
 	if err != nil {
-		return 0.0
+		return 0.0, stacktrace.Propagate(err, "failed to parse HTML response from ItemDB")
 	}
 	price := 0.0
 	doc.Find(".chakra-stat__number").Each(func(index int, item *goquery.Selection) {
@@ -58,7 +58,8 @@ func (ds *ItemDBDataSource) Price(itemName string) float64 {
 		}
 	})
 	if price == 0.0 {
-		slog.Warn(fmt.Sprintf("Failed to retrieve price for %q from ItemDb!", itemName))
+		return price, stacktrace.NewError(fmt.Sprintf("Failed to retrieve price for %q from ItemDB!", itemName))
 	}
-	return price
+
+	return price, nil
 }

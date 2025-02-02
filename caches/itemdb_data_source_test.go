@@ -7,9 +7,9 @@ import (
 func TestItemDBPrice(t *testing.T) {
 	itemName := "Green Apple"
 	target := NewItemDBDataSource()
-	price := target.Price(itemName)
+	price, err := target.Price(itemName)
 
-	if price <= 0 {
+	if err != nil || price <= 0 {
 		t.Fatalf("failed to retrieve price for %q from ItemDb! The retrieved price was %f", itemName, price)
 	}
 }

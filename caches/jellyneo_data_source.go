@@ -12,6 +12,7 @@ import (
 	"github.com/PuerkitoBio/goquery"
 	"github.com/darienchong/neopets-battledome-analysis/constants"
 	"github.com/darienchong/neopets-battledome-analysis/helpers"
+	"github.com/palantir/stacktrace"
 )
 
 var _ ItemPriceDataSource = (*JellyNeoDataSource)(nil)
@@ -35,9 +36,9 @@ func jellyNeoPriceUrl(itemName string) string {
 	return fmt.Sprintf("https://items.jellyneo.net/search/?name=%s&name_type=3", normalisedJellyNeoItemName(itemName))
 }
 
-func (ds *JellyNeoDataSource) Price(itemName string) float64 {
+func (ds *JellyNeoDataSource) Price(itemName string) (float64, error) {
 	if slices.Contains(bannedItems, itemName) {
-		return 0.0
+		return 0.0, stacktrace.NewError(fmt.Sprintf("item %q was a banned item"))
 	}
 
 	url := jellyNeoPriceUrl(itemName)
@@ -45,22 +46,19 @@ func (ds *JellyNeoDataSource) Price(itemName string) float64 {
 
 	res, err := helpers.HumanlikeGet(url)
 	if err != nil {
-		slog.Error(fmt.Sprintf("%+v", err))
-		return 0.0
+		return 0.0, stacktrace.Propagate(err, "failed to reach JellyNeo")
 	}
 	defer res.Body.Close()
 
 	bodyCopy, err := io.ReadAll(res.Body)
 	if err != nil {
-		slog.Error(fmt.Sprintf("%+v", err))
-		return 0.0
+		return 0.0, stacktrace.Propagate(err, "failed to read response body")
 	}
 
 	reader := strings.NewReader(string(bodyCopy))
 	doc, err := goquery.NewDocumentFromReader(reader)
 	if err != nil {
-		slog.Error(fmt.Sprintf("%+v", err))
-		return 0.0
+		return 0.0, stacktrace.Propagate(err, "failed to create reader from response body")
 	}
 
 	price := 0.0
@@ -72,7 +70,7 @@ func (ds *JellyNeoDataSource) Price(itemName string) float64 {
 	})
 	if price == 0.0 {
 		slog.Debug(fmt.Sprintf(`Response from JellyNeo for %s: %s`, url, string(bodyCopy)))
-		slog.Error(fmt.Sprintf(`Failed to retrieve price for "%s" from JellyNeo!`, itemName))
+		return 0.0, stacktrace.NewError(fmt.Sprintf("failed to retrieve price for %q from JellyNeo", itemName))
 	}
-	return price
+	return price, nil
 }

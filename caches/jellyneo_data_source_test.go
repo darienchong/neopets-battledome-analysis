@@ -15,9 +15,9 @@ func TestMain(m *testing.M) {
 func TestJellyNeoPrice(t *testing.T) {
 	itemName := "Green Apple"
 	target := NewJellyNeoDataSource()
-	price := target.Price(itemName)
+	price, err := target.Price(itemName)
 
-	if price <= 0 {
+	if err != nil || price <= 0 {
 		t.Fatalf("failed to retrieve price for %q from JellyNeo! The retrieved price was %f", itemName, price)
 	}
 }

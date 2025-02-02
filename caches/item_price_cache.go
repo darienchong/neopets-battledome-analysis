@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/darienchong/neopets-battledome-analysis/constants"
+	"github.com/darienchong/neopets-battledome-analysis/helpers"
 	"github.com/palantir/stacktrace"
 )
 
@@ -19,6 +20,7 @@ type ItemPriceCache interface {
 }
 
 type RealItemPriceCache struct {
+	retryPolicy   helpers.RetryPolicy[float64]
 	dataSource    ItemPriceDataSource
 	expiry        time.Time
 	cachedPrices  map[string]float64
@@ -35,6 +37,12 @@ var (
 func ItemPriceCacheInstance(dataSource ItemPriceDataSource) (ItemPriceCache, error) {
 	var err error
 	realCacheInstance := &RealItemPriceCache{
+		retryPolicy: helpers.RetryPolicy[float64]{
+			Backoff: func(retryCount int) int {
+				return 500
+			},
+			MaxTries: 3,
+		},
 		dataSource:    dataSource,
 		cachedPrices:  map[string]float64{},
 		specialPrices: map[string]float64{},
@@ -72,7 +80,15 @@ func (c *RealItemPriceCache) Price(itemName string) float64 {
 		return maybeSpecialPrice
 	}
 
-	price := c.dataSource.Price(itemName)
+	price, err := c.retryPolicy.Execute(func() (float64, error) {
+		return c.dataSource.Price(itemName)
+	})
+
+	if err != nil {
+		slog.Error(fmt.Sprintf("%+v", err))
+		return 0.0
+	}
+
 	if price > 0 {
 		c.cachedPrices[itemName] = price
 	}
