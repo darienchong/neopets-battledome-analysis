@@ -1,0 +1,15 @@
+$ARENA:Ugga Dome
+$CHALLENGER:Cybunny Scout
+$DIFFICULTY:Average
+Camelior|1
+Cui Codestone|2
+Cybunny Carrot Stew|1
+Stone Muffin|2
+Tyrannian Acara Plushie|1
+Sho Codestone|1
+Tyrannian Skeith Plushie|1
+Weak Bottled Water Faerie|1
+Weak Bottled Fire Faerie|1
+Main Codestone|2
+Weak Bottled Air Faerie|1
+Mau Codestone|1
