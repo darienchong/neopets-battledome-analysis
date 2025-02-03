@@ -6,25 +6,37 @@ import (
 	"github.com/darienchong/neopets-battledome-analysis/constants"
 	"github.com/darienchong/neopets-battledome-analysis/helpers"
 	"github.com/darienchong/neopets-battledome-analysis/models"
-	"github.com/darienchong/neopets-battledome-analysis/parsers"
 	"github.com/palantir/stacktrace"
 )
 
+type GeneratedBattledomeItems interface {
+	Items(arena models.Arena, count int) (models.NormalisedBattledomeItems, error)
+}
+
+type SavedGeneratedBattledomeItems interface {
+	Parse(filePath string) (models.NormalisedBattledomeItems, error)
+	Save(items models.NormalisedBattledomeItems, filePath string) error
+}
+
+type SavedBattledomeItems interface {
+	Parse(filePath string) (*models.BattledomeItemsDto, error)
+}
+
 type BattledomeItemsService struct {
-	ItemGenerationService         *BattledomeItemGenerationService
-	GeneratedBattledomeItemParser *parsers.GeneratedBattledomeItemParser
-	BattledomeItemDropDataParser  *parsers.BattledomeItemDropDataParser
+	GeneratedBattledomeItems
+	SavedGeneratedBattledomeItems
+	SavedBattledomeItems
 }
 
 func NewBattledomeItemsService(
-	itemGenerationService *BattledomeItemGenerationService,
-	generatedBattledomeItemParser *parsers.GeneratedBattledomeItemParser,
-	battledomeItemDropDataParser *parsers.BattledomeItemDropDataParser,
+	generatedBattledomeItems GeneratedBattledomeItems,
+	generatedBattledomeItemParser SavedGeneratedBattledomeItems,
+	battledomeItemDropDataParser SavedBattledomeItems,
 ) *BattledomeItemsService {
 	return &BattledomeItemsService{
-		ItemGenerationService:         itemGenerationService,
-		GeneratedBattledomeItemParser: generatedBattledomeItemParser,
-		BattledomeItemDropDataParser:  battledomeItemDropDataParser,
+		GeneratedBattledomeItems:      generatedBattledomeItems,
+		SavedGeneratedBattledomeItems: generatedBattledomeItemParser,
+		SavedBattledomeItems:          battledomeItemDropDataParser,
 	}
 }
 
@@ -41,7 +53,7 @@ func (s *BattledomeItemsService) AllDrops() (map[models.Arena]models.BattledomeI
 
 	itemsByArena := map[models.Arena]models.BattledomeItems{}
 	for _, file := range files {
-		dto, err := s.BattledomeItemDropDataParser.Parse(constants.DropDataFilePath(file))
+		dto, err := s.SavedBattledomeItems.Parse(constants.DropDataFilePath(file))
 		if err != nil {
 			return nil, stacktrace.Propagate(err, "failed to parse %q as battledome drop data", file)
 		}
@@ -106,20 +118,19 @@ func (s *BattledomeItemsService) DropsByArena(arena models.Arena) (models.Normal
 
 func (s *BattledomeItemsService) GeneratedDropsByArena(arena models.Arena) (models.NormalisedBattledomeItems, error) {
 	if helpers.IsFileExists(constants.GeneratedDropsFilePath(string(arena))) {
-		parsedDrops, err := s.GeneratedBattledomeItemParser.Parse(constants.GeneratedDropsFilePath(string(arena)))
+		parsedDrops, err := s.SavedGeneratedBattledomeItems.Parse(constants.GeneratedDropsFilePath(string(arena)))
 		if err != nil {
 			return nil, stacktrace.Propagate(err, "failed to parse %q as battledome drops", arena)
 		}
 
 		return parsedDrops, nil
 	} else {
-		items, err := s.ItemGenerationService.GenerateItems(arena, constants.NumberOfItemsToGenerate)
+		items, err := s.GeneratedBattledomeItems.Items(arena, constants.NumberOfItemsToGenerate)
 		if err != nil {
 			return nil, stacktrace.Propagate(err, "failed to generate items for %q", arena)
 		}
 
-		err = s.GeneratedBattledomeItemParser.Save(items, constants.GeneratedDropsFilePath(string(arena)))
-		if err != nil {
+		if s.SavedGeneratedBattledomeItems.Save(items, constants.GeneratedDropsFilePath(string(arena))); err != nil {
 			return nil, stacktrace.Propagate(err, "falled to save generated drops to %q", constants.GeneratedDropsFilePath(string(arena)))
 		}
 

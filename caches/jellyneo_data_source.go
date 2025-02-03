@@ -38,7 +38,7 @@ func jellyNeoPriceUrl(itemName string) string {
 
 func (ds *JellyNeoDataSource) Price(itemName string) (float64, error) {
 	if slices.Contains(bannedItems, itemName) {
-		return 0.0, stacktrace.NewError(fmt.Sprintf("item %q was a banned item"))
+		return 0.0, stacktrace.NewError(fmt.Sprintf("item %q was a banned item", itemName))
 	}
 
 	url := jellyNeoPriceUrl(itemName)

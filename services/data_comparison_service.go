@@ -7,23 +7,30 @@ import (
 	"github.com/palantir/stacktrace"
 )
 
-type DataComparisonService struct {
-	BattledomeItemsService *BattledomeItemsService
+type BattledomeItems interface {
+	DropsByArena(arena models.Arena) (models.NormalisedBattledomeItems, error)
+	GeneratedDropsByArena(arena models.Arena) (models.NormalisedBattledomeItems, error)
+	DropsByMetadata(metadata models.BattledomeItemMetadata) (models.NormalisedBattledomeItems, error)
+	DropsGroupedByMetadata() (map[models.BattledomeItemMetadata]models.NormalisedBattledomeItems, error)
 }
 
-func NewDataComparisonService(battledomeItemsService *BattledomeItemsService) *DataComparisonService {
+type DataComparisonService struct {
+	BattledomeItems
+}
+
+func NewDataComparisonService(battledomeItemsService BattledomeItems) *DataComparisonService {
 	return &DataComparisonService{
-		BattledomeItemsService: battledomeItemsService,
+		BattledomeItems: battledomeItemsService,
 	}
 }
 
 func (s *DataComparisonService) CompareByMetadata(metadata models.BattledomeItemMetadata) (realData models.NormalisedBattledomeItems, generatedData models.NormalisedBattledomeItems, err error) {
-	realData, err = s.BattledomeItemsService.DropsByMetadata(metadata)
+	realData, err = s.BattledomeItems.DropsByMetadata(metadata)
 	if err != nil {
 		return nil, nil, stacktrace.Propagate(err, "failed to get drops by metadata for %q", metadata.String())
 	}
 
-	generatedData, err = s.BattledomeItemsService.GeneratedDropsByArena(metadata.Arena)
+	generatedData, err = s.BattledomeItems.GeneratedDropsByArena(metadata.Arena)
 	if err != nil {
 		return nil, nil, stacktrace.Propagate(err, "failed to generate drops by arena for %q", metadata.Arena)
 	}
@@ -32,12 +39,12 @@ func (s *DataComparisonService) CompareByMetadata(metadata models.BattledomeItem
 }
 
 func (s *DataComparisonService) CompareArena(arena models.Arena) (realData models.NormalisedBattledomeItems, generatedData models.NormalisedBattledomeItems, err error) {
-	realData, err = s.BattledomeItemsService.DropsByArena(arena)
+	realData, err = s.BattledomeItems.DropsByArena(arena)
 	if err != nil {
 		return nil, nil, stacktrace.Propagate(err, "failed to get drops by arena for %q", arena)
 	}
 
-	generatedData, err = s.BattledomeItemsService.GeneratedDropsByArena(arena)
+	generatedData, err = s.BattledomeItems.GeneratedDropsByArena(arena)
 	if err != nil {
 		return nil, nil, stacktrace.Propagate(err, "failed to generate drops by arena for %q", arena)
 	}
@@ -46,7 +53,7 @@ func (s *DataComparisonService) CompareArena(arena models.Arena) (realData model
 }
 
 func (s *DataComparisonService) CompareAllChallengers(itemPriceCache caches.ItemPriceCache) (challengerData []models.NormalisedBattledomeItems, err error) {
-	data, err := s.BattledomeItemsService.DropsGroupedByMetadata()
+	data, err := s.BattledomeItems.DropsGroupedByMetadata()
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to get drops grouped by metadata")
 	}

@@ -4,22 +4,25 @@ import (
 	"github.com/darienchong/neopets-battledome-analysis/constants"
 	"github.com/darienchong/neopets-battledome-analysis/helpers"
 	"github.com/darienchong/neopets-battledome-analysis/models"
-	"github.com/darienchong/neopets-battledome-analysis/parsers"
 	"github.com/palantir/stacktrace"
 )
 
-type BattledomeItemWeightService struct {
-	ItemWeightParser *parsers.BattledomeItemWeightParser
+type SavedBattledomeItemWeights interface {
+	Parse(filePath string) ([]models.BattledomeItemWeight, error)
 }
 
-func NewBattledomeItemWeightService(itemWeightParser *parsers.BattledomeItemWeightParser) *BattledomeItemWeightService {
+type BattledomeItemWeightService struct {
+	SavedBattledomeItemWeights
+}
+
+func NewBattledomeItemWeightService(savedBattledomeItemWeights SavedBattledomeItemWeights) *BattledomeItemWeightService {
 	return &BattledomeItemWeightService{
-		ItemWeightParser: itemWeightParser,
+		SavedBattledomeItemWeights: savedBattledomeItemWeights,
 	}
 }
 
-func (s *BattledomeItemWeightService) GetItemWeights(arena string) ([]models.BattledomeItemWeight, error) {
-	weights, err := s.ItemWeightParser.Parse(constants.ItemWeightsFilePath())
+func (s *BattledomeItemWeightService) ItemWeights(arena string) ([]models.BattledomeItemWeight, error) {
+	weights, err := s.SavedBattledomeItemWeights.Parse(constants.ItemWeightsFilePath())
 	if err != nil {
 		return nil, stacktrace.Propagate(err, "failed to parse %q as item weights", constants.ItemWeightsFilePath())
 	}
