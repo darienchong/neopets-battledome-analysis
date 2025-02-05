@@ -1,0 +1,15 @@
+$ARENA:Ugga Dome
+$CHALLENGER:Harry the Mutant Moehog
+$DIFFICULTY:Mighty
+Eo Codestone|2
+Unidentifiable Weak Bottled Faerie|1
+Lu Codestone|2
+Mag Codestone|1
+Tyrannian Usuki|1
+Blue Furry Negg|1
+Vo Codestone|2
+Mazzew|1
+Weak Bottled Dark Faerie|1
+Bri Codestone|1
+Orn Codestone|1
+Weak Bottled Fire Faerie|1
