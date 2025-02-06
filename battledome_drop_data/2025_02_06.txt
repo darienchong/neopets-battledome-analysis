@@ -1,0 +1,15 @@
+$ARENA:Ugga Dome
+$CHALLENGER:Harry the Mutant Moehog
+$DIFFICULTY:Mighty
+Speak Tyrannian|2
+Bri Codestone|1
+Lu Codestone|1
+Har Codestone|1
+Skies Above Tyrannia|1
+Zei Codestone|2
+Tyragh the Tyrannian Buzz|2
+Hairy Snowball|1
+Weak Bottled Dark Faerie|1
+Tyrannian Acara Plushie|1
+Icklesaur|1
+Stone Muffin|1
