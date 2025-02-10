@@ -11,7 +11,7 @@ type RetryPolicy[TResult any] struct {
 	MaxTries int
 }
 
-func (rp RetryPolicy[T]) Execute(action func() (T, error)) (T, error) {
+func (rp RetryPolicy[T]) Execute(action func() (T, error), errorMsg string) (T, error) {
 	var outcome T
 	var err error
 	for i := 1; i <= rp.MaxTries; i++ {
@@ -21,7 +21,7 @@ func (rp RetryPolicy[T]) Execute(action func() (T, error)) (T, error) {
 		}
 
 		backoff := rp.Backoff(i)
-		slog.Error(fmt.Sprintf("Failed to execute action; retrying in %d ms...", backoff))
+		slog.Error(fmt.Sprintf("Failed to execute %q; retrying in %d ms...", errorMsg, backoff))
 		time.Sleep(time.Duration(backoff) * time.Millisecond)
 	}
 

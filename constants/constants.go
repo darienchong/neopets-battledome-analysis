@@ -9,6 +9,17 @@ import (
 
 type ItemPriceDataSourceType int
 
+func (i ItemPriceDataSourceType) String() string {
+	switch i {
+	case JellyNeo:
+		return "JellyNeo"
+	case ItemDB:
+		return "ItemDB"
+	default:
+		return "?"
+	}
+}
+
 const (
 	Unknown ItemPriceDataSourceType = iota
 	JellyNeo

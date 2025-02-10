@@ -82,7 +82,7 @@ func (c *RealItemPriceCache) Price(itemName string) float64 {
 
 	price, err := c.retryPolicy.Execute(func() (float64, error) {
 		return c.dataSource.Price(itemName)
-	})
+	}, fmt.Sprintf("Getting %s from %s", itemName, constants.ItemPriceDataSource.String()))
 
 	if err != nil {
 		slog.Error(fmt.Sprintf("%+v", err))
