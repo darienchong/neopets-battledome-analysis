@@ -1,0 +1,16 @@
+$ARENA:Ugga Dome
+$CHALLENGER:Harry the Mutant Moehog
+$DIFFICULTY:Mighty
+Weak Bottled Fire Faerie|1
+Stone Muffin|2
+Zei Codestone|1
+Weak Bottled Light Faerie|1
+Tyrannian Acara Plushie|2
+Unidentifiable Weak Bottled Faerie|1
+Tyragh the Tyrannian Buzz|1
+Hairy Snowball|1
+Tyrannian Skeith Plushie|1
+General Crustygums|1
+Weak Bottled Water Faerie|1
+Kew Codestone|1
+Mazzew|1
