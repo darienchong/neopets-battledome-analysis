@@ -1,0 +1,16 @@
+$ARENA:Dome of the Deep
+$CHALLENGER:Koi Warrior
+$DIFFICULTY:Strong
+Bri Codestone|1
+Underwater Tour|1
+Weak Bottled Dark Faerie|1
+Maraquan Faerie Tales|1
+Vo Codestone|1
+Legends of Maraqua|2
+Maraquan Bed Time Stories|2
+Lu Codestone|1
+Weak Bottled Light Faerie|1
+Maraquan Charger Plushie|1
+Maraquan Grackle Bug|1
+Koi Collector|1
+Weak Bottled Air Faerie|1
