@@ -1,0 +1,15 @@
+$ARENA:Dome of the Deep
+$CHALLENGER:Koi Warrior
+$DIFFICULTY:Strong
+Weak Bottled Air Faerie|1
+Legends of Maraqua|2
+Lu Codestone|2
+Maraquan Defenders Stamp|2
+Maraquan Charger Plushie|1
+Eo Codestone|1
+Har Codestone|1
+Underwater Tour|1
+Bri Codestone|1
+Vo Codestone|1
+The Great Koi Caper|1
+Maraquan Troops Stamp|1
