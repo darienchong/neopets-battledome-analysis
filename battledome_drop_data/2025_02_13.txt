@@ -1,0 +1,16 @@
+$ARENA:Dome of the Deep
+$CHALLENGER:Koi Warrior
+$DIFFICULTY:Strong
+Har Codestone|1
+Underwater Tour|1
+Vo Codestone|2
+Maraquan Charger Plushie|1
+Lu Codestone|1
+Water Faerie Halberd|1
+Koi Collector|1
+Weak Bottled Dark Faerie|2
+Unidentifiable Weak Bottled Faerie|1
+Orn Codestone|1
+Sho Codestone|1
+One Dubloon Coin|1
+Tai-Kai Codestone|1
