@@ -1,0 +1,15 @@
+$ARENA:Dome of the Deep
+$CHALLENGER:Koi Warrior
+$DIFFICULTY:Strong
+Legends of Maraqua|1
+Red Koi Plushie|2
+Weak Bottled Water Faerie|1
+Tablet of Water Runes|1
+Cui Codestone|2
+Vux Codestone|2
+Five Dubloon Coin|1
+Orn Codestone|1
+Lu Codestone|1
+Kew Codestone|1
+Main Codestone|1
+Zed Codestone|1
