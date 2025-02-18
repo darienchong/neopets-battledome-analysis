@@ -1,0 +1,16 @@
+$ARENA:Ugga Dome
+$CHALLENGER:Harry the Mutant Moehog
+$DIFFICULTY:Mighty
+Moehog Transmogrification Potion|1
+Blue Furry Negg|2
+Tyrannian Skeith Plushie|1
+Tai-Kai Codestone|1
+Tyrannian Usuki|1
+Speak Tyrannian|1
+Eo Codestone|2
+Stone Muffin|1
+Sho Codestone|1
+Weak Bottled Air Faerie|1
+Mazzew|1
+Trrygdorr|1
+General Crustygums|1

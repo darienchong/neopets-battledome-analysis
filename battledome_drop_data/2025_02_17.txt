@@ -1,0 +1,16 @@
+$ARENA:Dome of the Deep
+$CHALLENGER:Koi Warrior
+$DIFFICULTY:Strong
+Halloween Koi Plushie|1
+Necklace of the Water Faerie|1
+Eo Codestone|2
+One Dubloon Coin|1
+Lu Codestone|2
+Weak Bottled Light Faerie|1
+Maraquan Shieldmaiden Plushie|1
+Maraquan Defenders Stamp|1
+Vo Codestone|1
+Orn Codestone|1
+Underwater Tour|1
+Cui Codestone|1
+Tai-Kai Codestone|1

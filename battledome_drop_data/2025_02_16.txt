@@ -1,0 +1,16 @@
+$ARENA:Dome of the Deep
+$CHALLENGER:Koi Warrior
+$DIFFICULTY:Strong
+Weak Bottled Earth Faerie|1
+Maraquan Faerie Tales|2
+Bri Codestone|1
+Water Faerie Halberd|1
+Koi Collector|1
+Mag Codestone|2
+Maraquan Charger Plushie|1
+Har Codestone|1
+Zed Codestone|1
+Maraquan Troops Stamp|1
+Weak Bottled Water Faerie|1
+Vux Codestone|1
+Maraquan Bed Time Stories|1
