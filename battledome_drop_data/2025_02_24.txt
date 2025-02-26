@@ -1,0 +1,17 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Mau Codestone|2
+Battle Ready Pencil Box|1
+Stone Muffin|1
+Ridiculously Heavy Battle Hammer|1
+Organic Bran Carrot Muffin|1
+Lu Codestone|1
+Watermelon Fruit Cup|1
+Vux Codestone|1
+Assorted Mini Biscuits|1
+Cursed Wand of Shadow|1
+Steamed Vegetable Dumplings|1
+Cui Codestone|1
+Kew Codestone|1
+Orn Codestone|1

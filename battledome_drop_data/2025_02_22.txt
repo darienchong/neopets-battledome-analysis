@@ -1,0 +1,15 @@
+$ARENA:Ugga Dome
+$CHALLENGER:Harry the Mutant Moehog
+$DIFFICULTY:Mighty
+Unidentifiable Weak Bottled Faerie|1
+Trrygdorr|2
+Bri Codestone|1
+Har Codestone|1
+Tyrannian Usuki|2
+Tai-Kai Codestone|1
+Weak Bottled Water Faerie|1
+Tyrannian Acara Plushie|2
+Blue Furry Negg|1
+Speak Tyrannian|1
+Bang Bang Negg|1
+Tyrannian Skeith Plushie|1

@@ -1,0 +1,14 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Weak Bottled Dark Faerie|1
+Apple Juice|2
+Battle Ready Pencil Box|1
+Fire Muffin|1
+Zed Codestone|2
+Kew Codestone|2
+Weak Bottled Earth Faerie|1
+Electro Sword|1
+Har Codestone|2
+Apple Cherry Tarts|1
+Battle Faerie Dagger|1
