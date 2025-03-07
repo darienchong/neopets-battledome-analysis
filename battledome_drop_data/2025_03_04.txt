@@ -1,0 +1,16 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Training School Myths|1
+Normal Platinum Nerkmid|1
+Weak Bottled Dark Faerie|1
+Robot Muffin|1
+Tai-Kai Codestone|1
+Chocolate Chip Battle Biscuit|2
+Har Codestone|2
+Sho Codestone|1
+Battle Faerie Dagger|1
+Bri Codestone|1
+Fried Chicken and Waffles|1
+Vux Codestone|1
+Chocolate Creme Pie|1

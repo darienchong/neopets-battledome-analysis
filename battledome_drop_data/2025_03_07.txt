@@ -1,0 +1,16 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Weak Bottled Light Faerie|2
+Fire Muffin|1
+Chocolate Chip Battle Biscuit|1
+Vo Codestone|1
+Main Codestone|1
+Steamed Vegetable Dumplings|1
+Tai-Kai Codestone|2
+Can of Neocola|1
+Zed Codestone|1
+Darigan Muffin|1
+Cursed Wand of Shadow|1
+Chocolate Covered Cherries|1
+Lu Codestone|1

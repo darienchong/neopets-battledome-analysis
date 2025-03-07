@@ -1,0 +1,17 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Weak Bottled Dark Faerie|1
+Cinnamon Raisin Oatmeal|1
+Eo Codestone|2
+Chocolate Chip Battle Biscuit|1
+Weak Bottled Light Faerie|1
+Main Codestone|1
+Lu Codestone|1
+Brown Rice|1
+Har Codestone|1
+Steamed Vegetable Dumplings|1
+Robot Muffin|1
+Toast with Jam|1
+Nimmo Battle Cry|1
+Apple and Cheese Sandwich|1

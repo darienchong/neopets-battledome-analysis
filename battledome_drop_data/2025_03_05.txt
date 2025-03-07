@@ -1,0 +1,17 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Wrapped Strawberry Candy|1
+Zed Codestone|1
+Weak Bottled Water Faerie|1
+Banana Creme Pie|1
+Vux Codestone|1
+Veggie Lasagne|1
+Weak Bottled Fire Faerie|1
+Battle Ready Pencil Box|1
+Garlic Cheese Toast|2
+Weak Bottled Light Faerie|1
+Fire Muffin|1
+Golden Muffin|1
+Electro Sword|1
+Mag Codestone|1

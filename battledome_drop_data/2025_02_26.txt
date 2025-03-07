@@ -1,0 +1,17 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Vux Codestone|1
+Orn Codestone|1
+Training School Myths|1
+Eo Codestone|2
+Acara Battle Book|1
+Har Codestone|1
+Weak Bottled Water Faerie|1
+Milk Chocolate Rose|1
+Chocolate Chip Battle Biscuit|1
+Weak Bottled Dark Faerie|1
+Fried Chicken and Waffles|1
+Brain Muffin|1
+Baked Asparagus Biscuit|1
+Watermelon Fruit Cup|1

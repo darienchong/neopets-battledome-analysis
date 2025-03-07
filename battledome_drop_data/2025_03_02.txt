@@ -1,0 +1,18 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Can of Neocola|1
+Watermelon Fruit Cup|1
+Battle Faerie Dagger|1
+Steamed Vegetable Dumplings|1
+Weak Bottled Fire Faerie|1
+Weak Bottled Dark Faerie|1
+Marzipan Sugared Slorg|1
+Lesser Nerkmid|1
+Electro Sword|1
+Zei Codestone|1
+Milk Chocolate Rose|1
+Toast with Jam|1
+Strawberry Jam Sandwich Cookie|1
+Brain Muffin|1
+Har Codestone|1

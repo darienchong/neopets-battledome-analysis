@@ -1,0 +1,15 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Battle Faerie Dagger|2
+Golden Muffin|1
+Darigan Muffin|1
+Eo Codestone|1
+Kasuki Lu Biography|2
+Main Codestone|1
+Stone Muffin|1
+Weak Bottled Air Faerie|2
+Cui Codestone|1
+Healthy Veggie Deluxe Sandwich|1
+Croissant|1
+Uni Battle!|1

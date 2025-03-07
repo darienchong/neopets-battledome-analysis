@@ -1,0 +1,18 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Weak Bottled Air Faerie|1
+Bri Codestone|1
+Battle Ready Pencil Box|1
+Mau Codestone|1
+Milk Chocolate Rose|1
+Sho Codestone|1
+Tai-Kai Codestone|1
+Kew Codestone|1
+Vegetarian Meat Pie|1
+Lu Codestone|1
+Cinnamon Raisin Oatmeal|1
+Main Codestone|1
+Fried Egg on Toast|1
+Apple Juice|1
+Zed Codestone|1
