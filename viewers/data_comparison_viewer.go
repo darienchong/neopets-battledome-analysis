@@ -151,7 +151,8 @@ func (v *DataComparisonViewer) generateArenaProfitableItemsTable(itemPriceCache 
 	}))
 	arenaSpecificItems := helpers.Filter(helpers.Values(dataCopy), func(item *models.BattledomeItem) bool {
 		_, exists := generatedItems[item.Name]
-		return exists
+		_, isAdditionalArenaPrize := constants.AdditionalArenaSpecificDrops[string(item.Metadata.Arena)][string(item.Name)]
+		return exists || isAdditionalArenaPrize
 	})
 	profitableItems := helpers.OrderByDescending(arenaSpecificItems, func(item *models.BattledomeItem) float64 {
 		return item.Profit(itemPriceCache)
@@ -371,9 +372,11 @@ func (v *DataComparisonViewer) ViewChallengerComparison(itemPriceCache caches.It
 	return lines, nil
 }
 
-func isArenaSpecificDrop(itemName models.ItemName, items models.NormalisedBattledomeItems) bool {
+func isArenaSpecificDrop(item *models.BattledomeItem, items models.NormalisedBattledomeItems) bool {
+	itemName := item.Name
 	_, exists := items[itemName]
-	return exists
+	_, isArenaSpecificItem := constants.AdditionalArenaSpecificDrops[string(item.Metadata.Arena)][string(itemName)]
+	return exists || isArenaSpecificItem
 }
 
 func (v *DataComparisonViewer) generateArenaSpecificDropsTable(itemPriceCache caches.ItemPriceCache, realData models.NormalisedBattledomeItems, generatedData models.NormalisedBattledomeItems) (*helpers.Table, error) {
@@ -388,7 +391,7 @@ func (v *DataComparisonViewer) generateArenaSpecificDropsTable(itemPriceCache ca
 	table.IsLastRowDistinct = true
 
 	realItems := helpers.Filter(helpers.Values(realData), func(item *models.BattledomeItem) bool {
-		return isArenaSpecificDrop(item.Name, generatedData)
+		return isArenaSpecificDrop(item, generatedData)
 	})
 	orderedRealItems := helpers.OrderByDescending(realItems, func(item *models.BattledomeItem) float64 {
 		return float64(item.Quantity) * itemPriceCache.Price(string(item.Name))
@@ -461,7 +464,7 @@ func (v *DataComparisonViewer) generateChallengerSpecificDropsTable(itemPriceCac
 	table.IsLastRowDistinct = true
 
 	realItems := helpers.Filter(helpers.Values(realData), func(item *models.BattledomeItem) bool {
-		return !isArenaSpecificDrop(item.Name, generatedData)
+		return !isArenaSpecificDrop(item, generatedData)
 	})
 	orderedRealItems := helpers.OrderByDescending(realItems, func(item *models.BattledomeItem) float64 {
 		return float64(item.Quantity) * itemPriceCache.Price(string(item.Name))
@@ -595,11 +598,11 @@ func (v *DataComparisonViewer) ViewChallengerComparisons(itemPriceCache caches.I
 		totalRealItemQuantity := items.TotalItemQuantity()
 		brownCodestoneDropRateLeftBound, brownCodestoneDropRateRightBound, err := v.StatisticsService.ClopperPearsonInterval(totalRealBrownCodestoneQuantity, totalRealItemQuantity, constants.SignificanceLevel)
 		if err != nil {
-			return nil, stacktrace.Propagate(err, "faiiled to generate confidence interval for brown codestone drop rates for %q", metadata.Arena)
+			return nil, stacktrace.Propagate(err, "failed to generate confidence interval for brown codestone drop rates for %q", metadata.Arena)
 		}
 		redCodestoneDropRateLeftBound, redCodestoneDropRateRightBound, err := v.StatisticsService.ClopperPearsonInterval(totalRealRedCodestoneQuantity, totalRealItemQuantity, constants.SignificanceLevel)
 		if err != nil {
-			return nil, stacktrace.Propagate(err, "faiiled to generate confidence interval for red codestone drop rates for %q", metadata.Arena)
+			return nil, stacktrace.Propagate(err, "failed to generate confidence interval for red codestone drop rates for %q", metadata.Arena)
 		}
 
 		generatedItems, err := v.BattledomeItemsService.GeneratedDropsByArena(metadata.Arena)
@@ -635,7 +638,8 @@ func (v *DataComparisonViewer) ViewChallengerComparisons(itemPriceCache caches.I
 				}
 
 				_, exists := generatedItems[item.Name]
-				if !exists {
+				_, isArenaSpecificItem := constants.AdditionalArenaSpecificDrops[string(item.Metadata.Arena)][string(item.Name)]
+				if !exists && !isArenaSpecificItem {
 					return 0
 				}
 
@@ -651,7 +655,8 @@ func (v *DataComparisonViewer) ViewChallengerComparisons(itemPriceCache caches.I
 				}
 
 				_, exists := generatedItems[item.Name]
-				if exists {
+				_, isArenaSpecificItem := constants.AdditionalArenaSpecificDrops[string(item.Metadata.Arena)][string(item.Name)]
+				if exists || isArenaSpecificItem {
 					return 0
 				}
 

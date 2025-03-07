@@ -81,6 +81,34 @@ var (
 		"Frost Arena",
 		"Ugga Dome",
 	}
+	// Additional prizes not covered by the initial drop estimations
+	// e.g. Central Arena had Nerkmids added to their drop pool
+	AdditionalArenaSpecificDrops = map[string]map[string]any{
+		"Cosmic Dome":    {},
+		"Neocola Centre": {},
+		"Central Arena": {
+			"Nimmo Battle Cry":        nil,
+			"Aluminium Nerkmid":       nil,
+			"Basic Golden Nerkmid":    nil,
+			"Copper Nerkmid":          nil,
+			"Golden Nerkmid X":        nil,
+			"Golden Nerkmid XX":       nil,
+			"Good Nerkmid":            nil,
+			"Lesser Nerkmid":          nil,
+			"Magical Golden Nerkmid":  nil,
+			"Normal Golden Nerkmid":   nil,
+			"Normal Platinum Nerkmid": nil,
+			"Platinum Nerkmid X":      nil,
+			"Platinum Nerkmid XX":     nil,
+			"Ultimate Nerkmid":        nil,
+			"Ultra Golden Nerkmid":    nil,
+		},
+		"Dome of the Deep":  {},
+		"Rattling Cauldron": {},
+		"Pango Palladium":   {},
+		"Frost Arena":       {},
+		"Ugga Dome":         {},
+	}
 )
 
 func CombineRelativeFolderAndFilename(folder string, fileName string) string {

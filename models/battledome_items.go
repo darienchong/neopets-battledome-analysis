@@ -66,7 +66,8 @@ func generateArenaProfitData(itemPriceCache caches.ItemPriceCache, items Normali
 		}
 		itemPrice := itemPriceCache.Price(string(item.Name))
 		_, exists := generatedItems[item.Name]
-		if !exists {
+		_, isArenaSpecificItem := constants.AdditionalArenaSpecificDrops[string(item.Metadata.Arena)][string(item.Name)]
+		if !(exists || isArenaSpecificItem) {
 			// Remove profit contribution from challenger-specific drops if flag is set
 			itemPrice = 0
 		}
