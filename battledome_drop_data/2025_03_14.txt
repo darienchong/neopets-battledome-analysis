@@ -1,0 +1,17 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Tai-Kai Codestone|1
+Vux Codestone|1
+Eo Codestone|1
+Fruity Pancakes|1
+Croissant|1
+Bri Codestone|1
+Blackberry Pie|1
+Normal Golden Nerkmid|1
+Strawberry Fondant Surprise|1
+Stone Muffin|1
+Weak Bottled Air Faerie|1
+Mau Codestone|2
+Main Codestone|1
+Ridiculously Heavy Battle Hammer|1

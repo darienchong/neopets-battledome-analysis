@@ -1,0 +1,17 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Battle Faerie Dagger|1
+Marzipan Sugared Slorg|1
+Bri Codestone|2
+Eo Codestone|1
+Veggie Lasagne|1
+Ridiculously Heavy Battle Hammer|1
+Brain Muffin|1
+Weak Bottled Fire Faerie|1
+Golden Muffin|1
+Healthy Veggie Deluxe Sandwich|1
+Sho Codestone|1
+Corn Bread|1
+Watermelon Fruit Cup|1
+Smelly Dung Muffin|1

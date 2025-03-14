@@ -1,0 +1,17 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Apple Cobbler|1
+Cinnamon Roll|2
+Steamed Vegetable Dumplings|1
+Brain Muffin|1
+Cui Codestone|1
+Electro Sword|1
+Darigan Muffin|1
+Blue Berry Pie|1
+Weak Bottled Earth Faerie|1
+Eo Codestone|1
+Sho Codestone|1
+Lu Codestone|1
+Dried Mango|1
+French Toast Sticks|1

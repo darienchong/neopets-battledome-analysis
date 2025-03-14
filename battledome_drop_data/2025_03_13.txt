@@ -1,0 +1,16 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Kew Codestone|2
+Fire Muffin|1
+Brioche|2
+Croissant|1
+Freshly Tinned Carrots|1
+Eo Codestone|1
+Darigan Muffin|1
+Basket of Bread|1
+Har Codestone|1
+Tai-Kai Codestone|1
+Mag Codestone|1
+Ridiculously Heavy Battle Hammer|1
+Mau Codestone|1

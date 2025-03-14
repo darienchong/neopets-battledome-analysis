@@ -1,0 +1,17 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Tai-Kai Codestone|1
+Lu Codestone|1
+Chocolate Creme Pie|1
+Weak Bottled Water Faerie|1
+Mag Codestone|1
+Bri Codestone|2
+Robot Muffin|1
+Unidentifiable Weak Bottled Faerie|1
+Vo Codestone|1
+Ridiculously Heavy Battle Hammer|1
+Zed Codestone|1
+Weak Bottled Earth Faerie|1
+Fire Muffin|1
+Watermelon Fruit Cup|1

@@ -1,0 +1,17 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Vo Codestone|1
+Freshly Tinned Carrots|1
+Cursed Wand of Shadow|1
+Zed Codestone|1
+Weak Bottled Air Faerie|1
+Mau Codestone|1
+Platinum Nerkmid X|1
+Tai-Kai Codestone|2
+Bag of Chips|1
+Smelly Dung Muffin|1
+Wrapped Strawberry Candy|1
+Sho Codestone|1
+Cinnamon Raisin Oatmeal|1
+Apple Cinnamon Crepe|1
