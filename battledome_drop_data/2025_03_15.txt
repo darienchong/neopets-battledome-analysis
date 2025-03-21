@@ -1,0 +1,17 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Apple and Cheese Sandwich|1
+Wrapped Strawberry Candy|1
+Bri Codestone|1
+Weak Bottled Earth Faerie|1
+Main Codestone|1
+Cinnamon Raisin Oatmeal|1
+Ridiculously Heavy Battle Hammer|1
+Lu Codestone|2
+Zed Codestone|1
+Vux Codestone|1
+Healthy Veggie Deluxe Sandwich|1
+Fire Muffin|1
+Chocolate Covered Cherries|1
+Chocolate Chip Battle Biscuit|1

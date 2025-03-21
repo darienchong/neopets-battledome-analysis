@@ -1,0 +1,16 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Freshly Tinned Carrots|1
+Weak Bottled Air Faerie|1
+Mau Codestone|3
+Mag Codestone|1
+Lu Codestone|1
+Toast with Jam|1
+Vo Codestone|1
+Apple Cobbler|1
+Bri Codestone|1
+Cursed Wand of Shadow|1
+Cui Codestone|1
+Har Codestone|1
+Kew Codestone|1

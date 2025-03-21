@@ -1,0 +1,17 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Ridiculously Heavy Battle Hammer|1
+Baked Cheddar Straws|1
+Zed Codestone|1
+Bri Codestone|1
+Freshly Tinned Carrots|1
+Main Codestone|1
+Chocolate Chip Battle Biscuit|1
+Wrapped Strawberry Candy|1
+Orn Codestone|2
+Mag Codestone|1
+Assorted Mini Biscuits|1
+Endless Salad and Bread Sticks|1
+Milk Chocolate Rose|1
+Eo Codestone|1

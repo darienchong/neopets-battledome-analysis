@@ -1,0 +1,18 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Weak Bottled Fire Faerie|1
+Good Nerkmid|1
+Bri Codestone|1
+Chocolate Creme Pie|1
+Eo Codestone|1
+Watermelon Fruit Cup|1
+Weak Bottled Earth Faerie|1
+Orn Codestone|1
+Egg Salad and Cheese Sandwich|1
+Main Codestone|1
+Assorted Mini Biscuits|1
+Zei Codestone|1
+Apple Cherry Tarts|1
+Lu Codestone|1
+Har Codestone|1

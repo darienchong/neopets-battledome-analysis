@@ -1,0 +1,17 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Weak Bottled Air Faerie|1
+Chocolate Ice Cream|1
+Ridiculously Heavy Battle Hammer|1
+Stone Muffin|1
+Lu Codestone|1
+Veggie Lasagne|1
+Eo Codestone|2
+Endless Salad and Bread Sticks|1
+Tai-Kai Codestone|1
+Kew Codestone|1
+Weak Bottled Water Faerie|1
+Toast with Jam|1
+Unidentifiable Weak Bottled Faerie|1
+Mag Codestone|1

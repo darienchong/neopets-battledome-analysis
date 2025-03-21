@@ -1,0 +1,16 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Brain Muffin|2
+Eo Codestone|1
+Chocolate Chip Battle Biscuit|1
+Darigan Muffin|1
+French Toast Sticks|1
+Kasuki Lu Biography|1
+Blue Berry Pie|1
+Fish and Chips|1
+Baked Cheddar Straws|1
+Dried Mango|2
+Vegetarian Meat Pie|1
+Electro Sword|1
+Mag Codestone|1

@@ -1,0 +1,18 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Brown Rice|1
+Orn Codestone|1
+Veggie Lasagne|1
+Vo Codestone|1
+Main Codestone|1
+Banana Creme Pie|1
+Oatmeal Raisin Biscuit|1
+Toast with Jam|1
+Nutty Chocolate Brownies|1
+Bag of Chips|1
+Avocado Baby Food|1
+Electro Sword|1
+Hot Buttered Toast|1
+Toad in a Hole|1
+Strawberry Fondant Surprise|1
