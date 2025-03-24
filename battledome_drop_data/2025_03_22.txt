@@ -1,0 +1,15 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Weak Bottled Dark Faerie|1
+Avocado Baby Food|1
+Vo Codestone|2
+Eo Codestone|1
+Hot Buttered Toast|1
+Darigan Muffin|2
+Sho Codestone|1
+Battle Ready Pencil Box|1
+Lu Codestone|2
+Weak Bottled Air Faerie|1
+Dried Mango|1
+Bri Codestone|1

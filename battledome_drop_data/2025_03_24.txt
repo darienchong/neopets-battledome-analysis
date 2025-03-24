@@ -1,0 +1,14 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Weak Bottled Dark Faerie|1
+Mag Codestone|2
+Steamed Vegetable Dumplings|1
+Lu Codestone|2
+Zed Codestone|1
+Weak Bottled Earth Faerie|1
+Bag of Chips|1
+Zei Codestone|2
+Bri Codestone|2
+Weak Bottled Air Faerie|1
+Main Codestone|1
