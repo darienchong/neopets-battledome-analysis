@@ -65,6 +65,11 @@ func (p *BattledomeItemDropDataParser) Parse(filePath string) (*models.Battledom
 	}
 	if itemCount != constants.BattledomeDropsPerDay {
 		slog.Error(fmt.Sprintf("WARNING! The drop data in %q does not contain %d drops; %d drops were detected.", dto.Metadata.Source, constants.BattledomeDropsPerDay, itemCount))
+
+		// Zero out all the item quantities and return so that it doesn't pollute the dataset
+		for _, item := range dto.Items {
+			item.Quantity = 0
+		}
 	}
 	return dto, nil
 }

@@ -25,6 +25,7 @@ type RealItemPriceCache struct {
 	expiry        time.Time
 	cachedPrices  map[string]float64
 	specialPrices map[string]float64
+	failedItems   map[string]any
 }
 
 var (
@@ -44,6 +45,7 @@ func ItemPriceCacheInstance(dataSource ItemPriceDataSource) (ItemPriceCache, err
 			MaxTries: 3,
 		},
 		dataSource:    dataSource,
+		failedItems:   map[string]any{},
 		cachedPrices:  map[string]float64{},
 		specialPrices: map[string]float64{},
 	}
@@ -80,12 +82,18 @@ func (c *RealItemPriceCache) Price(itemName string) float64 {
 		return maybeSpecialPrice
 	}
 
+	if _, ok := c.failedItems[itemName]; ok {
+		// Failed to get price before
+		return 0.0
+	}
+
 	price, err := c.retryPolicy.Execute(func() (float64, error) {
 		return c.dataSource.Price(itemName)
 	}, fmt.Sprintf("Getting %s from %s", itemName, constants.ItemPriceDataSource.String()))
 
 	if err != nil {
 		slog.Error(fmt.Sprintf("%+v", err))
+		c.failedItems[itemName] = nil
 		return 0.0
 	}
 
