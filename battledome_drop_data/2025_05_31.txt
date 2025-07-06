@@ -1,0 +1,16 @@
+$ARENA:Pango Palladium
+$CHALLENGER:Tiki Tack Man
+$DIFFICULTY:Strong
+Eo Codestone|2
+How to Pick Flowers|1
+Tangella Tonic|1
+Supernova|1
+Mau Codestone|1
+Tai-Kai Codestone|1
+Island Cybunny Guide|1
+Cocoa Juppie|2
+Snowberry Crepe|1
+Steaming Skeem Potion|1
+Tacky Porcelain Skeith|1
+Cui Codestone|1
+Mystery Island Travel Brochure|1

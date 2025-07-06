@@ -1,0 +1,16 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Sho Codestone|1
+Zei Codestone|1
+Bri Codestone|1
+Vo Codestone|1
+Draining Negg Slice|1
+Apple and Cheese Sandwich|1
+Corn Bread|1
+Endless Salad and Bread Sticks|1
+Har Codestone|3
+Weak Bottled Light Faerie|1
+Wrapped Strawberry Candy|1
+Doughnut Holes|1
+Zed Codestone|1

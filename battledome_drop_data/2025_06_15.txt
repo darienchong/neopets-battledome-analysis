@@ -1,0 +1,17 @@
+$ARENA:Rattling Cauldron
+$CHALLENGER:Jelly Chia
+$DIFFICULTY:Mighty
+Kew Codestone|1
+Candy Corn Stuffed Pumpkin|1
+Weak Bottled Fire Faerie|1
+Main Codestone|2
+Blueberry Jelly Shield|1
+Vux Codestone|1
+Bottled Droolik Drool|1
+Lu Codestone|1
+Weak Bottled Light Faerie|1
+Mau Codestone|1
+Weak Bottled Earth Faerie|1
+Ghost Wrap|1
+Large Grundo Toe With Lint Side Order|1
+Zombie Marshmallows|1

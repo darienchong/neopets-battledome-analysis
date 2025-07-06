@@ -1,0 +1,17 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+French Toast Sticks|1
+Weak Bottled Air Faerie|1
+Buttered Toast|1
+Har Codestone|1
+Lu Codestone|2
+Vux Codestone|1
+Brain Muffin|1
+Endless Salad and Bread Sticks|1
+Hasee Puff Cereal|1
+Basket of Bread|1
+Bri Codestone|1
+Apple Juice|1
+Vo Codestone|1
+Robot Muffin|1

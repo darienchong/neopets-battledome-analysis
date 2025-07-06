@@ -1,0 +1,17 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Kew Codestone|2
+Weak Bottled Fire Faerie|1
+Battle Faerie Dagger|1
+Orn Codestone|1
+Cinnamon Raisin Oatmeal|1
+Smelly Dung Muffin|1
+Organic Bran Carrot Muffin|1
+Mag Codestone|1
+Croissant|1
+Battle Ready Pencil Box|1
+Stone Muffin|1
+Vo Codestone|1
+Lu Codestone|1
+Brain Muffin|1

@@ -1,0 +1,17 @@
+$ARENA:Neocola Centre
+$CHALLENGER:S750 Kreludan Defender Robot
+$DIFFICULTY:Mighty
+Galaxy Energy Drink|1
+Weak Bottled Air Faerie|1
+Har Codestone|1
+Zed Codestone|1
+Robot Rock|1
+Green Neocola Token|1
+Mau Codestone|1
+Main Codestone|1
+Zei Codestone|1
+Vux Codestone|2
+Weak Bottled Fire Faerie|1
+Oppressor Onions|1
+Cui Codestone|1
+Unidentifiable Weak Bottled Faerie|1

@@ -1,0 +1,16 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Bri Codestone|1
+Weak Bottled Fire Faerie|1
+Har Codestone|1
+Zei Codestone|1
+Main Codestone|3
+Weak Bottled Air Faerie|1
+Cursed Wand of Shadow|1
+Training School Myths|1
+Stone Muffin|1
+Egg Salad and Cheese Sandwich|1
+Baked Cheddar Straws|1
+Hasee Puff Cereal|1
+Weak Bottled Dark Faerie|1

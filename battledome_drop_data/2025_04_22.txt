@@ -1,0 +1,17 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Smelly Dung Muffin|1
+Orn Codestone|1
+Weak Bottled Light Faerie|1
+Bite Size Celery|1
+Kew Codestone|1
+Grilled Veggie Bowl|1
+Robot Muffin|1
+Weak Bottled Water Faerie|1
+Cui Codestone|1
+Har Codestone|1
+Strawberry Fondant Surprise|1
+Brioche|2
+Can of Neocola|1
+Mau Codestone|1

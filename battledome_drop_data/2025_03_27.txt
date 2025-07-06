@@ -1,0 +1,18 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Basket of Bread|1
+Caramel Creams|1
+Brain Muffin|1
+Brioche|1
+Weak Bottled Light Faerie|1
+Battle Ready Pencil Box|1
+Healthy Veggie Deluxe Sandwich|1
+Kew Codestone|1
+Cursed Wand of Shadow|1
+Mau Codestone|1
+Zed Codestone|1
+Fried Chicken and Waffles|1
+Mag Codestone|1
+Sho Codestone|1
+Can of Neocola|1

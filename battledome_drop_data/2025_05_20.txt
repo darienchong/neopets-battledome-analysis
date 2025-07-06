@@ -1,0 +1,18 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Toad in a Hole|1
+Orn Codestone|1
+Weak Bottled Air Faerie|1
+Sho Codestone|1
+Electro Sword|1
+Vegetarian Meat Pie|1
+Weak Bottled Water Faerie|1
+Fire Muffin|1
+Chocolate Creme Pie|1
+Zed Codestone|1
+Eo Codestone|1
+Dried Mango|1
+Stone Muffin|1
+Apple Cobbler|1
+Baked Cheddar Straws|1

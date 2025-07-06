@@ -1,0 +1,18 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Sho Codestone|1
+Weak Bottled Light Faerie|1
+Orn Codestone|1
+Har Codestone|1
+Vo Codestone|1
+Main Codestone|1
+Grilled Veggie Bowl|1
+Eo Codestone|1
+Weak Bottled Earth Faerie|1
+Weak Bottled Air Faerie|1
+Chocolate Chip Battle Biscuit|1
+Lu Codestone|1
+Robot Muffin|1
+Weak Bottled Water Faerie|1
+Mau Codestone|1

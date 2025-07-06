@@ -1,0 +1,16 @@
+$ARENA:Pango Palladium
+$CHALLENGER:Tiki Tack Man
+$DIFFICULTY:Strong
+Banango Bread|2
+Mau Codestone|2
+Ultranova|1
+Weak Bottled Air Faerie|1
+Magical Wheel Potion|1
+Mystery Island Tour Guide|1
+Sho Codestone|1
+Zei Codestone|1
+Snowberry Crepe|1
+Tacky Porcelain Skeith|1
+Weak Bottled Light Faerie|1
+Stramberry Coconut Milk|1
+Weak Bottled Earth Faerie|1

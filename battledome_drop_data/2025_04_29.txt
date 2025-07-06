@@ -1,0 +1,16 @@
+$ARENA:Ugga Dome
+$CHALLENGER:Cybunny Scout
+$DIFFICULTY:Average
+Vux Codestone|1
+Speak Tyrannian|2
+Tyragh the Tyrannian Buzz|1
+Blue Furry Negg|1
+Tyrannian Skeith Plushie|1
+Stone Muffin|1
+Cybunny Carrot Stew|1
+Trrygdorr|1
+Hairy Snowball|1
+Camelior|1
+Vo Codestone|1
+Mazzew|2
+Skies Above Tyrannia|1

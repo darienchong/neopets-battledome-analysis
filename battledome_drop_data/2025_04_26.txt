@@ -1,0 +1,18 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Weak Bottled Fire Faerie|1
+Tai-Kai Codestone|1
+Lu Codestone|1
+Golden Muffin|1
+Oatmeal Raisin Biscuit|1
+Zei Codestone|1
+Electro Sword|1
+Avocado Baby Food|1
+Mag Codestone|1
+Healthy Veggie Deluxe Sandwich|1
+Basic Golden Nerkmid|1
+Apple and Cheese Sandwich|1
+Croissant|1
+Weak Bottled Light Faerie|1
+Fire Muffin|1

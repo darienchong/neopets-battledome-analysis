@@ -1,0 +1,16 @@
+$ARENA:Rattling Cauldron
+$CHALLENGER:Jelly Chia
+$DIFFICULTY:Mighty
+Mau Codestone|1
+Slime Soup|1
+Zombie Marshmallows|2
+Jelly Muffin|1
+Mag Codestone|2
+Orn Codestone|1
+Eliv Thade Wrap|1
+Unidentifiable Weak Bottled Faerie|1
+Zei Codestone|1
+Kew Codestone|1
+Bottled Droolik Drool|1
+Har Codestone|1
+Weak Bottled Earth Faerie|1

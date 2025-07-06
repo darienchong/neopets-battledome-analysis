@@ -1,0 +1,15 @@
+$ARENA:Rattling Cauldron
+$CHALLENGER:Jelly Chia
+$DIFFICULTY:Mighty
+Zombie Marshmallows|1
+Bri Codestone|2
+Orn Codestone|1
+Weak Bottled Fire Faerie|2
+Brain Stew|1
+Weak Bottled Air Faerie|1
+Weak Bottled Light Faerie|1
+Vo Codestone|1
+Mau Codestone|1
+Undead Celery|1
+Kew Codestone|2
+Large Grundo Toe With Lint Side Order|1

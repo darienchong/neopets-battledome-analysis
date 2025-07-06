@@ -1,0 +1,15 @@
+$ARENA:Rattling Cauldron
+$CHALLENGER:Jelly Chia
+$DIFFICULTY:Mighty
+Sho Codestone|1
+Undead Broccoli|2
+Crispy Pumpkin Chips|2
+Lu Codestone|1
+Zombie Marshmallows|1
+Haunted Hummus|2
+Weak Bottled Fire Faerie|1
+Mau Codestone|1
+Spider Licorice|1
+Pumpkin Slice|1
+Har Codestone|1
+Weak Bottled Light Faerie|1

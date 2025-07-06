@@ -1,0 +1,16 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Electro Sword|2
+Fruity Pancakes|1
+Main Codestone|2
+Stone Muffin|1
+Sho Codestone|1
+Tai-Kai Codestone|1
+Basket of Bread|1
+Wrapped Strawberry Candy|1
+Kew Codestone|1
+Weak Bottled Fire Faerie|1
+Fire Muffin|1
+Chocolate Creme Pie|1
+Apple Juice|1

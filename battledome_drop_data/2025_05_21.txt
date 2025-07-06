@@ -1,0 +1,15 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Toast with Jam|1
+Battle Faerie Dagger|1
+Unidentifiable Weak Bottled Faerie|2
+Stone Muffin|1
+Zed Codestone|1
+Mag Codestone|2
+Battle Ready Pencil Box|1
+Mau Codestone|1
+Fire Muffin|1
+Weak Bottled Light Faerie|1
+Egg Salad and Cheese Sandwich|1
+Zei Codestone|2

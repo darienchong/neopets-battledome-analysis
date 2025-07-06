@@ -1,0 +1,16 @@
+$ARENA:Rattling Cauldron
+$CHALLENGER:Jelly Chia
+$DIFFICULTY:Mighty
+Weak Bottled Air Faerie|2
+Haunted Hummus|1
+Blueberry Jelly Shield|1
+Zei Codestone|2
+Candy Corn Stuffed Pumpkin|1
+Roasted Spyder on a Stick|1
+Har Codestone|1
+Bone Dog|1
+Weak Bottled Earth Faerie|1
+Undead Celery|1
+Undead Broccoli|1
+Mau Codestone|1
+Undead Turnip|1

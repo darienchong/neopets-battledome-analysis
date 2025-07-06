@@ -1,0 +1,16 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Dried Mango|1
+Cui Codestone|1
+Weak Bottled Earth Faerie|1
+Sho Codestone|1
+Brain Muffin|1
+Vo Codestone|2
+Ridiculously Heavy Battle Hammer|1
+Zed Codestone|1
+Har Codestone|1
+French Toast Sticks|1
+Bite Size Celery|2
+Weak Bottled Light Faerie|1
+Robot Muffin|1

@@ -1,0 +1,17 @@
+$ARENA:Rattling Cauldron
+$CHALLENGER:Jelly Chia
+$DIFFICULTY:Mighty
+Zed Codestone|1
+Large Grundo Toe With Lint Side Order|2
+Jelly Chia|1
+Weak Bottled Light Faerie|1
+Wormy Pasta|1
+Mag Codestone|1
+Rotting Wormburger|1
+Bri Codestone|1
+Jelly Muffin|1
+Weak Bottled Water Faerie|1
+Grundo Stix|1
+Zei Codestone|1
+Ghost Wrap|1
+Box of Skull Truffles|1

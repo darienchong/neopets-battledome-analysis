@@ -1,0 +1,17 @@
+$ARENA:Dome of the Deep
+$CHALLENGER:Giant Spectral Mutant Walein
+$DIFFICULTY:Mighty
+Har Codestone|1
+Mag Codestone|1
+Orn Codestone|1
+Weak Bottled Dark Faerie|1
+Zei Codestone|2
+Weak Bottled Water Faerie|1
+One Dubloon Coin|1
+Maraquan Defenders Stamp|1
+Tablet of Water Runes|1
+Maraquan Grackle Bug|1
+Weak Bottled Air Faerie|1
+Underwater Tour|1
+Weak Bottled Earth Faerie|1
+Walein|1

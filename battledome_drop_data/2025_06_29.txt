@@ -1,0 +1,16 @@
+$ARENA:Rattling Cauldron
+$CHALLENGER:Jelly Chia
+$DIFFICULTY:Mighty
+Gooey Bug Soup|2
+Tai-Kai Codestone|2
+Large Grundo Toe With Lint Side Order|1
+Haunted Hummus|1
+Box of Skull Truffles|1
+Zombie Marshmallows|1
+Bone Dog|1
+Cui Codestone|1
+Unidentifiable Weak Bottled Faerie|1
+Grundo Stix|1
+Crispy Pumpkin Chips|1
+Undead Celery|1
+Orn Codestone|1

@@ -1,0 +1,17 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Kew Codestone|1
+Training School Myths|1
+Strawberry Jam Sandwich Cookie|1
+Eo Codestone|1
+Stone Muffin|1
+Main Codestone|1
+Weak Bottled Air Faerie|1
+Apple Cobbler|1
+Steamed Vegetable Dumplings|1
+Har Codestone|2
+Sho Codestone|1
+Cursed Wand of Shadow|1
+Assorted Mini Biscuits|1
+Brain Muffin|1

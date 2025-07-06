@@ -1,0 +1,16 @@
+$ARENA:Ugga Dome
+$CHALLENGER:Cybunny Scout
+$DIFFICULTY:Average
+Icklesaur|1
+Sho Codestone|1
+Weak Bottled Light Faerie|1
+Bri Codestone|1
+Mag Codestone|2
+Weak Bottled Fire Faerie|1
+Tyragh the Tyrannian Buzz|1
+Camelior|1
+Tyrannian Usuki|2
+Weak Bottled Earth Faerie|1
+Trrygdorr|1
+Tyrannian Acara Plushie|1
+Hairy Snowball|1

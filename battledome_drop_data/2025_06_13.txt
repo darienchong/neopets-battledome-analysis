@@ -1,0 +1,16 @@
+$ARENA:Rattling Cauldron
+$CHALLENGER:Jelly Chia
+$DIFFICULTY:Mighty
+Bone Dog|1
+Weak Bottled Light Faerie|1
+Mag Codestone|2
+Large Grundo Toe With Lint Side Order|1
+Eliv Thade Wrap|1
+Crispy Pumpkin Chips|2
+Sickly Negg Slice|1
+Kew Codestone|1
+Weak Bottled Earth Faerie|1
+Brain Stew|1
+Undead Turnip|1
+Spider Licorice|1
+Gooey Bug Soup|1

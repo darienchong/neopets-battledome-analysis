@@ -1,0 +1,15 @@
+$ARENA:Ugga Dome
+$CHALLENGER:Cybunny Scout
+$DIFFICULTY:Average
+Weak Bottled Air Faerie|1
+Stone Muffin|1
+Weak Bottled Dark Faerie|2
+Eo Codestone|2
+Speak Tyrannian|1
+Kew Codestone|1
+Icklesaur|1
+Har Codestone|2
+Mazzew|1
+Weak Bottled Light Faerie|1
+Tyrannian Skeith Plushie|1
+Tyragh the Tyrannian Buzz|1

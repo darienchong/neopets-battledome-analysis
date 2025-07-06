@@ -1,0 +1,16 @@
+$ARENA:Rattling Cauldron
+$CHALLENGER:Jelly Chia
+$DIFFICULTY:Mighty
+Weak Bottled Dark Faerie|2
+Sho Codestone|1
+Jelly Muffin|1
+Vo Codestone|1
+Pumpkin Slice|1
+Jelly Chia|1
+Tai-Kai Codestone|2
+Sickly Negg Slice|1
+Unidentifiable Weak Bottled Faerie|1
+Weak Bottled Water Faerie|1
+Main Codestone|1
+Kew Codestone|1
+Zombie Marshmallows|1

@@ -1,0 +1,18 @@
+$ARENA:Ugga Dome
+$CHALLENGER:Cybunny Scout
+$DIFFICULTY:Average
+Main Codestone|1
+Tyrannian Usuki|1
+Tyragh the Tyrannian Buzz|1
+Camelior|1
+Zei Codestone|1
+Trrygdorr|1
+Tyrannian Goulash|1
+Skies Above Tyrannia|1
+Lu Codestone|1
+Scout Unit|1
+Weak Bottled Water Faerie|1
+Mau Codestone|1
+Stone Muffin|1
+Weak Bottled Earth Faerie|1
+General Crustygums|1

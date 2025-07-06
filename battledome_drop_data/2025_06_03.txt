@@ -1,0 +1,18 @@
+$ARENA:Pango Palladium
+$CHALLENGER:Tiki Tack Man
+$DIFFICULTY:Strong
+Chokato Jam|1
+Orn Codestone|1
+Sunset On Mystery Island|1
+Vo Codestone|2
+Sho Codestone|1
+Mystery Island Kacheekers|1
+Mystery Island Paperback Book|1
+Cocoa Juppie|1
+Pickled Eel|1
+Har Codestone|1
+Dark Nova|1
+Wooden Warf Totem|1
+Islandberry Fruit Kebab|1
+Tapira|1
+Island Techo Morphing Potion|1

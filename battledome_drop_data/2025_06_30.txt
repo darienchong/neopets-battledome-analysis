@@ -1,0 +1,16 @@
+$ARENA:Rattling Cauldron
+$CHALLENGER:Jelly Chia
+$DIFFICULTY:Mighty
+Rotting Wormburger|1
+Weak Bottled Light Faerie|2
+Weak Bottled Water Faerie|1
+Slime Soup|1
+Unidentifiable Weak Bottled Faerie|1
+Weak Bottled Dark Faerie|1
+Spider Licorice|1
+Bri Codestone|2
+Zed Codestone|1
+Large Grundo Toe With Lint Side Order|1
+Sho Codestone|1
+Har Codestone|1
+Bottled Droolik Drool|1

@@ -1,0 +1,16 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Brown Rice|2
+Tai-Kai Codestone|1
+Toast with Jam|1
+Smelly Dung Muffin|2
+Mau Codestone|1
+Cinnamon Raisin Oatmeal|1
+Normal Platinum Nerkmid|1
+Apple and Cheese Sandwich|1
+Grilled Veggie Bowl|1
+Eo Codestone|1
+Fruity Pancakes|1
+Mag Codestone|1
+Zei Codestone|1

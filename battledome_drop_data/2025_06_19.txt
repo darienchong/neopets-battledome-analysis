@@ -1,0 +1,15 @@
+$ARENA:Rattling Cauldron
+$CHALLENGER:Jelly Chia
+$DIFFICULTY:Mighty
+Roasted Spyder on a Stick|1
+Zei Codestone|2
+Main Codestone|2
+Lu Codestone|1
+Eliv Thade Wrap|2
+Vux Codestone|1
+Vo Codestone|1
+Unidentifiable Weak Bottled Faerie|1
+Zombie Marshmallows|1
+Blueberry Jelly Shield|1
+Undead Turnip|1
+Grundo Stix|1

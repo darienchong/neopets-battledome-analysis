@@ -1,0 +1,16 @@
+$ARENA:Neocola Centre
+$CHALLENGER:S750 Kreludan Defender Robot
+$DIFFICULTY:Mighty
+Blue Neocola Token|1
+Fizzy Neocola Bottles|1
+Zei Codestone|1
+Main Codestone|1
+Light Speed Made Easy|1
+Thermal Explosive Device|2
+Green Neocola Token|1
+Adventures In Space|2
+Ultranova|1
+Neocola Book|1
+Weak Bottled Light Faerie|1
+Red Neocola Token|1
+Cui Codestone|1

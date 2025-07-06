@@ -1,0 +1,16 @@
+$ARENA:Rattling Cauldron
+$CHALLENGER:Jelly Chia
+$DIFFICULTY:Mighty
+Mag Codestone|1
+Crispy Pumpkin Chips|1
+Jelly Pop Stamp|1
+Undead Turnip|1
+Lu Codestone|2
+Weak Bottled Air Faerie|1
+Slime Soup|1
+Weak Bottled Light Faerie|1
+Sickly Negg Slice|1
+Jelly Chia|1
+Bottled Droolik Drool|1
+Vo Codestone|2
+Bri Codestone|1

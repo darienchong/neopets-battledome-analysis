@@ -1,0 +1,17 @@
+$ARENA:Neocola Centre
+$CHALLENGER:S750 Kreludan Defender Robot
+$DIFFICULTY:Mighty
+Weak Bottled Fire Faerie|1
+Red Neocola Token|1
+Light Speed Made Easy|2
+Mag Codestone|1
+Meteor Bomb|1
+Har Codestone|1
+Vo Codestone|1
+Weak Bottled Light Faerie|1
+Bri Codestone|1
+Helm-mounted Laser Beam|1
+Weak Bottled Water Faerie|1
+Orn Codestone|1
+Oppressor Onions|1
+Rocket Fizzy Drink|1

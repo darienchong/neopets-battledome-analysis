@@ -1,0 +1,17 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Kew Codestone|1
+Tai-Kai Codestone|1
+Toad in a Hole|1
+Zed Codestone|1
+Weak Bottled Fire Faerie|1
+Brain Muffin|2
+Steamed Vegetable Dumplings|1
+Fish and Chips|1
+Nutty Chocolate Brownies|1
+Chocolate Ice Cream|1
+Training School Myths|1
+Sho Codestone|1
+Battle Ready Pencil Box|1
+Weak Bottled Dark Faerie|1

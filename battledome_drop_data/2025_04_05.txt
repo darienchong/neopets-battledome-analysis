@@ -1,0 +1,18 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Weak Bottled Earth Faerie|1
+Eo Codestone|1
+Tai-Kai Codestone|1
+Kew Codestone|1
+Training School Myths|1
+French Toast Sticks|1
+Zei Codestone|1
+Smelly Dung Muffin|1
+Dried Mango|1
+Chocolate Chip Battle Biscuit|1
+Weak Bottled Air Faerie|1
+Fruity Pancakes|1
+Nutty Chocolate Brownies|1
+Bri Codestone|1
+Fish and Chips|1

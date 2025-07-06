@@ -1,0 +1,16 @@
+$ARENA:Ugga Dome
+$CHALLENGER:Cybunny Scout
+$DIFFICULTY:Average
+Camelior|1
+Bri Codestone|1
+Sho Codestone|2
+Zed Codestone|1
+Tyrannian Skeith Plushie|1
+Bang Bang Negg|2
+Scout Unit|1
+Vo Codestone|1
+Lu Codestone|1
+Mau Codestone|1
+Kew Codestone|1
+Eo Codestone|1
+Tyragh the Tyrannian Buzz|1

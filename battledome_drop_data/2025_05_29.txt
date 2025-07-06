@@ -1,0 +1,16 @@
+$ARENA:Pango Palladium
+$CHALLENGER:Tiki Tack Man
+$DIFFICULTY:Strong
+Flatfruit Lollypop|2
+Mau Codestone|1
+Teal Juppie|1
+Har Codestone|1
+Kew Codestone|1
+Mystery Island Monthly|1
+How to Pick Flowers|1
+Frucumber|2
+Wooden Snuffly Totem|1
+Ixi Island|1
+Wooden Warf Totem|1
+Mystery Island Kacheekers|1
+Island Cybunny Guide|1

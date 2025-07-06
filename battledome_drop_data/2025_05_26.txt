@@ -1,0 +1,17 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Chocolate Chip Battle Biscuit|1
+Steamed Vegetable Dumplings|1
+Vo Codestone|1
+Chocolate Creme Pie|2
+Tai-Kai Codestone|1
+Egg Salad and Cheese Sandwich|1
+Main Codestone|1
+Weak Bottled Fire Faerie|1
+Brain Muffin|1
+Avocado Baby Food|1
+Electro Sword|1
+Aethias Ultimate Battle Guide|1
+Healthy Veggie Deluxe Sandwich|1
+Cursed Wand of Shadow|1

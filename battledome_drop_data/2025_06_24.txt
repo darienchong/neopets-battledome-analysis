@@ -1,0 +1,17 @@
+$ARENA:Rattling Cauldron
+$CHALLENGER:Jelly Chia
+$DIFFICULTY:Mighty
+Pumpkin Slice|1
+Weak Bottled Dark Faerie|1
+Grundo Stix|1
+Eo Codestone|1
+Brain Stew|1
+Gooey Bug Soup|1
+Sho Codestone|2
+Har Codestone|1
+Weak Bottled Earth Faerie|1
+Large Grundo Toe With Lint Side Order|1
+Ghost Wrap|1
+Orn Codestone|1
+Rotting Wormburger|1
+Weak Bottled Water Faerie|1

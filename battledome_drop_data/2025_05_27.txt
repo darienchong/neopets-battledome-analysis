@@ -1,0 +1,17 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Weak Bottled Air Faerie|1
+Toast with Jam|1
+Oatmeal Raisin Biscuit|1
+Mau Codestone|2
+Apple and Cheese Sandwich|1
+Weak Bottled Earth Faerie|1
+Bri Codestone|1
+Lu Codestone|1
+Zed Codestone|1
+Endless Salad and Bread Sticks|1
+Main Codestone|1
+Weak Bottled Fire Faerie|1
+French Toast Sticks|1
+Eo Codestone|1

@@ -1,0 +1,17 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Kew Codestone|2
+Kasuki Lu Biography|1
+Bri Codestone|1
+Corn Bread|1
+Steamed Vegetable Dumplings|1
+Organic Bran Carrot Muffin|1
+Assorted Mini Biscuits|1
+Apple Cinnamon Crepe|1
+Basket of Bread|1
+Brain Muffin|1
+Mau Codestone|1
+Chocolate Chip Battle Biscuit|1
+Eo Codestone|1
+Dried Mango|1

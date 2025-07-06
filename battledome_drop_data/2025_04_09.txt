@@ -1,0 +1,16 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Kew Codestone|1
+Vo Codestone|1
+Steamed Vegetable Dumplings|2
+Battle Faerie Dagger|1
+Kasuki Lu Biography|1
+Zei Codestone|2
+Training School Myths|1
+Robot Muffin|1
+Cui Codestone|1
+Doughnut Holes|1
+Weak Bottled Water Faerie|1
+Caramel Creams|1
+Egg Salad and Cheese Sandwich|1

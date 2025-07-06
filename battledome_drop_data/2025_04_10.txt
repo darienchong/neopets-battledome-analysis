@@ -1,0 +1,17 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Freshly Tinned Carrots|1
+Ridiculously Heavy Battle Hammer|1
+Grilled Veggie Bowl|2
+Hot Buttered Toast|1
+Egg Salad and Cheese Sandwich|1
+Strawberry Fondant Surprise|1
+Unidentifiable Weak Bottled Faerie|1
+Robot Muffin|1
+Orn Codestone|1
+Kew Codestone|1
+Zei Codestone|1
+Cui Codestone|1
+Healthy Veggie Deluxe Sandwich|1
+Main Codestone|1

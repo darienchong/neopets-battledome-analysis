@@ -1,0 +1,18 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Training School Myths|1
+Lu Codestone|1
+Blue Berry Pie|1
+Basket of Bread|1
+Weak Bottled Fire Faerie|1
+Zed Codestone|1
+Ridiculously Heavy Battle Hammer|1
+Fried Egg on Toast|1
+Cui Codestone|1
+Main Codestone|1
+Kew Codestone|1
+Stone Muffin|1
+Can of Neocola|1
+Electro Sword|1
+Orn Codestone|1

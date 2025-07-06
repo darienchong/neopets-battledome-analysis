@@ -1,0 +1,16 @@
+$ARENA:Rattling Cauldron
+$CHALLENGER:Jelly Chia
+$DIFFICULTY:Mighty
+Undead Turnip|1
+Eo Codestone|2
+Bone Dog|1
+Main Codestone|1
+Cui Codestone|1
+Weak Bottled Fire Faerie|1
+Weak Bottled Water Faerie|1
+Tai-Kai Codestone|1
+Weak Bottled Air Faerie|1
+Crispy Pumpkin Chips|1
+Gooey Bug Soup|2
+Pumpkin Slice|1
+Brain Stew|1

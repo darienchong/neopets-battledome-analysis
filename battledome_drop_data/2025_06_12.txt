@@ -1,0 +1,16 @@
+$ARENA:Rattling Cauldron
+$CHALLENGER:Jelly Chia
+$DIFFICULTY:Mighty
+Har Codestone|1
+Mag Codestone|1
+Large Grundo Toe With Lint Side Order|3
+Weak Bottled Air Faerie|1
+Crispy Pumpkin Chips|1
+Vo Codestone|1
+Sho Codestone|1
+Undead Turnip|1
+Main Codestone|1
+Bri Codestone|1
+Zed Codestone|1
+Kew Codestone|1
+Eliv Thade Sludge Shake|1

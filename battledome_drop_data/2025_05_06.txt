@@ -1,0 +1,16 @@
+$ARENA:Ugga Dome
+$CHALLENGER:Cybunny Scout
+$DIFFICULTY:Average
+Mag Codestone|1
+Zei Codestone|1
+Mau Codestone|1
+Weak Bottled Dark Faerie|1
+Tyrannian Skeith Plushie|2
+Camelior|2
+Speak Tyrannian|1
+Vux Codestone|1
+Main Codestone|1
+Tai-Kai Codestone|1
+Mazzew|1
+Zed Codestone|1
+Kew Codestone|1

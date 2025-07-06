@@ -1,0 +1,15 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Brioche|1
+Vo Codestone|1
+Tai-Kai Codestone|3
+Mag Codestone|2
+Lu Codestone|1
+Defence in the Battledome|1
+Battle Ready Pencil Box|1
+Golden Muffin|1
+Smelly Dung Muffin|1
+Bri Codestone|1
+Blue Berry Pie|1
+Fire Muffin|1

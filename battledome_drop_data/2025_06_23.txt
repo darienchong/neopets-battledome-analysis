@@ -1,0 +1,16 @@
+$ARENA:Rattling Cauldron
+$CHALLENGER:Jelly Chia
+$DIFFICULTY:Mighty
+Vo Codestone|1
+Weak Bottled Dark Faerie|1
+Wormy Pasta|1
+Large Grundo Toe With Lint Side Order|3
+Pumpkin Slice|1
+Blueberry Jelly Shield|1
+Spider Licorice|1
+Grundo Stix|1
+Tai-Kai Codestone|1
+Weak Bottled Light Faerie|1
+Weak Bottled Fire Faerie|1
+Candy Corn Stuffed Pumpkin|1
+Undead Broccoli|1

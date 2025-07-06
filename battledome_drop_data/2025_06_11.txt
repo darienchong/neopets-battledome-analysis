@@ -1,0 +1,16 @@
+$ARENA:Rattling Cauldron
+$CHALLENGER:Jelly Chia
+$DIFFICULTY:Mighty
+Mau Codestone|2
+Weak Bottled Dark Faerie|2
+Undead Celery|1
+Vo Codestone|1
+Orn Codestone|1
+Kew Codestone|1
+Large Grundo Toe With Lint Side Order|1
+Jelly Chia|1
+Roasted Spyder on a Stick|1
+Grundo Stix|1
+Main Codestone|1
+Rotting Wormburger|1
+Zei Codestone|1

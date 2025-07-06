@@ -1,0 +1,17 @@
+$ARENA:Rattling Cauldron
+$CHALLENGER:Jelly Chia
+$DIFFICULTY:Mighty
+Mau Codestone|1
+Main Codestone|1
+Bottled Droolik Drool|1
+Weak Bottled Light Faerie|1
+Large Grundo Toe With Lint Side Order|1
+Crispy Pumpkin Chips|2
+Tai-Kai Codestone|1
+Lu Codestone|1
+Undead Celery|1
+Bri Codestone|1
+Gooey Bug Soup|1
+Mag Codestone|1
+Tomb Chips|1
+Bone Dog|1

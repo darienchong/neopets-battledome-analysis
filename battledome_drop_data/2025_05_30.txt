@@ -1,0 +1,16 @@
+$ARENA:Pango Palladium
+$CHALLENGER:Tiki Tack Man
+$DIFFICULTY:Strong
+Islandberry Fruit Kebab|1
+Orn Codestone|1
+Sunset On Mystery Island|1
+Vo Codestone|2
+Wooden Stahkee Totem|1
+Corn Balls|1
+How to Pick Flowers|1
+Tangella Tonic|1
+Wooden Meepit Totem|1
+Tacky Porcelain Skeith|2
+Cocoa Juppie|1
+Snowberry Crepe|1
+Frucumber|1

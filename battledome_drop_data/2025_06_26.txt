@@ -1,0 +1,15 @@
+$ARENA:Rattling Cauldron
+$CHALLENGER:Jelly Chia
+$DIFFICULTY:Mighty
+Bone Dog|2
+Roasted Spyder on a Stick|1
+Zombie Marshmallows|1
+Weak Bottled Air Faerie|1
+Vo Codestone|3
+Weak Bottled Dark Faerie|1
+Lu Codestone|1
+Bri Codestone|1
+Wormy Pasta|1
+Zei Codestone|1
+Main Codestone|1
+Unidentifiable Weak Bottled Faerie|1

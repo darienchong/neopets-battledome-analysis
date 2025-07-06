@@ -1,0 +1,18 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Main Codestone|1
+Smelly Dung Muffin|1
+Hot Buttered Toast|1
+Orn Codestone|1
+Corn Bread|1
+Cui Codestone|1
+Training School Myths|1
+Apple Cherry Tarts|1
+Zei Codestone|1
+Endless Salad and Bread Sticks|1
+Brown Rice|1
+Cursed Wand of Shadow|1
+Robot Muffin|1
+Milk Chocolate Rose|1
+Fruity Pancakes|1

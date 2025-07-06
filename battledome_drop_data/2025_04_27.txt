@@ -1,0 +1,14 @@
+$ARENA:Ugga Dome
+$CHALLENGER:Cybunny Scout
+$DIFFICULTY:Average
+Kew Codestone|1
+Weak Bottled Dark Faerie|1
+Camelior|1
+Mag Codestone|2
+Zei Codestone|1
+Tyrannian Usuki|2
+Tai-Kai Codestone|2
+Vo Codestone|2
+Eo Codestone|1
+Bang Bang Negg|1
+Hairy Snowball|1

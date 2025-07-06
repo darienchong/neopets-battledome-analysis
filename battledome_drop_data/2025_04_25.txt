@@ -1,0 +1,17 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Weak Bottled Earth Faerie|1
+Chocolate Chip Battle Biscuit|1
+Avocado Baby Food|1
+Vo Codestone|1
+Lu Codestone|1
+Endless Salad and Bread Sticks|1
+Unidentifiable Weak Bottled Faerie|2
+Mag Codestone|1
+Bri Codestone|1
+Main Codestone|1
+Brain Muffin|1
+Apple and Cheese Sandwich|1
+Orn Codestone|1
+Weak Bottled Water Faerie|1

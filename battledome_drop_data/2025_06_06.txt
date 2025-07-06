@@ -1,0 +1,17 @@
+$ARENA:Rattling Cauldron
+$CHALLENGER:Jelly Chia
+$DIFFICULTY:Mighty
+Eo Codestone|1
+Haunted Hummus|1
+Bri Codestone|1
+Main Codestone|2
+Vux Codestone|1
+Tai-Kai Codestone|1
+Weak Bottled Dark Faerie|1
+Festering Coffee|1
+Undead Turnip|1
+Sho Codestone|1
+Kew Codestone|1
+Lu Codestone|1
+Zombie Marshmallows|1
+Weak Bottled Light Faerie|1

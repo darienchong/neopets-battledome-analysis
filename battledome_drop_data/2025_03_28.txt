@@ -1,0 +1,18 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Battle Ready Pencil Box|1
+Sho Codestone|1
+Eo Codestone|1
+Darigan Muffin|1
+Zed Codestone|1
+Bri Codestone|1
+Unidentifiable Weak Bottled Faerie|1
+Har Codestone|1
+Tai-Kai Codestone|1
+Cui Codestone|1
+Hot Buttered Toast|1
+Orn Codestone|1
+Kew Codestone|1
+Chocolate Chip Battle Biscuit|1
+Weak Bottled Fire Faerie|1

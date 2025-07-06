@@ -1,0 +1,16 @@
+$ARENA:Rattling Cauldron
+$CHALLENGER:Jelly Chia
+$DIFFICULTY:Mighty
+Zombie Marshmallows|1
+Tai-Kai Codestone|1
+Grundo Stix|1
+Weak Bottled Water Faerie|1
+Pumpkin Slice|1
+Vo Codestone|1
+Eliv Thade Wrap|2
+Eliv Thade Sludge Shake|1
+Blueberry Jelly Shield|1
+Weak Bottled Light Faerie|2
+Ghost Wrap|1
+Lu Codestone|1
+Festering Coffee|1

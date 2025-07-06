@@ -1,0 +1,15 @@
+$ARENA:Ugga Dome
+$CHALLENGER:Cybunny Scout
+$DIFFICULTY:Average
+Icklesaur|1
+Tyrannian Acara Plushie|1
+General Crustygums|1
+Mau Codestone|2
+Skies Above Tyrannia|2
+Camelior|2
+Weak Bottled Fire Faerie|1
+Blue Furry Negg|1
+Tyrannian Skeith Plushie|1
+Sho Codestone|1
+Zei Codestone|1
+Eo Codestone|1

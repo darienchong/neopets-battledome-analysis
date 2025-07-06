@@ -1,0 +1,17 @@
+$ARENA:Ugga Dome
+$CHALLENGER:Cybunny Scout
+$DIFFICULTY:Average
+Weak Bottled Earth Faerie|1
+Vo Codestone|1
+Har Codestone|1
+Eo Codestone|1
+Trrygdorr|2
+Tyragh the Tyrannian Buzz|1
+Kew Codestone|1
+Zed Codestone|1
+Lu Codestone|1
+Orn Codestone|1
+Tyrannian Skeith Plushie|1
+Weak Bottled Water Faerie|1
+Stone Muffin|1
+Bri Codestone|1

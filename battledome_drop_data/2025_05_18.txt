@@ -1,0 +1,15 @@
+$ARENA:Neocola Centre
+$CHALLENGER:S750 Kreludan Defender Robot
+$DIFFICULTY:Mighty
+Cui Codestone|1
+Rocket Fizzy Drink|1
+Har Codestone|2
+Vo Codestone|2
+Zed Codestone|1
+Mau Codestone|1
+Light Speed Made Easy|2
+Zei Codestone|1
+Green Neocola Token|1
+N-4 Info Retrieval Bot|1
+Galaxy Energy Drink|1
+Meteor Bomb|1

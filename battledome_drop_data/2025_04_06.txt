@@ -1,0 +1,16 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Weak Bottled Light Faerie|1
+Vo Codestone|1
+Steamed Vegetable Dumplings|1
+Nutty Chocolate Brownies|1
+Weak Bottled Water Faerie|1
+Apple Juice|1
+Cursed Wand of Shadow|2
+Orn Codestone|1
+Golden Muffin|2
+Darigan Muffin|1
+Freshly Tinned Carrots|1
+Wrapped Strawberry Candy|1
+Blackberry Pie|1

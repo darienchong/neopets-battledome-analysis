@@ -1,0 +1,15 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Golden Muffin|1
+Vux Codestone|2
+Orn Codestone|1
+Main Codestone|1
+Kew Codestone|3
+Zei Codestone|1
+Hasee Puff Cereal|1
+Bri Codestone|1
+Har Codestone|1
+Cui Codestone|1
+Ridiculously Heavy Battle Hammer|1
+Tai-Kai Codestone|1
