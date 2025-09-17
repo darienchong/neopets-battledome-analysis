@@ -1,0 +1,18 @@
+$ARENA:Pango Palladium
+$CHALLENGER:Advisor Broo
+$DIFFICULTY:Mighty
+Bri Codestone|1
+Weak Bottled Fire Faerie|1
+Island Cybunny Guide|1
+Weak Bottled Earth Faerie|1
+Lu Codestone|1
+Vo Codestone|1
+Har Codestone|1
+Banango Bread|1
+Mystery Island Travel Brochure|1
+Funnydew Melon|1
+Weak Bottled Dark Faerie|1
+Orn Codestone|1
+Wooden Snuffly Totem|1
+Islandberry Fruit Kebab|1
+Wooden Warf Totem|1

@@ -1,0 +1,16 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Apple and Cheese Sandwich|1
+Har Codestone|1
+Zed Codestone|1
+Blackberry Pie|1
+Fish and Chips|1
+Cui Codestone|2
+Weak Bottled Fire Faerie|1
+Lu Codestone|2
+Chocolate Creme Pie|1
+Main Codestone|1
+Orn Codestone|1
+Sho Codestone|1
+Zei Codestone|1

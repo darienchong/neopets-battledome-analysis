@@ -1,0 +1,18 @@
+$ARENA:Pango Palladium
+$CHALLENGER:Advisor Broo
+$DIFFICULTY:Mighty
+Lu Codestone|1
+Catamara|1
+Mystery Island Tour Guide|1
+Mau Codestone|1
+Sho Codestone|1
+Ultranova|1
+Mystery Island Paperback Book|1
+Blumaroo Tail Salad Extravaganza|1
+Vo Codestone|1
+Leeble|1
+Wooden Meepit Totem|1
+Corn Balls|1
+Banango Bread|1
+Dark Nova|1
+Island Cybunny Guide|1

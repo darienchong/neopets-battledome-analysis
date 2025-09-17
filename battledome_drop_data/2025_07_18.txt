@@ -1,0 +1,16 @@
+$ARENA:Pango Palladium
+$CHALLENGER:Advisor Broo
+$DIFFICULTY:Mighty
+Islandberry Fruit Kebab|1
+Zei Codestone|2
+Dark Nova|1
+Stramberry Coconut Milk|1
+Orn Codestone|1
+Weak Bottled Fire Faerie|1
+Weak Bottled Air Faerie|2
+Boingari|1
+Wooden Stahkee Totem|1
+Laced Wooden Staff|1
+Vo Codestone|1
+Ixi Island|1
+Mystery Island Jungle Lore|1

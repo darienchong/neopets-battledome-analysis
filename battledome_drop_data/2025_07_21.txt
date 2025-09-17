@@ -1,0 +1,17 @@
+$ARENA:Pango Palladium
+$CHALLENGER:Advisor Broo
+$DIFFICULTY:Mighty
+Weak Bottled Air Faerie|1
+Banango Bread|1
+Mystery Island Monthly|1
+Island Cybunny Guide|1
+Vux Codestone|1
+Har Codestone|1
+Jittery Jipple Pear Potion|1
+Lu Codestone|2
+Mystery Island Tour Guide|1
+Flatfruit Lollypop|1
+Warm Amber Ointment|1
+Cocoa Juppie|1
+Wooden Snuffly Totem|1
+Eo Codestone|1

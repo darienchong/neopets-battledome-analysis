@@ -1,0 +1,17 @@
+$ARENA:Frost Arena
+$CHALLENGER:The Snowager
+$DIFFICULTY:Average
+Yellow Snowflake|1
+Mega Force Ice Glove|1
+Blueberry Snowflake|1
+Water Ice Cream|1
+Steel Snowball|1
+Kew Codestone|1
+Snow Architecture|2
+Vo Codestone|1
+Weak Bottled Light Faerie|1
+Green Frost Cannon|1
+Weak Bottled Air Faerie|1
+Grapity Slushie|1
+Weak Bottled Earth Faerie|1
+Peanut Butter Slushie|1

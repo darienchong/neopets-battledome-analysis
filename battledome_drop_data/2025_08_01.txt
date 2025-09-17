@@ -1,0 +1,16 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Hasee Puff Cereal|2
+Healthy Veggie Deluxe Sandwich|1
+Dried Mango|1
+Mag Codestone|1
+Eo Codestone|1
+Smelly Dung Muffin|2
+Avocado Baby Food|1
+Bri Codestone|1
+Zei Codestone|1
+Darigan Muffin|1
+Marzipan Sugared Slorg|1
+Weak Bottled Fire Faerie|1
+Sho Codestone|1

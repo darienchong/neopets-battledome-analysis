@@ -1,0 +1,14 @@
+$ARENA:Dome of the Deep
+$CHALLENGER:Giant Spectral Mutant Walein
+$DIFFICULTY:Mighty
+Sho Codestone|1
+Legends of Maraqua|2
+Maraquan Faerie Tales|1
+Orn Codestone|2
+Weak Bottled Water Faerie|1
+Zed Codestone|1
+Unidentifiable Weak Bottled Faerie|2
+Maraquan Bed Time Stories|1
+Main Codestone|1
+Weak Bottled Fire Faerie|2
+Mau Codestone|1

@@ -1,0 +1,16 @@
+$ARENA:Dome of the Deep
+$CHALLENGER:Giant Spectral Mutant Walein
+$DIFFICULTY:Mighty
+Tai-Kai Codestone|1
+Weak Bottled Air Faerie|1
+Mau Codestone|1
+Weak Bottled Dark Faerie|2
+Maraquan Charger Plushie|2
+Maraquan Bed Time Stories|1
+Unidentifiable Weak Bottled Faerie|1
+Realm of the Water Faeries|1
+Orn Codestone|1
+Tablet of Water Runes|1
+Weak Bottled Light Faerie|1
+Water Faerie Halberd|1
+Weak Bottled Earth Faerie|1

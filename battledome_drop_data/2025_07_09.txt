@@ -1,0 +1,16 @@
+$ARENA:Dome of the Deep
+$CHALLENGER:Giant Spectral Mutant Walein
+$DIFFICULTY:Mighty
+Zed Codestone|1
+Unidentifiable Weak Bottled Faerie|1
+Five Dubloon Coin|1
+Mag Codestone|1
+Kew Codestone|1
+Main Codestone|1
+Maraquan Charger Plushie|3
+Har Codestone|1
+Eo Codestone|1
+Tai-Kai Codestone|1
+Ten Dubloon Coin|1
+Green Walein|1
+Necklace of the Water Faerie|1

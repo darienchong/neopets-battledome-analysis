@@ -1,0 +1,17 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Cinnamon Raisin Oatmeal|1
+Orn Codestone|1
+Caramel Creams|1
+Lu Codestone|1
+Zed Codestone|1
+Brain Muffin|2
+Electro Sword|1
+Vo Codestone|1
+Baked Asparagus Biscuit|1
+Wrapped Strawberry Candy|1
+Banana Creme Pie|1
+Main Codestone|1
+Kew Codestone|1
+Smelly Dung Muffin|1

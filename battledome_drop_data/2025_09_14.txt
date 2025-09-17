@@ -1,0 +1,16 @@
+$ARENA:Frost Arena
+$CHALLENGER:The Snowager
+$DIFFICULTY:Average
+Weak Bottled Dark Faerie|1
+Frost Bite Egg|1
+Pink Faerie Snowball|1
+Green Frost Cannon|1
+Crystal Negg|1
+Blueberry Snowflake|1
+Reject Snowager Usuki|2
+Diamond Snowball|1
+Kew Codestone|1
+Lavender Ice Cream|1
+Terror Mountain Travel Brochure|1
+Cui Codestone|1
+Chocolate Chip Cookie Slushie|1

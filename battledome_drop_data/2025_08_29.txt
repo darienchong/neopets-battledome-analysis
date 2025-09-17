@@ -1,0 +1,15 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Bri Codestone|2
+Brown Rice|1
+Tai-Kai Codestone|3
+Mau Codestone|1
+Kew Codestone|1
+Milk Chocolate Rose|1
+Electro Sword|1
+Cursed Wand of Shadow|1
+Doughnut Holes|1
+Darigan Muffin|1
+Fried Egg on Toast|1
+Battle Faerie Dagger|1

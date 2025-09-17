@@ -1,0 +1,17 @@
+$ARENA:Dome of the Deep
+$CHALLENGER:Giant Spectral Mutant Walein
+$DIFFICULTY:Mighty
+Weak Bottled Light Faerie|1
+Walein|1
+Weak Bottled Fire Faerie|1
+Maraquan Bed Time Stories|1
+Mag Codestone|1
+Weak Bottled Earth Faerie|1
+Maraquan Faerie Tales|1
+Weak Bottled Dark Faerie|2
+Vux Codestone|1
+One Dubloon Coin|1
+Five Dubloon Coin|1
+Ten Dubloon Coin|1
+Legends of Maraqua|1
+Zei Codestone|1

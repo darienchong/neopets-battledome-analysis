@@ -1,0 +1,17 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Battle Ready Pencil Box|2
+Zed Codestone|1
+Main Codestone|1
+Sho Codestone|1
+Vo Codestone|1
+Brain Muffin|1
+Apple Cherry Tarts|1
+Scrambled Egg on Toast|1
+Fried Chicken and Waffles|1
+Baked Cheddar Straws|1
+Stone Muffin|1
+Healthy Veggie Deluxe Sandwich|1
+Cursed Wand of Shadow|1
+Eo Codestone|1

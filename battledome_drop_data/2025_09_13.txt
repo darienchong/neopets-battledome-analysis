@@ -1,0 +1,16 @@
+$ARENA:Frost Arena
+$CHALLENGER:The Snowager
+$DIFFICULTY:Average
+Diamond Snowball|1
+Vo Codestone|1
+Main Codestone|3
+Snow Architecture|1
+Twinkling Ice Cream|1
+Har Codestone|1
+Frost Bite Egg|1
+Poisonous Snowflake|1
+Peach Snowflake|1
+Exploding Snowflake|1
+Mag Codestone|1
+Sluggish Negg Slice|1
+Chocolate Chip Cookie Slushie|1

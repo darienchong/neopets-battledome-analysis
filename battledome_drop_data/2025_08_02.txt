@@ -1,0 +1,17 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Vux Codestone|1
+Weak Bottled Light Faerie|1
+Fire Muffin|1
+Brain Muffin|2
+Doughnut Holes|1
+Unidentifiable Weak Bottled Faerie|1
+Wrapped Strawberry Candy|1
+Eo Codestone|1
+Oatmeal Raisin Biscuit|1
+Apple Cinnamon Crepe|1
+Fish and Chips|1
+Har Codestone|1
+Hasee Puff Cereal|1
+Watermelon Fruit Cup|1

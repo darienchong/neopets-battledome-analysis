@@ -1,0 +1,16 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Brain Muffin|1
+Cursed Wand of Shadow|2
+Ridiculously Heavy Battle Hammer|1
+Vux Codestone|1
+Weak Bottled Light Faerie|1
+Mau Codestone|2
+Draining Negg Slice|1
+French Toast Sticks|1
+Chocolate Chip Battle Biscuit|1
+Kau Battle Tactics|1
+Mag Codestone|1
+Organic Bran Carrot Muffin|1
+Can of Neocola|1

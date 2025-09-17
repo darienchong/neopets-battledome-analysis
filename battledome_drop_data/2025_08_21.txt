@@ -1,0 +1,17 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Mau Codestone|2
+Endless Salad and Bread Sticks|1
+Apple Cobbler|1
+Chocolate Covered Cherries|1
+Lu Codestone|1
+Corn Bread|1
+Grilled Veggie Bowl|1
+Vux Codestone|1
+Unidentifiable Weak Bottled Faerie|1
+Training School Myths|1
+Weak Bottled Earth Faerie|1
+Weak Bottled Fire Faerie|1
+Zed Codestone|1
+Cursed Wand of Shadow|1

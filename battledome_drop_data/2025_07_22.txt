@@ -1,0 +1,18 @@
+$ARENA:Pango Palladium
+$CHALLENGER:Advisor Broo
+$DIFFICULTY:Mighty
+Quetzal|1
+Ixi Island|1
+Corn Balls|1
+Mystery Island Monthly|1
+Supernova|1
+Cui Codestone|1
+Kew Codestone|1
+Orn Codestone|1
+Unidentifiable Weak Bottled Faerie|1
+Sunset On Mystery Island|1
+Islandberry Fruit Kebab|1
+Tai-Kai Codestone|1
+Laced Wooden Staff|1
+Weak Bottled Dark Faerie|1
+Weak Bottled Light Faerie|1

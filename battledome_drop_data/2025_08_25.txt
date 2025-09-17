@@ -1,0 +1,18 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Weak Bottled Fire Faerie|1
+Chocolate Chip Battle Biscuit|1
+Vegetarian Meat Pie|1
+Unidentifiable Weak Bottled Faerie|1
+Organic Bran Carrot Muffin|1
+Zei Codestone|1
+Tips for the Beginning Acara Battler|1
+Cinnamon Raisin Oatmeal|1
+Fish and Chips|1
+Buttered Toast|1
+Healthy Veggie Deluxe Sandwich|1
+Zed Codestone|1
+Smelly Dung Muffin|1
+Orn Codestone|1
+Apple Cherry Tarts|1

@@ -1,0 +1,17 @@
+$ARENA:Frost Arena
+$CHALLENGER:The Snowager
+$DIFFICULTY:Average
+Borovan Ice Cream Scoop|1
+Main Codestone|2
+Grape Snowflake|1
+Unidentifiable Weak Bottled Faerie|1
+Frozen Block of Sustenance|1
+Steel Snowball|1
+Zed Codestone|1
+Har Codestone|1
+Wet Snowflake|1
+Terror Mountain Travel Brochure|1
+Exploding Snowflake|1
+Rainborific Slushie|1
+Yellow Snowflake|1
+Sho Codestone|1

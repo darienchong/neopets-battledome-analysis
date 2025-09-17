@@ -1,0 +1,17 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Kew Codestone|1
+Golden Muffin|1
+Endless Salad and Bread Sticks|1
+Apple Cinnamon Crepe|1
+Wrapped Strawberry Candy|1
+Strawberry Jam Sandwich Cookie|1
+Healthy Veggie Deluxe Sandwich|1
+Har Codestone|1
+Mau Codestone|1
+Brown Rice|1
+Sho Codestone|1
+Tai-Kai Codestone|2
+Smelly Dung Muffin|1
+Bri Codestone|1

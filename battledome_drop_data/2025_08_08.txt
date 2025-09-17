@@ -1,0 +1,17 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Weak Bottled Water Faerie|1
+Weak Bottled Dark Faerie|1
+Smelly Dung Muffin|1
+Endless Salad and Bread Sticks|2
+Kasuki Lu Biography|1
+Cui Codestone|1
+Bri Codestone|1
+Eo Codestone|1
+Zed Codestone|1
+Main Codestone|1
+Mau Codestone|1
+Strawberry Jam Sandwich Cookie|1
+Tai-Kai Codestone|1
+Bag of Chips|1

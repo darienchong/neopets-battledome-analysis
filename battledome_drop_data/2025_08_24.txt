@@ -1,0 +1,17 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Cursed Wand of Shadow|1
+Chocolate Creme Pie|1
+Stone Muffin|1
+Brown Rice|1
+Steamed Vegetable Dumplings|1
+Eo Codestone|1
+Watermelon Fruit Cup|1
+Healthy Veggie Deluxe Sandwich|1
+Bri Codestone|1
+Weak Bottled Dark Faerie|2
+Freshly Tinned Carrots|1
+Cui Codestone|1
+Apple Cinnamon Crepe|1
+Super Nerkmid|1

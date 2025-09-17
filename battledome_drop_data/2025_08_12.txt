@@ -1,0 +1,18 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Ridiculously Heavy Battle Hammer|1
+Wrapped Strawberry Candy|1
+Lu Codestone|1
+Veggie Lasagne|1
+Electro Sword|1
+Fried Chicken and Waffles|1
+Weak Bottled Dark Faerie|1
+Weak Bottled Fire Faerie|1
+Battle Faerie Dagger|1
+Weak Bottled Light Faerie|1
+Weak Bottled Air Faerie|1
+Orn Codestone|1
+Smelly Dung Muffin|1
+Bite Size Celery|1
+Main Codestone|1

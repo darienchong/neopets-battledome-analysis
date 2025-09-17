@@ -1,0 +1,18 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Weak Bottled Fire Faerie|1
+Battle Ready Pencil Box|1
+Mag Codestone|1
+Battle Faerie Dagger|1
+Weak Bottled Light Faerie|1
+Endless Salad and Bread Sticks|1
+Har Codestone|1
+Assorted Mini Biscuits|1
+Cinnamon Raisin Oatmeal|1
+Apple Cobbler|1
+Chocolate Chip Battle Biscuit|1
+Zei Codestone|1
+Weak Bottled Air Faerie|1
+Scrambled Egg on Toast|1
+Brown Rice|1

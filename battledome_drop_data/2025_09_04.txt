@@ -1,0 +1,15 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Bri Codestone|1
+Weak Bottled Fire Faerie|2
+Weak Bottled Earth Faerie|1
+Healthy Veggie Deluxe Sandwich|1
+Toast with Jam|1
+Vo Codestone|2
+Toad in a Hole|1
+Draining Negg Slice|1
+Electro Sword|1
+Har Codestone|2
+Tai-Kai Codestone|1
+Battle Faerie Dagger|1

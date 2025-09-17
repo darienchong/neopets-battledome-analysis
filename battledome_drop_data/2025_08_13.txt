@@ -1,0 +1,16 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Cinnamon Raisin Oatmeal|1
+Oatmeal Raisin Biscuit|1
+Chocolate Covered Cherries|1
+Vo Codestone|1
+Weak Bottled Earth Faerie|1
+Weak Bottled Light Faerie|1
+Battle Ready Pencil Box|2
+Battle Faerie Dagger|1
+Eo Codestone|2
+Chocolate Chip Battle Biscuit|1
+Toast with Jam|1
+Zed Codestone|1
+Milk Chocolate Rose|1

@@ -1,0 +1,17 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Scrambled Egg on Toast|1
+Weak Bottled Water Faerie|1
+Watermelon Fruit Cup|2
+Battle Ready Pencil Box|1
+Nutty Chocolate Brownies|1
+Hot Buttered Toast|1
+Apple Cherry Tarts|1
+Smelly Dung Muffin|1
+Weak Bottled Fire Faerie|1
+Zed Codestone|1
+Draining Negg Slice|1
+Electro Sword|1
+Vo Codestone|1
+Hasee Puff Cereal|1

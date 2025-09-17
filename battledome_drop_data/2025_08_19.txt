@@ -1,0 +1,17 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Dried Mango|1
+Kew Codestone|1
+Veggie Lasagne|1
+Weak Bottled Air Faerie|1
+Fruity Pancakes|1
+Lu Codestone|1
+Har Codestone|1
+Sho Codestone|1
+Main Codestone|2
+Can of Neocola|1
+Apple Juice|1
+Zed Codestone|1
+Brain Muffin|1
+Zei Codestone|1

@@ -1,0 +1,18 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Wrapped Strawberry Candy|1
+Unidentifiable Weak Bottled Faerie|1
+Main Codestone|1
+Training School Myths|1
+Apple Cherry Tarts|1
+Kew Codestone|1
+Steamed Vegetable Dumplings|1
+Vux Codestone|1
+Electro Sword|1
+Har Codestone|1
+Orn Codestone|1
+Eo Codestone|1
+Sho Codestone|1
+Mau Codestone|1
+Organic Bran Carrot Muffin|1

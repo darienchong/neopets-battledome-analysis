@@ -1,0 +1,16 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Eo Codestone|1
+Apple and Cheese Sandwich|1
+Cursed Wand of Shadow|1
+Assorted Mini Biscuits|1
+Weak Bottled Light Faerie|2
+Har Codestone|1
+Main Codestone|1
+Can of Neocola|1
+Weak Bottled Earth Faerie|2
+Robot Muffin|1
+Chocolate Ice Cream|1
+Vo Codestone|1
+Mag Codestone|1

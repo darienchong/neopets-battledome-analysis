@@ -1,0 +1,16 @@
+$ARENA:Pango Palladium
+$CHALLENGER:Advisor Broo
+$DIFFICULTY:Mighty
+Baby Blu|1
+Catamara|1
+Grunion Fruit Shake|1
+Warm Amber Ointment|1
+Lu Codestone|3
+How to Pick Flowers|1
+Pickled Eel|1
+Mag Codestone|1
+Har Codestone|1
+Teal Juppie|1
+Wooden Stahkee Totem|1
+Weak Bottled Light Faerie|1
+Mystery Island Jungle Lore|1

@@ -1,0 +1,15 @@
+$ARENA:Pango Palladium
+$CHALLENGER:Advisor Broo
+$DIFFICULTY:Mighty
+Corn Balls|2
+Banango Bread|1
+Har Codestone|1
+Mau Codestone|1
+Wooden Snuffly Totem|1
+Ixi Island|2
+Cui Codestone|1
+Dark Nova|2
+Jittery Jipple Pear Potion|1
+Kew Codestone|1
+Vo Codestone|1
+Sho Codestone|1

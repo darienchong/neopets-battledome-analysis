@@ -1,0 +1,17 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Smelly Dung Muffin|2
+Battle Ready Pencil Box|1
+Steamed Vegetable Dumplings|1
+Battle Faerie Dagger|1
+Eo Codestone|1
+Weak Bottled Air Faerie|1
+Electro Sword|1
+Weak Bottled Earth Faerie|1
+Lu Codestone|1
+Ridiculously Heavy Battle Hammer|1
+Average Nerkmid|1
+Kew Codestone|1
+Apple and Cheese Sandwich|1
+Brioche|1

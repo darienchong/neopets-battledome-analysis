@@ -1,0 +1,17 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Scrambled Egg on Toast|1
+Orn Codestone|1
+Weak Bottled Air Faerie|1
+Organic Bran Carrot Muffin|2
+Unidentifiable Weak Bottled Faerie|1
+Steamed Vegetable Dumplings|1
+Fried Chicken and Waffles|1
+Weak Bottled Earth Faerie|1
+Caramel Creams|1
+Weak Bottled Fire Faerie|1
+Veggie Lasagne|1
+Vo Codestone|1
+Bite Size Celery|1
+Weak Bottled Dark Faerie|1

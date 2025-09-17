@@ -1,0 +1,16 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Battle Ready Pencil Box|2
+Weak Bottled Water Faerie|1
+Zei Codestone|1
+Mag Codestone|1
+Weak Bottled Air Faerie|2
+Main Codestone|1
+Cinnamon Raisin Oatmeal|1
+Zed Codestone|1
+Croissant|1
+Bri Codestone|1
+Robot Muffin|1
+Fish and Chips|1
+Golden Muffin|1

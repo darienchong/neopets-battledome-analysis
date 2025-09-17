@@ -1,0 +1,18 @@
+$ARENA:Pango Palladium
+$CHALLENGER:Advisor Broo
+$DIFFICULTY:Mighty
+Banango Bread|1
+Laced Wooden Staff|1
+Stramberry Coconut Milk|1
+Orn Codestone|1
+Baby Blumaroos|1
+Teal Juppie|1
+Islandberry Fruit Kebab|1
+Island Cybunny Guide|1
+Snowberry Crepe|1
+Ixi Island|1
+Bri Codestone|1
+Eo Codestone|1
+Nova|1
+Mystery Island Jungle Lore|1
+Har Codestone|1

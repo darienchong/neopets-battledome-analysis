@@ -1,0 +1,18 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Cui Codestone|1
+Dried Mango|1
+Milk Chocolate Rose|1
+Weak Bottled Earth Faerie|1
+Lu Codestone|1
+Sho Codestone|1
+Vo Codestone|1
+Brain Muffin|1
+Mau Codestone|1
+Croissant|1
+Darigan Muffin|1
+Main Codestone|1
+Stone Muffin|1
+Avocado Baby Food|1
+Zed Codestone|1

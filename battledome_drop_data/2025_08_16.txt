@@ -1,0 +1,15 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Electro Sword|1
+Lu Codestone|2
+Tai-Kai Codestone|2
+Mau Codestone|1
+Cui Codestone|1
+Unidentifiable Weak Bottled Faerie|2
+Orn Codestone|1
+Baked Cheddar Straws|1
+Cinnamon Raisin Oatmeal|1
+Weak Bottled Earth Faerie|1
+Mag Codestone|1
+Watermelon Fruit Cup|1

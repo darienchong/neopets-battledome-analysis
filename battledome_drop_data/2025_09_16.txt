@@ -1,0 +1,15 @@
+$ARENA:Frost Arena
+$CHALLENGER:The Snowager
+$DIFFICULTY:Average
+Frozen Block of Sustenance|3
+Reject Snowager Usuki|1
+Glowing Snowflake|1
+Blueberry Snowflake|1
+Lavender Ice Cream|1
+Snow Architecture|1
+Wet Snowflake|1
+Tai-Kai Codestone|1
+Cup of Frozen Borovan|1
+Grape Snowflake|2
+Borovan Ice Cream Scoop|1
+Frost Bite Egg|1

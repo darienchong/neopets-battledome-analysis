@@ -1,0 +1,16 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Fruity Pancakes|1
+Brioche|1
+Har Codestone|2
+Kew Codestone|1
+Wrapped Strawberry Candy|1
+Fire Muffin|2
+Vo Codestone|1
+Ultra Platinum Nerkmid|1
+Mau Codestone|1
+Zei Codestone|1
+Banana Creme Pie|1
+Tai-Kai Codestone|1
+Zed Codestone|1

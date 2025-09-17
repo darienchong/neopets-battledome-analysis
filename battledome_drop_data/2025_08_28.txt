@@ -1,0 +1,16 @@
+$ARENA:Central Arena
+$CHALLENGER:Kasuki Lu
+$DIFFICULTY:Mighty
+Avocado Baby Food|1
+Toad in a Hole|1
+Bag of Chips|2
+Dried Mango|1
+Chocolate Ice Cream|1
+Smelly Dung Muffin|1
+Main Codestone|2
+Veggie Lasagne|1
+Apple Cobbler|1
+Chocolate Chip Battle Biscuit|1
+Caramel Creams|1
+Battle Ready Pencil Box|1
+Unidentifiable Weak Bottled Faerie|1
